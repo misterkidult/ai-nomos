@@ -36,11 +36,15 @@ button{border:1px solid #000;background:#C5FF4A;padding:8px 16px;font:inherit;fo
 <script>
 const $=id=>document.getElementById(id);
 const log=(m,cls)=>{const d=document.createElement('div');d.textContent=new Date().toLocaleTimeString()+'　'+m;if(cls)d.className=cls;$('log').prepend(d)};
-const mc=(typeof document.modelContext?.registerTool==='function')?document.modelContext:(navigator.modelContext&&typeof navigator.modelContext.registerTool==='function')?navigator.modelContext:null;
-const which=mc===document.modelContext?'document.modelContext（ChatGPT 桌面版）':mc?'navigator.modelContext（Chrome／Edge）':null;
-if(!mc){$('env').innerHTML='<span class="no">document.modelContext 與 navigator.modelContext 都不存在</span><br>ChatGPT 桌面版：Settings › Browser › Permissions 開「Enable site tools」，模型選 GPT-5.6 Sol／Terra（Luna 關閉）<br>Chrome：Canary／Beta 146+，chrome://flags/#enable-webmcp-testing 開啟後重啟';log('無 modelContext，退化模式','no');}
-else{
-  $('env').innerHTML='<span class="ok">'+which+' 存在</span>（'+navigator.userAgent.slice(0,60)+'…）';
+function pick(){return (typeof document.modelContext?.registerTool==='function')?document.modelContext:(navigator.modelContext&&typeof navigator.modelContext.registerTool==='function')?navigator.modelContext:null}
+let tries=0;$('env').textContent='偵測中…（最多等 10 秒，ChatGPT 可能在載入後才注入）';
+const timer=setInterval(()=>{const mc=pick();tries++;
+  if(mc){clearInterval(timer);setup(mc,tries)}
+  else if(tries>=20){clearInterval(timer);$('env').innerHTML='<span class="no">等了 10 秒，document.modelContext 與 navigator.modelContext 都不存在</span><br>ChatGPT 桌面版：Settings › Browser › Permissions 開「Enable site tools」，模型選 GPT-5.6 Sol／Terra（Luna 關閉）<br>Chrome：152 原生有 document.modelContext；146–151 需 Canary／Beta 開 chrome://flags/#enable-webmcp-testing';log('無 modelContext，退化模式','no');}
+},500);
+function setup(mc,tries){
+  const which=mc===document.modelContext?'document.modelContext':'navigator.modelContext';
+  $('env').innerHTML='<span class="ok">'+which+' 存在</span>（第 '+tries+' 次偵測到；'+navigator.userAgent.slice(0,50)+'…）';
   const tools=[
     {name:'ping',description:'回 pong 與伺服器時間。用來確認 agent 叫得到這頁的工具。',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
      async execute(){log('ping 被呼叫','ok');return {result:'pong',time:new Date().toISOString()}}},
