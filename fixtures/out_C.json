@@ -1,0 +1,6 @@
+[
+  {"term":"WebMCP","known":false,"sentence":"The desktop version of ChatGPT's built-in browser now supports WebMCP, a standard that instructs AI on how to use website features like purchasing products, reserving seats, and searching for information.","explained":"有定義句","intent":"技術描述","domain":"是","definition_quote":"a standard that instructs AI on how to use website features like purchasing products, reserving seats, and searching for information"},
+  {"term":"ChatGPT","known":true,"sentence":"The desktop version of ChatGPT's built-in browser now supports WebMCP, a standard that instructs AI on how to use website features like purchasing products, reserving seats, and searching for information.","explained":"假設你懂","intent":"技術描述","domain":"是","definition_quote":""},
+  {"term":"Codex","known":false,"sentence":"With this integration, ChatGPT and Codex can automatically perform tasks on compatible websites.","explained":"假設你懂","intent":"賣點","domain":"是","definition_quote":""},
+  {"term":"ChatGPT Sites","known":false,"sentence":"The ChatGPT Sites feature—which enables building websites through ChatGPT—now also supports creating WebMCP-compatible sites.","explained":"有定義句","intent":"賣點","domain":"是","definition_quote":"which enables building websites through ChatGPT"}
+]

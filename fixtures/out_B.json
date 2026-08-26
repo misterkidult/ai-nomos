@@ -1,0 +1,272 @@
+[
+ {
+  "term": "RAG",
+  "known": true,
+  "sentence": "RAG（Retrieval-Augmented Generation，檢索增強生成）是一種結合「資料檢索」與「AI 生成」的技術架構。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "RAG（Retrieval-Augmented Generation，檢索增強生成）是一種結合「資料檢索」與「AI 生成」的技術架構。"
+ },
+ {
+  "term": "AI 助理",
+  "known": false,
+  "sentence": "RAG 企業知識庫 2026：中小企業打造專屬 AI 助理的完整實戰指南",
+  "explained": "順帶提到",
+  "intent": "賣點",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "幻覺率",
+  "known": true,
+  "sentence": "根據 [公司]（2025）統計，啟用 RAG 的企業 AI 系統可將「幻覺率」從 15-20% 降至 2-3%，這是企業敢把 AI 用在客戶服務與內部決策的關鍵。",
+  "explained": "假設你懂",
+  "intent": "賣點",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "索引建置",
+  "known": false,
+  "sentence": "索引建置（離線）：把企業文件切片、轉成向量，存入向量資料庫。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "邊緣",
+  "definition_quote": "把企業文件切片、轉成向量，存入向量資料庫。"
+ },
+ {
+  "term": "向量",
+  "known": false,
+  "sentence": "索引建置（離線）：把企業文件切片、轉成向量，存入向量資料庫。",
+  "explained": "假設你懂",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "檢索",
+  "known": false,
+  "sentence": "檢索（即時）：使用者問題轉向量後，從資料庫找出最相關的片段。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "使用者問題轉向量後，從資料庫找出最相關的片段。"
+ },
+ {
+  "term": "LLM",
+  "known": true,
+  "sentence": "生成（即時）：把問題與檢索結果一起送給 LLM 或 SLM，產出答案。",
+  "explained": "假設你懂",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "SLM",
+  "known": false,
+  "sentence": "生成（即時）：把問題與檢索結果一起送給 LLM 或 SLM，產出答案。",
+  "explained": "假設你懂",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "Fine-tune",
+  "known": true,
+  "sentence": "核心邏輯：RAG 是 AI 即時查資料，Fine-tune 是 AI 學進腦袋。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "Fine-tune 是 AI 學進腦袋。"
+ },
+ {
+  "term": "GPU",
+  "known": false,
+  "sentence": "導入成本：RAG 低（一週可上線），Fine-tune 高（需 GPU 與 ML 工程）。",
+  "explained": "順帶提到",
+  "intent": "風險或限制",
+  "domain": "邊緣",
+  "definition_quote": ""
+ },
+ {
+  "term": "ML 工程",
+  "known": true,
+  "sentence": "導入成本：RAG 低（一週可上線），Fine-tune 高（需 GPU 與 ML 工程）。",
+  "explained": "順帶提到",
+  "intent": "風險或限制",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "通用 AI",
+  "known": false,
+  "sentence": "原因一：通用 AI 不懂你公司。",
+  "explained": "順帶提到",
+  "intent": "風險或限制",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "ChatGPT",
+  "known": true,
+  "sentence": "ChatGPT、Claude 雖然很聰明，但對「你公司的退換貨政策」一無所知。",
+  "explained": "順帶提到",
+  "intent": "風險或限制",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "Claude",
+  "known": true,
+  "sentence": "ChatGPT、Claude 雖然很聰明，但對「你公司的退換貨政策」一無所知。",
+  "explained": "順帶提到",
+  "intent": "風險或限制",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "溯源",
+  "known": false,
+  "sentence": "2026 年起，客戶與監管機構開始要求企業的 AI 回答必須能「溯源」。",
+  "explained": "假設你懂",
+  "intent": "風險或限制",
+  "domain": "邊緣",
+  "definition_quote": ""
+ },
+ {
+  "term": "來源引用",
+  "known": true,
+  "sentence": "RAG 天生支援來源引用，是合規友善的架構。",
+  "explained": "順帶提到",
+  "intent": "賣點",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "文件切片（Chunking）",
+  "known": false,
+  "sentence": "元件二：文件切片（Chunking）。把長文件切成適合檢索的片段。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "把長文件切成適合檢索的片段。"
+ },
+ {
+  "term": "嵌入模型（Embedding Model）",
+  "known": true,
+  "sentence": "元件三：嵌入模型（Embedding Model）。把文字片段轉成向量。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "把文字片段轉成向量。"
+ },
+ {
+  "term": "向量資料庫（Vector Database）",
+  "known": true,
+  "sentence": "元件四：向量資料庫（Vector Database）。儲存與檢索向量的核心元件。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "儲存與檢索向量的核心元件。"
+ },
+ {
+  "term": "混合檢索",
+  "known": false,
+  "sentence": "混合檢索：結合關鍵字搜尋（BM25）與向量搜尋。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "結合關鍵字搜尋（BM25）與向量搜尋。"
+ },
+ {
+  "term": "重排序（Re-ranking）",
+  "known": false,
+  "sentence": "重排序（Re-ranking）：用更精準的模型對前 50 個結果重新排序，取前 5 個。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "用更精準的模型對前 50 個結果重新排序，取前 5 個。"
+ },
+ {
+  "term": "查詢改寫",
+  "known": false,
+  "sentence": "查詢改寫：用 AI 改寫使用者問題，讓檢索更準。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "用 AI 改寫使用者問題，讓檢索更準。"
+ },
+ {
+  "term": "生成模型（Generator）",
+  "known": false,
+  "sentence": "元件六：生成模型（Generator）。把檢索結果與問題交給 LLM/SLM 生成答案。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "把檢索結果與問題交給 LLM/SLM 生成答案。"
+ },
+ {
+  "term": "本地",
+  "known": true,
+  "sentence": "中小企業可選：OpenAI GPT-4o / GPT-5、Claude Sonnet 4 / Opus 4、Qwen 2.5（本地）：中文 SLM、隱私佳、Phi-4（本地）。",
+  "explained": "順帶提到",
+  "intent": "賣點",
+  "domain": "邊緣",
+  "definition_quote": ""
+ },
+ {
+  "term": "LlamaIndex",
+  "known": false,
+  "sentence": "框架：LlamaIndex（簡單直接）或 LangChain（彈性高）。",
+  "explained": "順帶提到",
+  "intent": "技術描述",
+  "domain": "邊緣",
+  "definition_quote": ""
+ },
+ {
+  "term": "LangChain",
+  "known": false,
+  "sentence": "框架：LlamaIndex（簡單直接）或 LangChain（彈性高）。",
+  "explained": "順帶提到",
+  "intent": "技術描述",
+  "domain": "邊緣",
+  "definition_quote": ""
+ },
+ {
+  "term": "評估機制",
+  "known": false,
+  "sentence": "事先準備 50-100 個測試問題與標準答案，每次架構調整後重跑測試。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "邊緣",
+  "definition_quote": "事先準備 50-100 個測試問題與標準答案，每次架構調整後重跑測試。"
+ },
+ {
+  "term": "自架",
+  "known": true,
+  "sentence": "架構：BGE-M3 嵌入 + pgvector + Qwen 2.5 14B（自架 SLM 確保客戶資料隱私）。",
+  "explained": "順帶提到",
+  "intent": "賣點",
+  "domain": "是",
+  "definition_quote": ""
+ },
+ {
+  "term": "Custom GPT",
+  "known": false,
+  "sentence": "ChatGPT 的 Custom GPT、檔案上傳、Plugins 都是 RAG 的「託管版」實作。",
+  "explained": "有定義句",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": "ChatGPT 的 Custom GPT、檔案上傳、Plugins 都是 RAG 的「託管版」實作。"
+ },
+ {
+  "term": "提示",
+  "known": true,
+  "sentence": "建議在系統中加上「找不到資料時請說不知道」的提示。",
+  "explained": "順帶提到",
+  "intent": "技術描述",
+  "domain": "是",
+  "definition_quote": ""
+ }
+]
