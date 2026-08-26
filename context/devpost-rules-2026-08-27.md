@@ -8,3 +8,8 @@
 - 獎：10 名各 $3,500 現金＋贊助商獎品（頁面與 OpenAI 官網的 $3,000 不一致，以 Devpost 為準）
 
 對計畫的影響：評分項「Potential Impact」對應 Addy 說最弱的「有用」；影片 <3 分鐘且要旁白，9/2 那格要留錄音。
+
+## 環境事實（2026-08-27 查證，取代簡報裡的假設）
+- ChatGPT 桌面版：API 在 **`document.modelContext`**（非 navigator）；需 Settings › Browser › Permissions「Enable site tools」；模型 GPT-5.6 Sol／Terra（Luna 關閉）；地址列「Site tools」可看已註冊工具；Recently used › Sources 可看呼叫紀錄。**未見 `requestUserInteraction` 文件**，確認靠 ChatGPT 自身的 confirmation policy。來源 https://learn.chatgpt.com/docs/webmcp
+- Chrome：**Canary／Beta 146+**，`chrome://flags/#enable-webmcp-testing`；Stable 無。API 在 `navigator.modelContext`。來源 https://www.salamexperts.com/blog/ai/enable-webmcp-chrome/
+- ⇒ 探針與 `/read` 都要雙註冊；寫入確認在 ChatGPT 端不是頁面能控制的，計畫 v2 的「submitFindings 走 requestUserInteraction」要改成「標 readOnlyHint:false，交給 ChatGPT 的確認政策」
