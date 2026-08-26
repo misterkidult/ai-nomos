@@ -23,3 +23,5 @@
 - 01:10 `writeNote` 兩次直呼叫皆成功、**`client.requestUserInteraction` 不存在、無任何確認提示**（連續寫入無 gate）
 - ⇒ **設計定案**：寫入閘在伺服器端（三條鎖＋停用清單＋速率限制＋Haiku batch），頁面不做確認；`submitFindings` 標 `readOnlyHint:false` 交由 ChatGPT 自身的 confirmation policy。不採納「無 requestUserInteraction 即 reject」（會擋死 ChatGPT 路徑）
 - 探針狀態：registerTool ✅／執行 ✅／頁面端確認 ✗／**agent 通道未驗**（僅 ChatGPT 桌面版可驗）
+- 01:20 **ChatGPT 桌面版 agent 通道驗通**：Work 模式＋GPT-5.6 Terra＋⌘⇧B 內建瀏覽器，agent 呼叫 `writeNote` 成功；錯誤訊息「requestUserInteraction is not supported by the Codex WebMCP shim」證明 client 物件存在但無確認 API。免費方案可用（Free／Go 有 Terra）；需先開 Settings › Browser › Permissions「啟用網站工具」；Enterprise／Edu 無此功能
+- 探針四項定案：registerTool ✅／執行 ✅／agent 通道 ✅／頁面端確認 ✗（Chrome 152 與 ChatGPT 皆無）⇒ 閘在伺服器端，設計不改
