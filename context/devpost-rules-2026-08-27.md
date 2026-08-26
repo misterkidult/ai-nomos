@@ -20,3 +20,6 @@
 - `ping` 直呼叫成功 `{"result":"pong",...}`；registerTool 正常
 - **Claude in Chrome 不把頁面的 WebMCP 工具接進自己的工具清單**，只能 JS 直呼叫 ⇒ 「agent 叫得到」仍只能在 ChatGPT 桌面版驗
 - 待驗：`writeNote` 的 `client.requestUserInteraction` 是否存在
+- 01:10 `writeNote` 兩次直呼叫皆成功、**`client.requestUserInteraction` 不存在、無任何確認提示**（連續寫入無 gate）
+- ⇒ **設計定案**：寫入閘在伺服器端（三條鎖＋停用清單＋速率限制＋Haiku batch），頁面不做確認；`submitFindings` 標 `readOnlyHint:false` 交由 ChatGPT 自身的 confirmation policy。不採納「無 requestUserInteraction 即 reject」（會擋死 ChatGPT 路徑）
+- 探針狀態：registerTool ✅／執行 ✅／頁面端確認 ✗／**agent 通道未驗**（僅 ChatGPT 桌面版可驗）
