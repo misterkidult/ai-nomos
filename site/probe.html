@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ai-nomos · WebMCP 探針</title>
+<style>
+body{font-family:system-ui,"Noto Sans TC",sans-serif;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.7;color:#212529;background:#EAEAEA}
+h1{font-size:22px}code{background:#fff;border:1px solid #000;padding:1px 6px}
+.box{background:#fff;border:1px solid #000;padding:16px;margin:16px 0}
+.ok{color:#0a7d2c}.no{color:#b00020}
+#log div{padding:6px 0;border-top:1px solid #ddd;font-size:14px}
+button{border:1px solid #000;background:#C5FF4A;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+<h1>ai-nomos · WebMCP 探針</h1>
+<p>目的：確認這個瀏覽器裡的 agent 叫得到 <code>navigator.modelContext</code> 註冊的工具，以及 <code>requestUserInteraction</code> 會不會跳確認框。</p>
+
+<div class="box">
+  <div>環境：<span id="env">偵測中…</span></div>
+  <div>已註冊工具：<span id="tools">—</span></div>
+  <div>最後一次寫入：<span id="last">尚無</span></div>
+</div>
+
+<div class="box">
+  <p><strong>請對你的 agent 說：</strong></p>
+  <ol>
+    <li>「呼叫 <code>ping</code> 工具」→ 應回 <code>pong</code>＋時間</li>
+    <li>「呼叫 <code>writeNote</code>，note 寫『測試』」→ 應先跳確認框，確認後畫面「最後一次寫入」會更新</li>
+  </ol>
+  <p>沒有 agent 也可以按 <button id="selftest">本機自測（用 modelContextTesting）</button></p>
+</div>
+
+<div class="box"><strong>紀錄</strong><div id="log"></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const log=(m,cls)=>{const d=document.createElement('div');d.textContent=new Date().toLocaleTimeString()+'　'+m;if(cls)d.className=cls;$('log').prepend(d)};
+const mc=navigator.modelContext;
+if(!mc){$('env').innerHTML='<span class="no">navigator.modelContext 不存在</span> —— 這個瀏覽器沒開 WebMCP（ChatGPT 桌面版內建瀏覽器／Edge 147／Chrome 開 #enable-webmcp）';log('無 modelContext，退化模式','no');}
+else{
+  $('env').innerHTML='<span class="ok">navigator.modelContext 存在</span>（'+navigator.userAgent.slice(0,60)+'…）';
+  const tools=[
+    {name:'ping',description:'回 pong 與伺服器時間。用來確認 agent 叫得到這頁的工具。',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
+     async execute(){log('ping 被呼叫','ok');return {result:'pong',time:new Date().toISOString()}}},
+    {name:'writeNote',description:'寫一則測試筆記到畫面上。這是寫入動作，執行前會請使用者確認。',inputSchema:{type:'object',properties:{note:{type:'string',description:'要寫的內容'}},required:['note'],additionalProperties:false},
+     async execute(input,client){
+       log('writeNote 被呼叫，note='+JSON.stringify(input&&input.note));
+       let confirmed='（未提供 requestUserInteraction）';
+       if(client&&client.requestUserInteraction){
+         try{const r=await client.requestUserInteraction({message:'agent 想寫入：'+input.note+'，允許嗎？'});confirmed='requestUserInteraction 回傳：'+JSON.stringify(r);log(confirmed,'ok');}
+         catch(e){confirmed='requestUserInteraction 失敗：'+e.message;log(confirmed,'no');}
+       }else log('client 沒有 requestUserInteraction','no');
+       $('last').textContent=input.note+'　'+new Date().toLocaleTimeString();
+       return {result:'written',note:input.note,confirmation:confirmed};
+     }}
+  ];
+  try{tools.forEach(t=>mc.registerTool(t));$('tools').textContent=tools.map(t=>t.name).join('、');log('已註冊 '+tools.length+' 個工具','ok');}
+  catch(e){$('tools').innerHTML='<span class="no">registerTool 失敗：'+e.message+'</span>';log('registerTool 失敗：'+e.message,'no');}
+}
+$('selftest').onclick=async()=>{
+  const t=navigator.modelContextTesting;
+  if(!t){log('modelContextTesting 不存在（Chrome 146+ 開 #enable-webmcp-for-testing 才有）','no');return}
+  try{const list=await t.getTools();log('getTools → '+list.map(x=>x.name).join('、'),'ok');
+      const r=await t.executeTool('ping',{});log('executeTool ping → '+JSON.stringify(r),'ok');
+      const w=await t.executeTool('writeNote',{note:'自測'});log('executeTool writeNote → '+JSON.stringify(w),'ok');}
+  catch(e){log('自測失敗：'+e.message,'no')}
+};
+</script>
+</body>
+</html>
