@@ -14,7 +14,7 @@ button{border:1px solid #000;background:#C5FF4A;padding:8px 16px;font:inherit;fo
 </head>
 <body>
 <h1>ai-nomos · WebMCP 探針</h1>
-<p>目的：確認這個瀏覽器裡的 agent 叫得到 <code>navigator.modelContext</code> 註冊的工具，以及 <code>requestUserInteraction</code> 會不會跳確認框。</p>
+<p>目的：確認這個瀏覽器裡的 agent 叫得到 <code>document.modelContext</code>（ChatGPT）或 <code>navigator.modelContext</code>（Chrome）註冊的工具，以及 <code>requestUserInteraction</code> 會不會跳確認框。</p>
 
 <div class="box">
   <div>環境：<span id="env">偵測中…</span></div>
@@ -36,10 +36,11 @@ button{border:1px solid #000;background:#C5FF4A;padding:8px 16px;font:inherit;fo
 <script>
 const $=id=>document.getElementById(id);
 const log=(m,cls)=>{const d=document.createElement('div');d.textContent=new Date().toLocaleTimeString()+'　'+m;if(cls)d.className=cls;$('log').prepend(d)};
-const mc=navigator.modelContext;
-if(!mc){$('env').innerHTML='<span class="no">navigator.modelContext 不存在</span> —— 這個瀏覽器沒開 WebMCP（ChatGPT 桌面版內建瀏覽器／Edge 147／Chrome 開 #enable-webmcp）';log('無 modelContext，退化模式','no');}
+const mc=(typeof document.modelContext?.registerTool==='function')?document.modelContext:(navigator.modelContext&&typeof navigator.modelContext.registerTool==='function')?navigator.modelContext:null;
+const which=mc===document.modelContext?'document.modelContext（ChatGPT 桌面版）':mc?'navigator.modelContext（Chrome／Edge）':null;
+if(!mc){$('env').innerHTML='<span class="no">document.modelContext 與 navigator.modelContext 都不存在</span><br>ChatGPT 桌面版：Settings › Browser › Permissions 開「Enable site tools」，模型選 GPT-5.6 Sol／Terra（Luna 關閉）<br>Chrome：Canary／Beta 146+，chrome://flags/#enable-webmcp-testing 開啟後重啟';log('無 modelContext，退化模式','no');}
 else{
-  $('env').innerHTML='<span class="ok">navigator.modelContext 存在</span>（'+navigator.userAgent.slice(0,60)+'…）';
+  $('env').innerHTML='<span class="ok">'+which+' 存在</span>（'+navigator.userAgent.slice(0,60)+'…）';
   const tools=[
     {name:'ping',description:'回 pong 與伺服器時間。用來確認 agent 叫得到這頁的工具。',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
      async execute(){log('ping 被呼叫','ok');return {result:'pong',time:new Date().toISOString()}}},
@@ -55,7 +56,7 @@ else{
        return {result:'written',note:input.note,confirmation:confirmed};
      }}
   ];
-  try{tools.forEach(t=>mc.registerTool(t));$('tools').textContent=tools.map(t=>t.name).join('、');log('已註冊 '+tools.length+' 個工具','ok');}
+  try{tools.forEach(t=>{const r=mc.registerTool(t);if(r&&r.then)r.catch(e=>log('registerTool '+t.name+' 失敗：'+e.message,'no'))});$('tools').textContent=tools.map(t=>t.name).join('、');log('已註冊 '+tools.length+' 個工具','ok');}
   catch(e){$('tools').innerHTML='<span class="no">registerTool 失敗：'+e.message+'</span>';log('registerTool 失敗：'+e.message,'no');}
 }
 $('selftest').onclick=async()=>{
