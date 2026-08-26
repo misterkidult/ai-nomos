@@ -28,7 +28,7 @@ button{border:1px solid #000;background:#C5FF4A;padding:8px 16px;font:inherit;fo
     <li>「呼叫 <code>ping</code> 工具」→ 應回 <code>pong</code>＋時間</li>
     <li>「呼叫 <code>writeNote</code>，note 寫『測試』」→ 應先跳確認框，確認後畫面「最後一次寫入」會更新</li>
   </ol>
-  <p>沒有 agent 也可以按 <button id="selftest">本機自測（用 modelContextTesting）</button></p>
+  <p>沒有 agent 也可以按 <button id="selftest">本機自測（Chrome 152 原生 document.modelContext）</button></p>
 </div>
 
 <div class="box"><strong>紀錄</strong><div id="log"></div></div>
@@ -60,11 +60,13 @@ else{
   catch(e){$('tools').innerHTML='<span class="no">registerTool 失敗：'+e.message+'</span>';log('registerTool 失敗：'+e.message,'no');}
 }
 $('selftest').onclick=async()=>{
-  const t=navigator.modelContextTesting;
-  if(!t){log('modelContextTesting 不存在（Chrome 146+ 開 #enable-webmcp-for-testing 才有）','no');return}
-  try{const list=await t.getTools();log('getTools → '+list.map(x=>x.name).join('、'),'ok');
-      const r=await t.executeTool('ping',{});log('executeTool ping → '+JSON.stringify(r),'ok');
-      const w=await t.executeTool('writeNote',{note:'自測'});log('executeTool writeNote → '+JSON.stringify(w),'ok');}
+  // Chrome 152 原生：document.modelContext.getTools()／executeTool(toolObj, jsonString) → string
+  const ctx=(document.modelContext&&document.modelContext.getTools)?document.modelContext:(navigator.modelContextTesting||null);
+  if(!ctx){log('沒有 getTools／executeTool 可用（Chrome 152 走 document.modelContext；舊版走 navigator.modelContextTesting）','no');return}
+  try{const list=await ctx.getTools();log('getTools → '+list.map(x=>x.name).join('、'),'ok');
+      const find=n=>list.find(x=>x.name===n);
+      const r=await ctx.executeTool(find('ping'),JSON.stringify({}));log('executeTool ping → '+(typeof r==='string'?r:JSON.stringify(r)),'ok');
+      const w=await ctx.executeTool(find('writeNote'),JSON.stringify({note:'自測'}));log('executeTool writeNote → '+(typeof w==='string'?w:JSON.stringify(w)),'ok');}
   catch(e){log('自測失敗：'+e.message,'no')}
 };
 </script>
