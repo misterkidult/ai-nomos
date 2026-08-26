@@ -12,6 +12,8 @@
 ## 環境事實（2026-08-27 查證，取代簡報裡的假設）
 - ChatGPT 桌面版：API 在 **`document.modelContext`**（非 navigator）；需 Settings › Browser › Permissions「Enable site tools」；模型 GPT-5.6 Sol／Terra（Luna 關閉）；地址列「Site tools」可看已註冊工具；Recently used › Sources 可看呼叫紀錄。**未見 `requestUserInteraction` 文件**，確認靠 ChatGPT 自身的 confirmation policy。來源 https://learn.chatgpt.com/docs/webmcp
 - Chrome：**Canary／Beta 146+**，`chrome://flags/#enable-webmcp-testing`；Stable 無。API 在 `navigator.modelContext`。來源 https://www.salamexperts.com/blog/ai/enable-webmcp-chrome/
+- **`requestUserInteraction` 的規格身世（2026-08-27 查證）**：曾是 WebMCP 規格的 `ModelContextClient.requestUserInteraction(callback)`（參數是回 Promise 的函式，不是 `{message}` 物件；演算法只寫 TODO），**2026-06-11 PR #205 整個介面移除**，理由「未完整規格、無任何實作」。後續 PR #204 提議改名 `requestUserInput`，仍 open；README 把 elicitation 列在 future work。來源 https://github.com/webmachinelearning/webmcp/pull/205 、https://github.com/webmachinelearning/webmcp/pull/204 、https://github.com/webmachinelearning/webmcp/issues/165
+  - ⇒ 簡報／README **不得**寫「寫入走 requestUserInteraction 是規格用法」（Addy 審查 :48 那句撤回）；現行規格裡有的是 `readOnlyHint` 影響 agent 是否跳確認（security-privacy-questionnaire.md:63）。`probe.html:56` 的 `{message}` 呼叫簽名與舊規格不符，僅作紀錄、不再改
 - ⇒ 探針與 `/read` 都要雙註冊；寫入確認在 ChatGPT 端不是頁面能控制的，計畫 v2 的「submitFindings 走 requestUserInteraction」要改成「標 readOnlyHint:false，交給 ChatGPT 的確認政策」
 
 ## 探針實測（2026-08-27 01:07，Chrome 152，Claude in Chrome 協助）
