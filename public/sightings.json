@@ -391,7 +391,7 @@
 "explained": "has_definition",
 "intent": "technical",
 "domain": "core",
-"definition_quote": "ChatGPT是[company]運用大型AI模型「GPT-3.5」語言技術開發的產物，能對詞彙結構做數學分析，透過事先學習（pre-trained）具備生成對話（chat generative）的功能。",
+"definition_quote": "ChatGPT是OpenAI運用大型AI模型「GPT-3.5」語言技術開發的產物，能對詞彙結構做數學分析，透過事先學習（pre-trained）具備生成對話（chat generative）的功能。",
 "requested": true,
 "origin": "agent",
 "source": {
@@ -448,7 +448,7 @@
 "explained": "has_definition",
 "intent": "technical",
 "domain": "core",
-"definition_quote": "Claude 是 [company] 推出的大型語言模型家族，也是 [company] 面向一般使用者與開發者的核心 AI 產品名稱。",
+"definition_quote": "Claude 是 Anthropic 推出的大型語言模型家族，也是 Anthropic 面向一般使用者與開發者的核心 AI 產品名稱。",
 "requested": true,
 "origin": "agent",
 "source": {
@@ -467,7 +467,7 @@
 "explained": "has_definition",
 "intent": "technical",
 "domain": "edge",
-"definition_quote": "Claude Code 是 [company] 官方推出的 agentic coding tool，也就是「能使用工具完成開發任務的 AI 程式助理」。",
+"definition_quote": "Claude Code 是 Anthropic 官方推出的 agentic coding tool，也就是「能使用工具完成開發任務的 AI 程式助理」。",
 "requested": true,
 "origin": "agent",
 "source": {
@@ -1303,7 +1303,7 @@
 "explained": "has_definition",
 "intent": "technical",
 "domain": "core",
-"definition_quote": "模型上下文協定（英語：Model Context Protocol，縮寫：MCP）是[company]所推動的一項開放標準[1]，目的是為大型語言模型應用提供一個標準化介面，使其能夠連接外部資料來源和工具，並與其互動[2]。",
+"definition_quote": "模型上下文協定（英語：Model Context Protocol，縮寫：MCP）是Anthropic所推動的一項開放標準[1]，目的是為大型語言模型應用提供一個標準化介面，使其能夠連接外部資料來源和工具，並與其互動[2]。",
 "requested": true,
 "origin": "agent",
 "source": {

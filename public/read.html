@@ -214,7 +214,7 @@ const RULES=`You are helping the user read one article. feedDocument gives you i
 2. For each term answer three single-choice fields: explained (has_definition / mentioned / assumed), intent (selling_point / technical / risk_or_limit), domain (core / edge / not).
 3. Do not report: model architecture names, training hyperparameters, algorithm names, statistics terms, or anything in the stoplist below.
 4. The known-term list is in lexicon. Report known terms too (so the dictionary sees them again) and set term_normalized to the lexicon term; otherwise term_normalized = "".
-5. De-identify sentence and context: replace company names, person names, amounts, phone numbers and emails with [company], [person], [amount], [phone], [email].
+5. De-identification applies only to a pasted document (no url): replace third-party company names, person names, amounts, phone numbers and emails in sentence and context with [company], [person], [amount], [phone], [email]. For a public article (url given) copy verbatim — the quote must stay checkable against the page, and the company or product that is the subject of the definition is part of the definition.
 6. If a term appears several times, report it once — the occurrence that has a definition.
 7. requested = true for terms from requested_terms, false for terms you added. A requested term that is not an AI term still gets a finding, with domain = not — that is your verdict, the page shows it to the user. A requested term you cannot find in the article goes to not_found, not to findings.
 8. source: fill url from feedDocument, plus title and published (YYYY-MM-DD) if the article shows them.

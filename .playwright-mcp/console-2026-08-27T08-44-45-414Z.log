@@ -814,3 +814,362 @@ Suggestion: If you are or plan to run Video Shopping Ads (VSA), go to your sourc
 We are already logging load events for SSR and CSR environments, so you can remove these calls from your project. @ https://www.aitoken.com.tw/_partials/wix-thunderbolt/dist/clientWorker.ccf5bcb0.bundle.min.js:1
 [  417237ms] [WARNING] react-i18next:: It seems you are still using the old wait option, you may migrate to the new useSuspense behaviour. @ https://browser.sentry-cdn.com/7.120.3/bundle.tracing.es5.min.js:1
 [  417635ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ https://www.mendix.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[  941607ms] [LOG] dataLayer [Object] @ https://reading.udn.com/read/story/122749/8016247:388
+[  941609ms] [LOG] intowow code snippet started @ https://reading.udn.com/read/story/122749/8016247:403
+[  941621ms] [LOG] DFP clientId: 1447663736.1787820642 @ https://reading.udn.com/read/story/122749/8016247:424
+[  941621ms] [LOG] DFP eruId: undefined @ https://reading.udn.com/read/story/122749/8016247:425
+[  941621ms] [LOG] DFP user_id: undefined @ https://reading.udn.com/read/story/122749/8016247:426
+[  941634ms] [LOG] DFP Scripts Loaded @ https://udn.com/static/js/google-dfp-native.js?4:0
+[  941977ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.addAdUnits [Array(11)] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941977ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: addAdUnits @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941977ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: requestBids @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941978ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.requestBids [Object] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941979ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: beforeRequestBids @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941980ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-inline" bidder "rubicon" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941980ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-Mobile_300x250--article" bidder "rubicon" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941983ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-index-top--mobile" bidder "openx" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941983ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-inline" bidder "openx" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941984ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-Mobile_300x250--article" bidder "openx" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941984ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-index-top--mobile" bidder "bridgewell" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941984ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-inline" bidder "bridgewell" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941984ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-Mobile_300x250--article" bidder "bridgewell" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941984ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "stickyAds" bidder "bridgewell" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941985ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-index-top--mobile" bidder "appnexus" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941985ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-inline" bidder "appnexus" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941985ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Size mapping deactivated adUnit "ads-Mobile_300x250--article" bidder "appnexus" @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941986ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Bids Requested for Auction with id: cfb90224-2e19-4bec-bebb-d780b6e3c844 [Object, Object, Object, Object, Object, Object] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941986ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionInit @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941986ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: CALLING BIDDER ======= rubicon @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941986ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidRequested @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941987ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Rubicon: making banner request for adUnit ads-superBanner @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941987ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Rubicon: making banner request for adUnit ads-billboard @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941987ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Rubicon: making banner request for adUnit ads-recommendation-300x250 @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941987ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Rubicon: making banner request for adUnit ads-300x250-1 @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941987ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Rubicon: making banner request for adUnit ads-300x250-2 @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941989ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: CALLING BIDDER ======= aol @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941989ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidRequested @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941990ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: CALLING BIDDER ======= openx @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941991ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidRequested @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941991ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: CALLING BIDDER ======= bridgewell @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941991ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidRequested @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941992ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: CALLING BIDDER ======= appnexus @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941992ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidRequested @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941993ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: CALLING BIDDER ======= criteo @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  941993ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidRequested @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942130ms] [WARNING] Error with Permissions-Policy header: Unrecognized feature: 'attribution-reporting'. @ :0
+[  942208ms] [ERROR] Access to XMLHttpRequest at 'https://udn-usd-d.openx.net/w/1.0/arj?ju=https%3A%2F%2Freading.udn.com%2Fread%2Fstory%2F122749%2F8016247&ch=UTF-8&res=1920x1080x30&ifr=false&tz=-480&tws=1200x825&be=1&bc=hb_pb_3.0.3&dddid=a03f1ab4-6e9b-4ac7-aba7-5feea40bde45%2C3b163f98-e3d9-47e3-8515-fb32b58de616%2C37870385-38c5-4a09-803d-87765c085b34%2C6e6b2d41-ff60-4b43-aabd-5d7ec22a2f63%2Cf4ce0116-8e2f-460d-bfb5-93b4909a4abc&nocache=1787821227404&aus=970x250%2C970x90%7C300x250%2C300x600%7C300x250%7C300x250%7C300x250&divIds=ads-superBanner%2Cads-billboard%2Cads-recommendation-300x250%2Cads-300x250-1%2Cads-300x250-2&auid=541147516%2C541147524%2C541147525%2C541052419%2C541052420' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942209ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for openx failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942209ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942209ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942209ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942209ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942209ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942209ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942209ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidderDone @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942209ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://udn-usd-d.openx.net/w/1.0/arj?ju=https%3A%2F%2Freading.udn.com%2Fread%2Fstory%2F122749%2F8016247&ch=UTF-8&res=1920x1080x30&ifr=false&tz=-480&tws=1200x825&be=1&bc=hb_pb_3.0.3&dddid=a03f1ab4-6e9b-4ac7-aba7-5feea40bde45%2C3b163f98-e3d9-47e3-8515-fb32b58de616%2C37870385-38c5-4a09-803d-87765c085b34%2C6e6b2d41-ff60-4b43-aabd-5d7ec22a2f63%2Cf4ce0116-8e2f-460d-bfb5-93b4909a4abc&nocache=1787821227404&aus=970x250%2C970x90%7C300x250%2C300x600%7C300x250%7C300x250%7C300x250&divIds=ads-superBanner%2Cads-billboard%2Cads-recommendation-300x250%2Cads-300x250-1%2Cads-300x250-2&auid=541147516%2C541147524%2C541147525%2C541052419%2C541052420:0
+[  942210ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942210ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942210ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942210ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942210ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942210ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942210ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942210ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidderDone @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942287ms] [ERROR] Access to XMLHttpRequest at 'https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a96954f01747430358b4249c19f043f&pos=udn_mb_float_320x50_display_hb&cmd=bid&secure=1' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942287ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for aol failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942287ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942287ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a96954f01747430358b4249c19f043f&pos=udn_mb_float_320x50_display_hb&cmd=bid&secure=1:0
+[  942287ms] [ERROR] Access to XMLHttpRequest at 'https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_top_970x250_display_hb&cmd=bid&secure=1' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942287ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for aol failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942287ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942287ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_top_970x250_display_hb&cmd=bid&secure=1:0
+[  942287ms] [ERROR] Access to XMLHttpRequest at 'https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_right2_300x250_display_hb&cmd=bid&secure=1' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942287ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for aol failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942287ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_right2_300x250_display_hb&cmd=bid&secure=1:0
+[  942288ms] [ERROR] Access to XMLHttpRequest at 'https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_recommend2_300x250_display_hb&cmd=bid&secure=1' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942288ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for aol failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_recommend2_300x250_display_hb&cmd=bid&secure=1:0
+[  942288ms] [ERROR] Access to XMLHttpRequest at 'https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_right1_300x250_display_hb&cmd=bid&secure=1' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942288ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for aol failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_right1_300x250_display_hb&cmd=bid&secure=1:0
+[  942288ms] [ERROR] Access to XMLHttpRequest at 'https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a96954f01747430358b4249c19f043f&pos=udn_mb_button_300x250_display_hb&cmd=bid&secure=1' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942288ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for aol failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a96954f01747430358b4249c19f043f&pos=udn_mb_button_300x250_display_hb&cmd=bid&secure=1:0
+[  942288ms] [ERROR] Access to XMLHttpRequest at 'https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a96954f01747430358b4249c19f043f&pos=udn_mb_inarticle_300x250_display_hb&cmd=bid&secure=1' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942288ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for aol failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a96954f01747430358b4249c19f043f&pos=udn_mb_inarticle_300x250_display_hb&cmd=bid&secure=1:0
+[  942288ms] [ERROR] Access to XMLHttpRequest at 'https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_right4_300x250_display_hb&cmd=bid&secure=1' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942288ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for aol failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_right4_300x250_display_hb&cmd=bid&secure=1:0
+[  942288ms] [ERROR] Access to XMLHttpRequest at 'https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_right3_300x250_display_hb&cmd=bid&secure=1' from origin 'https://reading.udn.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://reading.udn.com/read/story/122749/8016247:0
+[  942288ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: Server call for aol failed: . Continuing without bids. @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidderDone @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942288ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://c2shb.ssp.yahoo.com/bidRequest?dcn=8a969162017373e3f4b2fb08e6a00704&pos=udn_pc_right3_300x250_display_hb&cmd=bid&secure=1:0
+[  942330ms] [WARNING] [GPT] PubAdsService.setTargeting is deprecated, use googletag.setConfig({targeting: ...}) instead.
+https://goo.gle/gpt-message#170 @ https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202608200101/pubads_impl.js:18
+[  942334ms] [WARNING] [GPT] Slot.getTargeting is deprecated, use Slot.getConfig('targeting') instead.
+https://goo.gle/gpt-message#201 @ https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202608200101/pubads_impl.js:18
+[  942347ms] [LOG] interstitialSlot Pv @ https://reading.udn.com/read/story/122749/8016247:1207
+[  942356ms] [WARNING] [GPT] Invalid value encountered when calling: googletag.setConfig.targeting: {}
+https://goo.gle/gpt-message#159 @ https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202608200101/pubads_impl.js:18
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942421ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidderDone @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942422ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.setTargetingForGPTAsync [] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942423ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - allowed keys [ hb_bidder, hb_adid, hb_pb, hb_size, hb_deal, hb_source, hb_format, hb_uuid, hb_cache_id, hb_cache_host, hb_native_title, hb_native_body, hb_native_body2, hb_native_privacy, hb_native_privicon, hb_native_brand, hb_native_image, hb_native_icon, hb_native_linkurl, hb_native_displayurl, hb_native_cta, hb_native_rating, hb_native_address, hb_native_downloads, hb_native_likes, hb_native_phone, hb_native_price, hb_native_saleprice, hb_renderer_url, hb_adTemplate ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942424ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - removed keys [  ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942424ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: setTargeting @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942677ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942678ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942678ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942678ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942678ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942678ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidderDone @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942693ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_17_Cy" [Caught in: Module "__elem_a588f507_1_0_3G"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942693ms] [ERROR] ErrorUtils caught an error:
+
+DataStore.get: namespace is required, got undefined
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 712, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: 2zjvir} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942694ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_1_et" [Caught in: Module "__elem_9fc087ed_1_0_8j"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942694ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_1_et" [Caught in: Module "__elem_9fc087ed_1_0_8j"] [Caught in: Requiring module "__elem_9fc087ed_1_0_8j" which threw an exception]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942695ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_4_+H" [Caught in: Module "__elem_9fc087ed_1_1_jY"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942695ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_4_+H" [Caught in: Module "__elem_9fc087ed_1_1_jY"] [Caught in: Requiring module "__elem_9fc087ed_1_1_jY" which threw an exception]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942695ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_2_3R" [Caught in: Module "__elem_9fc087ed_1_2_n9"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942695ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_2_3R" [Caught in: Module "__elem_9fc087ed_1_2_n9"] [Caught in: Requiring module "__elem_9fc087ed_1_2_n9" which threw an exception]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942695ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_3_7R" [Caught in: Module "__elem_9fc087ed_1_3_im"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942695ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_3_7R" [Caught in: Module "__elem_9fc087ed_1_3_im"] [Caught in: Requiring module "__elem_9fc087ed_1_3_im" which threw an exception]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942696ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_0_IJ" [Caught in: Module "__elem_9fc087ed_1_4_N3"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942696ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_0_IJ" [Caught in: Module "__elem_9fc087ed_1_4_N3"] [Caught in: Requiring module "__elem_9fc087ed_1_4_N3" which threw an exception]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942696ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_8_FL" [Caught in: Module "__elem_a588f507_1_2_9d"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942696ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_9_Zw" [Caught in: Module "__elem_de92090e_1_0_g+"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942696ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_a_pX" [Caught in: Module "__elem_072b8e64_1_0_LS"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942697ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_b_vQ" [Caught in: Module "__elem_a588f507_1_3_FY"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942697ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_c_1G" [Caught in: Module "__elem_de92090e_1_1_NZ"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942698ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_d_gk" [Caught in: Module "__elem_072b8e64_1_1_zl"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942698ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_e_j3" [Caught in: Module "__elem_a588f507_1_4_E2"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942699ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_f_Nq" [Caught in: Module "__elem_de92090e_1_2_yB"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942699ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_g_2t" [Caught in: Module "__elem_072b8e64_1_2_Gc"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942700ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_v_58" [Caught in: Module "__elem_2106b0cc_1_0_dk"] [Caught in: Module "__inst_b7ee1bfc_1_0_O7"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: 0fsj2o} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942700ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_x_vC" [Caught in: Module "__elem_2106b0cc_1_1_bi"] [Caught in: Module "__inst_b7ee1bfc_1_1_MU"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: 0fsj2o} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942701ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_15_H+" [Caught in: Module "__elem_2106b0cc_1_2_11"] [Caught in: Module "__inst_b7ee1bfc_1_2_Vs"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: 0fsj2o} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942701ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_13_VC" [Caught in: Module "__elem_2106b0cc_1_3_VY"] [Caught in: Module "__inst_b7ee1bfc_1_3_4m"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: 0fsj2o} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942702ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_z_eH" [Caught in: Module "__elem_2106b0cc_1_4_j3"] [Caught in: Module "__inst_b7ee1bfc_1_4_v2"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: 0fsj2o} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942703ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_o_uh" [Caught in: Module "__elem_a588f507_1_5_2A"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942703ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_p_pE" [Caught in: Module "__elem_de92090e_1_3_Pl"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942703ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_q_p4" [Caught in: Module "__elem_072b8e64_1_3_pi"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942703ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_s_4s" [Caught in: Module "__elem_a588f507_1_6_RJ"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942703ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_t_qT" [Caught in: Module "__elem_de92090e_1_4_lV"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942704ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_u_oy" [Caught in: Module "__elem_072b8e64_1_4_cG"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: xw1eta} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942704ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_10_w1" [Caught in: Module "__elem_fc9f538f_1_0_nE"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: ks2bde} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942704ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_w_8c" [Caught in: Module "__elem_fc9f538f_1_1_Nq"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: ks2bde} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942704ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_y_BV" [Caught in: Module "__elem_fc9f538f_1_2_HH"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: ks2bde} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942705ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_16_3I" [Caught in: Module "__elem_fc9f538f_1_3_kx"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: ks2bde} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942705ms] [ERROR] ErrorUtils caught an error:
+
+Could not find element "u_1_14_YC" [Caught in: Module "__elem_fc9f538f_1_4_72"]
+
+Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. {column: 180, clientTime: 1787821228, extra: Object, guardList: Array(4), hash: ks2bde} @ https://static.xx.fbcdn.net/rsrc.php/v4/yf/r/h5Yq23dSMFN.js:82
+[  942804ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getEvents @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942805ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getAdserverTargeting [] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942805ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - allowed keys [ hb_bidder, hb_adid, hb_pb, hb_size, hb_deal, hb_source, hb_format, hb_uuid, hb_cache_id, hb_cache_host, hb_native_title, hb_native_body, hb_native_body2, hb_native_privacy, hb_native_privicon, hb_native_brand, hb_native_image, hb_native_icon, hb_native_linkurl, hb_native_displayurl, hb_native_cta, hb_native_rating, hb_native_address, hb_native_downloads, hb_native_likes, hb_native_phone, hb_native_price, hb_native_saleprice, hb_renderer_url, hb_adTemplate ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942805ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - removed keys [  ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942805ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getEvents @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942805ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getAdserverTargeting [] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942805ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - allowed keys [ hb_bidder, hb_adid, hb_pb, hb_size, hb_deal, hb_source, hb_format, hb_uuid, hb_cache_id, hb_cache_host, hb_native_title, hb_native_body, hb_native_body2, hb_native_privacy, hb_native_privicon, hb_native_brand, hb_native_image, hb_native_icon, hb_native_linkurl, hb_native_displayurl, hb_native_cta, hb_native_rating, hb_native_address, hb_native_downloads, hb_native_likes, hb_native_phone, hb_native_price, hb_native_saleprice, hb_renderer_url, hb_adTemplate ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942805ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - removed keys [  ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942905ms] [ERROR] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; ERROR: in response for appnexus adapter: Could not find valid member in request @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942905ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionDebug @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942906ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942906ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942906ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942906ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942906ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: noBid @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942906ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Bids Received for Auction with id: cfb90224-2e19-4bec-bebb-d780b6e3c844 [] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942906ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: auctionEnd @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942906ms] [LOG] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; MESSAGE: Emitting event for: bidderDone @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  942991ms] [WARNING] [Meta Pixel] - Invalid parameter format for currency. Please refer https://developers.facebook.com/docs/meta-pixel/reference/ for valid parameter specifications. @ https://connect.facebook.net/en_US/fbevents.js:197
+[  942130ms] [WARNING] Error with Permissions-Policy header: Unrecognized feature: 'attribution-reporting'. @ :0
+[  943090ms] [WARNING] Taboola Push Option modes "tbla-cookie-match" for placement-TBLA Cookie Match, not present in Publisher Config modes. @ https://cdn.taboola.com/libtrc/udntw3-udnreading/loader.js:65
+[  943376ms] [WARNING] Mode 'tbla-cookie-match' for Placement 'TBLA Cookie Match' doesn't exist in configuration https://reading.udn.com/read/story/122749/8016247 @ https://cdn.taboola.com/libtrc/udntw3-udnreading/loader.js:65
+[  943377ms] [WARNING] Placements With no Content: TBLA Cookie Match @ https://cdn.taboola.com/libtrc/udntw3-udnreading/loader.js:65
+[  943571ms] [LOG] superBanner null @ https://udn.com/static/js/google-dfp-native.js?4:0
+[  943647ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getEvents @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  943647ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getAdserverTargeting [] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  943648ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - allowed keys [ hb_bidder, hb_adid, hb_pb, hb_size, hb_deal, hb_source, hb_format, hb_uuid, hb_cache_id, hb_cache_host, hb_native_title, hb_native_body, hb_native_body2, hb_native_privacy, hb_native_privicon, hb_native_brand, hb_native_image, hb_native_icon, hb_native_linkurl, hb_native_displayurl, hb_native_cta, hb_native_rating, hb_native_address, hb_native_downloads, hb_native_likes, hb_native_phone, hb_native_price, hb_native_saleprice, hb_renderer_url, hb_adTemplate ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  943648ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - removed keys [  ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  944315ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getEvents @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  944593ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getEvents @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  944593ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getAdserverTargeting [] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  944593ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - allowed keys [ hb_bidder, hb_adid, hb_pb, hb_size, hb_deal, hb_source, hb_format, hb_uuid, hb_cache_id, hb_cache_host, hb_native_title, hb_native_body, hb_native_body2, hb_native_privacy, hb_native_privicon, hb_native_brand, hb_native_image, hb_native_icon, hb_native_linkurl, hb_native_displayurl, hb_native_cta, hb_native_rating, hb_native_address, hb_native_downloads, hb_native_likes, hb_native_phone, hb_native_price, hb_native_saleprice, hb_renderer_url, hb_adTemplate ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  944593ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - removed keys [  ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  944594ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getEvents @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  944594ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: Invoking pbjs.getAdserverTargeting [] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  944594ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - allowed keys [ hb_bidder, hb_adid, hb_pb, hb_size, hb_deal, hb_source, hb_format, hb_uuid, hb_cache_id, hb_cache_host, hb_native_title, hb_native_body, hb_native_body2, hb_native_privacy, hb_native_privicon, hb_native_brand, hb_native_image, hb_native_icon, hb_native_linkurl, hb_native_displayurl, hb_native_cta, hb_native_rating, hb_native_address, hb_native_downloads, hb_native_likes, hb_native_phone, hb_native_price, hb_native_saleprice, hb_renderer_url, hb_adTemplate ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  944594ms] [INFO] %cPrebid display: inline-block; color: #fff; background: #3b88c3; padding: 1px 4px; border-radius: 3px; INFO: allowTargetingKeys - removed keys [  ] @ https://p.udn.com.tw/upf/static/common/prebid4.35.0_20210415.js:3
+[  945299ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ https://frankchiu.io/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[  947573ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ https://frankchiu.io/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[  950702ms] [WARNING] mediawiki.jqueryMsg: skin-theme-description: Parse error at position 0 in input: [實驗版本，遇到問題的可能性高] 減少裝置螢幕散發出的光線。 @ https://zh.wikipedia.org/w/load.php?lang=zh-tw&modules=mediawiki.jqueryMsg&skin=vector-2022&version=1buk6:1

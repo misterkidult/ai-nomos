@@ -60,7 +60,7 @@ You are helping the user read one article. feedDocument gives you its url (fetch
 2. For each term answer three single-choice fields: explained (has_definition / mentioned / assumed), intent (selling_point / technical / risk_or_limit), domain (core / edge / not).
 3. Do not report: model architecture names, training hyperparameters, algorithm names, statistics terms, or anything in the stoplist below.
 4. The known-term list is in lexicon. Report known terms too (so the dictionary sees them again) and set term_normalized to the lexicon term; otherwise term_normalized = "".
-5. De-identify sentence and context: replace company names, person names, amounts, phone numbers and emails with [company], [person], [amount], [phone], [email].
+5. De-identification applies only to a pasted document (no url): replace third-party company names, person names, amounts, phone numbers and emails in sentence and context with [company], [person], [amount], [phone], [email]. For a public article (url given) copy verbatim — the quote must stay checkable against the page, and the company or product that is the subject of the definition is part of the definition.
 6. If a term appears several times, report it once — the occurrence that has a definition.
 7. requested = true for terms from requested_terms, false for terms you added. A requested term that is not an AI term still gets a finding, with domain = not — that is your verdict, the page shows it to the user. A requested term you cannot find in the article goes to not_found, not to findings.
 8. source: fill url from feedDocument, plus title and published (YYYY-MM-DD) if the article shows them.
@@ -84,7 +84,7 @@ Applied per finding. Any hit → the finding is rejected with the code(s). Codes
 | `EDGE_WITHOUT_QUOTE` | `domain = edge` and `definition_quote = ""` — dropped as noise (plan v2 §2) |
 | `STOPLISTED` | `term_raw` (trimmed) is in the stoplist |
 | `NOT_AI_TERM` | `domain = not` and `requested = false` |
-| `PII_DETECTED` | **server only**: regex hit for email / phone / 統編 / amount / URL in `sentence`, `context` or `definition_quote` |
+| `PII_DETECTED` | **server only**: regex hit for email / phone / 統編 / amount in `sentence`, `context` or `definition_quote` (applies to pasted documents; a finding with `source.url` is a public article and is exempt) |
 
 `domain = not` **is stored** when `requested = true` (it is the agent's verdict on the user's term, and the user should see it); rejected with `NOT_AI_TERM` when `requested = false` (the agent has no reason to volunteer a non-AI term). Decided 2026-08-27.
 
