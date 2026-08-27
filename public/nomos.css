@@ -17,3 +17,11 @@ input{width:100%;border:1px solid #000;padding:10px;font:inherit;font-size:14px;
 button.lang{padding:4px 10px;font-size:13px;font-weight:400;background:#fff;white-space:nowrap}
 .card h1{font-size:24px}
 @media (max-width:640px){.list{columns:1}}
+.hot{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline}
+.hot a{color:inherit;text-decoration:none;display:inline-flex;align-items:baseline;gap:6px}.hot a b{line-height:1}
+.hot .up{font-size:12px;background:#C5FF4A;border:1px solid #000;padding:0 5px}.hot .n{font-size:12px;color:#555}
+.bars{display:inline-flex;gap:2px;align-items:flex-end;height:14px;margin-left:4px;vertical-align:middle}.bars i{display:block;width:5px;background:#000}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}@media(max-width:640px){.two{grid-template-columns:1fr}}
+.two h3{font-size:14px;margin:0 0 6px}.two .t{padding:3px 0;border-top:1px solid #eee;font-size:14px}.two .t a{color:inherit;text-decoration:none}.two .t small{color:#555;margin-left:6px}
+.feed{font-size:14px}.feed div{padding:6px 0;border-top:1px solid #eee}.feed .ago{color:#777;font-size:12px;width:6em;display:inline-block}.feed b{margin:0 4px}.feed a{color:inherit}.feed .meta{margin-left:8px}
+.fresh a{color:inherit;text-decoration:none}

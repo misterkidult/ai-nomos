@@ -15,6 +15,10 @@ window.NOMOS = (() => {
       noSightings: '還沒有任何目擊 —— 拿一篇提到它的文章來。', noDefs: '有人看見它，但還沒有人給定義句。',
       evidence: '只給證據不裁判；要引用就引用帶來源的那句。', back: '← 回字典', notFound: '字典裡沒有這個詞，也還沒有人看見它。',
       apiDown: '目擊資料層尚未上線（8/29）；現在顯示的是空狀態。', demoOn: '示範資料（fixtures/sightings-sample.json），不是真目擊。',
+      nLast: '最近一次目擊', hot: '本週在夯', hotNote: '（近 7 天目擊數；字越大越常被看見，↑＝本週才進榜）', hotEmpty: '近 7 天沒有目擊。', up: '↑ 新進榜',
+      sell: '🟢 大家在賣什麼', risk: '🔴 大家在擔心什麼', feed: '動態牆', feedNote: '（最新目擊，每一條都有來源）', feedEmpty: '還沒有目擊。', seenIn: (src, term) => '有人在《' + src + '》看到' + term, allLink: n => '全部 ' + n + ' 則 →', noMatch: '沒有符合的詞。',
+      justNow: '剛剛', hoursAgo: n => n + ' 小時前', yesterday: '昨天', daysAgo: n => n + ' 天前',
+      enums: { has_definition: '有定義句', mentioned: '順帶提到', assumed: '假設你懂', selling_point: '賣點', technical: '技術描述', risk_or_limit: '風險或限制' },
       lang: 'EN'
     },
     en: {
@@ -29,6 +33,10 @@ window.NOMOS = (() => {
       noSightings: 'No sightings yet — bring an article that mentions it.', noDefs: 'Seen, but no source has defined it yet.',
       evidence: 'Evidence only, no ruling; cite the quote with its source.', back: '← back to the dictionary', notFound: 'Not in the dictionary, and nobody has seen it yet.',
       apiDown: 'Sighting storage is not live yet (8/29); this is the empty state.', demoOn: 'Demo data (fixtures/sightings-sample.json), not real sightings.',
+      nLast: 'last sighting', hot: 'Hot this week', hotNote: '(sightings in the last 7 days; bigger = seen more; ↑ = entered the list this week)', hotEmpty: 'No sightings in the last 7 days.', up: '↑ new',
+      sell: '🟢 What people are selling', risk: '🔴 What people are worried about', feed: 'Activity', feedNote: '(latest sightings, each with its source)', feedEmpty: 'No sightings yet.', seenIn: (src, term) => 'someone saw ' + term + ' in “' + src + '”', allLink: n => 'all ' + n + ' entries →', noMatch: 'No matching term.',
+      justNow: 'just now', hoursAgo: n => n + ' h ago', yesterday: 'yesterday', daysAgo: n => n + ' days ago',
+      enums: { has_definition: 'has definition', mentioned: 'mentioned', assumed: 'assumed known', selling_point: 'selling point', technical: 'technical', risk_or_limit: 'risk / limit' },
       lang: '中文'
     }
   };
@@ -55,7 +63,8 @@ window.NOMOS = (() => {
   const termKey = s => s.term_key || (bySlug(s.term_normalized) ? s.term_normalized : String(s.term_raw || '').trim().toLowerCase());
   const groupByTerm = list => { const m = new Map(); for (const s of list) { const k = termKey(s); if (!m.has(k)) m.set(k, []); m.get(k).push(s); } return m; };
   const stats = rows => {
-    const dates = rows.map(s => (s.source && s.source.published) || (s.submitted_at || '').slice(0, 10)).filter(Boolean).sort();
+    /* first/last/quiet = when the dictionary received it (submitted_at); the article's own date stays on the quote */
+    const dates = rows.map(s => (s.submitted_at || (s.source && s.source.published) || '').slice(0, 10)).filter(Boolean).sort();
     const defs = rows.filter(s => s.definition_quote);
     return { sightings: rows.length, sources: new Set(rows.map(s => (s.source && s.source.url) || s.id)).size, first: dates[0] || null, last: dates[dates.length - 1] || null,
       quiet: dates.length ? Math.round((Date.now() - new Date(dates[dates.length - 1])) / 864e5) : null, defs, conflicting: new Set(defs.map(d => d.definition_quote)).size > 1 };
@@ -63,5 +72,6 @@ window.NOMOS = (() => {
   const quoteHtml = s => '<q>' + esc(s.definition_quote) + (s.source && s.source.url ? ' <a href="' + esc(s.source.url) + '" target="_blank" rel="noopener">' + esc(s.source.title || s.source.url) + '</a>' : '') + ' <span class="dim">' + esc((s.source && s.source.published) || '') + '</span></q>';
   const metaLine = st => [st.first ? T('firstSeen')(st.first) : null, T('sources')(st.sources), T('sightings')(st.sightings), st.quiet != null ? T('quiet')(st.quiet) : null].filter(Boolean).join(' · ');
 
-  return { esc, T, applyLang, toggleLang, loadLexicon, bySlug, lex: () => LEX, built: () => BUILT, loadSightings, termKey, groupByTerm, stats, quoteHtml, metaLine };
+  const ago = t => { const h = Math.round((Date.now() - t) / 36e5); if (h < 1) return T('justNow'); if (h < 24) return T('hoursAgo')(h); const d = Math.round(h / 24); return d === 1 ? T('yesterday') : T('daysAgo')(d); };
+  return { esc, T, ago, applyLang, toggleLang, loadLexicon, bySlug, lex: () => LEX, built: () => BUILT, loadSightings, termKey, groupByTerm, stats, quoteHtml, metaLine };
 })();

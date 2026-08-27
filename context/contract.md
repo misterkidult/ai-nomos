@@ -105,7 +105,7 @@ What the server keeps after a finding passes the locks. Public read surfaces onl
 | `submitter` | anonymous browser id (client-held; a limit, not a security feature) |
 | `contract_version` | integer, see §7 |
 
-Public via `lookupTerm`／`trending` (§5), never stored: `first_seen` = min `submitted_at`; `doc_count` = distinct `source.hash`; `quiet_days` = today − last `submitted_at` whose `definition_quote` is non-empty. Signal block hidden when `doc_count < 3`.
+Public via `lookupTerm`／`trending` (§5), never stored: `first_seen` = min `submitted_at` (when the dictionary first received it — never the article's `published`, which can be years older); `doc_count` = distinct `source.hash`; `quiet_days` = today − last `submitted_at` whose `definition_quote` is non-empty. Signal block hidden when `doc_count < 3`.
 
 ## 5. Tools
 

@@ -14,7 +14,18 @@
   <div><b id="n-sightings">—</b><span><span data-i="nSightings"></span> <small id="n-sources"></small></span></div>
   <div><b id="n-fresh">—</b><span data-i="nFresh"></span></div>
   <div><b id="n-contrib">—</b><span data-i="nContrib"></span></div>
+  <div><b id="n-last">—</b><span data-i="nLast"></span></div>
 </div></div>
+
+<div class="box">
+  <h2><span data-i="hot"></span> <span class="dim" data-i="hotNote"></span></h2>
+  <div class="hot" id="hot"></div>
+</div>
+
+<div class="box two">
+  <div><h3 data-i="sell"></h3><div id="sell"></div></div>
+  <div><h3 data-i="risk"></h3><div id="risk"></div></div>
+</div>
 
 <div class="box">
   <h2><span data-i="fresh"></span> <span class="dim" data-i="freshNote"></span></h2>
@@ -22,37 +33,47 @@
 </div>
 
 <div class="box">
-  <h2><span data-i="active"></span> <span class="dim" data-i="activeNote"></span></h2>
-  <div class="act" id="active"></div>
+  <h2><span data-i="feed"></span> <span class="dim" data-i="feedNote"></span></h2>
+  <div class="feed" id="feed"></div>
 </div>
 
-<div class="box">
-  <h2><span data-i="all"></span> <span class="dim" id="cnt"></span></h2>
-  <input id="filter" data-i="filterPh" data-attr="placeholder">
-  <div class="list" id="list"></div>
-</div>
+<div class="box act"><input id="filter" data-i="filterPh" data-attr="placeholder" style="flex:1;min-width:240px;margin:0"><a href="/terms" class="dim" id="alllink"></a></div>
+<div class="box" id="hits" hidden><div class="list" id="list"></div></div>
 
 <div class="box act"><span data-i="contribute"></span><a class="btn" href="/read" data-i="bring"></a><span class="dim" data-i="contributeNote"></span></div>
 
 <script src="/nomos.js"></script>
 <script>
 const N=NOMOS,$=id=>document.getElementById(id),esc=N.esc,T=N.T;
-$('lang').onclick=()=>{N.toggleLang();$('lang').textContent=T('lang');draw()};
+$('lang').onclick=()=>{N.toggleLang();draw()};
 let SIGHT={ok:false,sightings:[],contributors:0};
-function render(q){q=(q||'').toLowerCase();const rows=N.lex().filter(e=>!q||[e.term,e.zh,...(e.aka||[])].some(k=>k&&k.toLowerCase().includes(q)));
-  $('cnt').textContent=T('count')(rows.length);
-  $('list').innerHTML=rows.map(e=>'<div class="e"><a href="/term/'+esc(e.slug)+'">'+esc(e.term)+'</a>'+(e.zh&&e.zh!==e.term?'<small>'+esc(e.zh)+'</small>':'')+'<span class="line">'+esc(e.line)+'</span></div>').join('')}
+const when=s=>new Date((s.submitted_at)||(s.source&&s.source.published)||0);
+const href=k=>'/term/'+encodeURIComponent(k);
+const nameOf=(k,rows)=>{const e=N.bySlug(k);return e?e.term:rows[0].term_raw};
+function render(q){q=(q||'').toLowerCase();$('hits').hidden=!q;if(!q)return;const rows=N.lex().filter(e=>[e.term,e.zh,...(e.aka||[])].some(k=>k&&k.toLowerCase().includes(q)));
+  $('list').innerHTML=rows.length?rows.map(e=>'<div class="e"><a href="'+href(e.slug)+'">'+esc(e.term)+'</a>'+(e.zh&&e.zh!==e.term?'<small>'+esc(e.zh)+'</small>':'')+'<span class="line">'+esc(e.line)+'</span></div>').join(''):'<p class="dim">'+T('noMatch')+'</p>'}
 function draw(){
-  N.applyLang();$('lang').textContent=T('lang');
-  const S=SIGHT.sightings,groups=N.groupByTerm(S);
+  N.applyLang();$('lang').textContent=T('lang');$('alllink').textContent=T('allLink')(N.lex().length);
+  const S=SIGHT.sightings,groups=N.groupByTerm(S),now=Date.now(),d7=now-7*864e5,d14=now-14*864e5;
   $('n-terms').textContent=N.lex().length;$('n-sightings').textContent=S.length;$('n-sources').textContent=S.length?T('nSources')(new Set(S.map(s=>s.source&&s.source.url).filter(Boolean)).size):'';
   $('n-contrib').textContent=SIGHT.contributors;
-  const fresh=[...groups].filter(([k])=>!N.bySlug(k)).map(([k,rows])=>({k,rows,st:N.stats(rows)})).sort((a,b)=>(b.st.last||'')>(a.st.last||'')?1:-1);
-  $('n-fresh').textContent=fresh.length;
-  $('fresh').innerHTML=fresh.length?fresh.map(f=>'<div class="fresh"><b>'+esc(f.rows[0].term_raw)+'</b><span class="new">'+T('newTerm')+'</span> <span class="meta">'+N.metaLine(f.st)+(f.st.defs.length?'':' · '+T('assumedNoDef'))+'</span>'+(f.st.defs[0]?N.quoteHtml(f.st.defs[0]):'')+'</div>').join(''):'<p class="dim">'+T('freshEmpty')+'</p>';
-  const cut=Date.now()-30*864e5;
-  const active=[...groups].filter(([k])=>N.bySlug(k)).map(([k,rows])=>({e:N.bySlug(k),n:rows.filter(s=>new Date((s.source&&s.source.published)||s.submitted_at||0)>=cut).length,st:N.stats(rows)})).filter(a=>a.n).sort((a,b)=>b.n-a.n).slice(0,8);
-  $('active').innerHTML=active.length?active.map(a=>'<span><a href="/term/'+esc(a.e.slug)+'"><b>'+esc(a.e.term)+'</b></a> <span class="meta">'+T('times')(a.n)+'</span>'+(a.st.conflicting?'<span class="conflict">'+T('conflict')+'</span>':'')+'</span>').join(''):'<p class="dim">'+T('activeEmpty')+'</p>';
+  const latest=S.length?Math.max(...S.map(s=>+when(s))):null;$('n-last').textContent=latest?N.ago(latest):'—';
+  /* hot: last 7 days, with prev 7 and daily bars */
+  const hot=[...groups].map(([k,rows])=>{const n7=rows.filter(s=>+when(s)>=d7).length,p7=rows.filter(s=>{const t=+when(s);return t<d7&&t>=d14}).length;
+    const bars=Array.from({length:7},(_,i)=>rows.filter(s=>{const d=Math.floor((now-when(s))/864e5);return d===6-i}).length);
+    return {k,rows,n7,p7,bars,st:N.stats(rows)}}).filter(h=>h.n7).sort((a,b)=>b.n7-a.n7).slice(0,12);
+  $('hot').innerHTML=hot.length?hot.map(h=>'<a href="'+href(h.k)+'"><b style="font-size:'+(14+Math.min(h.n7,12)*2.4)+'px">'+esc(nameOf(h.k,h.rows))+'</b>'+(!N.bySlug(h.k)?'<span class="new">'+T('newTerm')+'</span>':'')+(h.st.conflicting?'<span class="conflict">'+T('conflict')+'</span>':'')+(h.p7===0?'<span class="up">'+T('up')+'</span>':'')+'<span class="n">'+h.n7+'</span><span class="bars">'+h.bars.map(b=>'<i style="height:'+(2+Math.min(b,4)*3)+'px"></i>').join('')+'</span></a>').join(''):'<p class="dim">'+T('hotEmpty')+'</p>';
+  /* sell / risk by intent, last 30 days */
+  const d30=now-30*864e5,by=intent=>[...groups].map(([k,rows])=>({k,rows,n:rows.filter(s=>s.intent===intent&&+when(s)>=d30).length})).filter(x=>x.n).sort((a,b)=>b.n-a.n).slice(0,6);
+  const col=list=>list.length?list.map(x=>'<div class="t"><a href="'+href(x.k)+'"><b>'+esc(nameOf(x.k,x.rows))+'</b></a><small>'+T('times')(x.n)+'</small></div>').join(''):'<p class="dim">'+T('activeEmpty')+'</p>';
+  $('sell').innerHTML=col(by('selling_point'));$('risk').innerHTML=col(by('risk_or_limit'));
+  /* fresh: unknown terms, newest first */
+  const fresh=[...groups].filter(([k])=>!N.bySlug(k)).map(([k,rows])=>({k,rows,st:N.stats(rows),last:Math.max(...rows.map(s=>+when(s)))})).sort((a,b)=>b.last-a.last).slice(0,6);
+  $('n-fresh').textContent=[...groups].filter(([k])=>!N.bySlug(k)).length;
+  $('fresh').innerHTML=fresh.length?fresh.map(f=>'<div class="fresh"><a href="'+href(f.k)+'"><b>'+esc(f.rows[0].term_raw)+'</b></a><span class="new">'+T('newTerm')+'</span> <span class="meta">'+N.metaLine(f.st)+(f.st.defs.length?'':' · '+T('assumedNoDef'))+'</span>'+(f.st.defs[0]?N.quoteHtml(f.st.defs[0]):'')+'</div>').join(''):'<p class="dim">'+T('freshEmpty')+'</p>';
+  /* feed */
+  const feed=[...S].sort((a,b)=>when(b)-when(a)).slice(0,10);
+  $('feed').innerHTML=feed.length?feed.map(s=>{const k=N.termKey(s),e=N.bySlug(k);return '<div><span class="ago">'+N.ago(+when(s))+'</span>'+T('seenIn')('<a href="'+esc(s.source&&s.source.url||'#')+'" target="_blank" rel="noopener">'+esc(s.source&&s.source.title||s.source&&s.source.url||'—')+'</a>','<a href="'+href(k)+'"><b>'+esc(s.term_raw)+'</b></a>')+'<span class="meta">'+[e?null:T('newTerm'),T('enums')[s.explained],T('enums')[s.intent]].filter(Boolean).join(' · ')+'</span></div>'}).join(''):'<p class="dim">'+T('feedEmpty')+'</p>';
   const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
   render($('filter').value);
 }
