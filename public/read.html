@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ai-nomos · 讀一篇文件</title>
+<style>
+body{font-family:system-ui,"Noto Sans TC",sans-serif;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.7;color:#212529;background:#EAEAEA}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 8px}
+.sub{color:#555;margin:0 0 20px}
+code{background:#fff;border:1px solid #000;padding:1px 6px;font-size:13px}
+.box{background:#fff;border:1px solid #000;padding:16px;margin:16px 0}
+.ok{color:#0a7d2c}.no{color:#b00020}.dim{color:#777}
+textarea{width:100%;min-height:220px;border:1px solid #000;padding:10px;font:inherit;font-size:14px;resize:vertical;box-sizing:border-box}
+button{border:1px solid #000;background:#C5FF4A;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer;margin:8px 8px 0 0}
+button.ghost{background:#fff;font-weight:400}
+.chips span{display:inline-block;border:1px solid #000;background:#EAEAEA;padding:2px 8px;margin:0 6px 6px 0;font-size:14px}
+.chips span small{color:#555}
+.f{border-top:1px solid #ddd;padding:10px 0}
+.f:first-child{border-top:0}
+.f .t{font-weight:700}.f .new{background:#C5FF4A;border:1px solid #000;padding:0 6px;font-size:12px;margin-left:6px}
+.f .known{background:#fff;border:1px solid #000;padding:0 6px;font-size:12px;margin-left:6px}
+.f .tags{font-size:13px;color:#555}
+.f q{display:block;margin:4px 0 0;padding-left:10px;border-left:3px solid #000;font-size:14px}
+.f q::before,.f q::after{content:""}
+#log div{padding:4px 0;border-top:1px solid #ddd;font-size:13px}
+.stat{display:flex;gap:24px;flex-wrap:wrap;font-size:14px}
+</style>
+</head>
+<body>
+<h1>ai-nomos · 讀一篇文件</h1>
+<p class="sub">把文件貼進來（<strong>不上傳</strong>，全文留在你的瀏覽器）。頁面先比對已知詞；若瀏覽器裡有 agent，它會找出文中的 AI 名詞與它們被怎麼用，送回字典當目擊紀錄。</p>
+
+<div class="box">
+  <div class="stat">
+    <div>字典：<span id="lex">載入中…</span></div>
+    <div>agent：<span id="env">偵測中…</span></div>
+    <div>工具：<span id="tools">—</span></div>
+  </div>
+</div>
+
+<div class="box">
+  <h2>1 · 文件</h2>
+  <textarea id="doc" placeholder="貼一篇提案、報價、新聞、白皮書…"></textarea>
+  <div>
+    <button id="match">本地比對已知詞</button>
+    <button id="clear" class="ghost">清空</button>
+    <span class="dim" id="doclen"></span>
+  </div>
+</div>
+
+<div class="box">
+  <h2>2 · 已知詞命中 <span class="dim" id="hitn"></span></h2>
+  <div class="chips" id="hits"><span class="dim" style="border:0;background:none;padding:0">尚未比對</span></div>
+</div>
+
+<div class="box">
+  <h2>3 · 目擊紀錄 <span class="dim">（mock：只在畫面上，尚未寫入伺服器）</span></h2>
+  <p class="dim" id="agenthint">有 agent 時對它說：「呼叫 <code>feedDocument</code>，照規則找出文中的 AI 名詞，再用 <code>submitFindings</code> 送回」。沒有 agent 也可以 <button id="demo" class="ghost">載入範例目擊（廠商文，14 筆）</button></p>
+  <div id="findings"></div>
+</div>
+
+<div class="box"><strong>紀錄</strong><div id="log"></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const log=(m,cls)=>{const d=document.createElement('div');d.textContent=new Date().toLocaleTimeString()+'　'+m;if(cls)d.className=cls;$('log').prepend(d)};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- 字典薄索引 ---------- */
+let LEX=[];               // {term,aka[],zh,slug,line}
+let ALIAS=[];             // [{key:lowercased, entry}] 依長度排序，長的先比
+fetch('lexicon.json').then(r=>r.json()).then(d=>{
+  LEX=d.terms;
+  for(const e of LEX){ for(const k of [e.term,e.zh,...(e.aka||[])]){ if(k&&k.length>=2) ALIAS.push({key:k.toLowerCase(),entry:e}); } }
+  ALIAS.sort((a,b)=>b.key.length-a.key.length);
+  $('lex').innerHTML='<span class="ok">'+d.count+' 則</span>（'+d.built+'）';
+  log('字典載入 '+d.count+' 則、'+ALIAS.length+' 個比對鍵','ok');
+}).catch(e=>{$('lex').innerHTML='<span class="no">載入失敗</span>';log('lexicon.json 載入失敗：'+e.message,'no')});
+
+/* ---------- 本地比對 ---------- */
+function matchKnown(text){
+  const low=text.toLowerCase(); const seen=new Map();
+  for(const {key,entry} of ALIAS){
+    if(seen.has(entry.slug)) continue;
+    // 英文鍵要整字比對，中文鍵直接找子字串
+    const isAscii=/^[\x20-\x7e]+$/.test(key);
+    let hit=false;
+    if(isAscii){ const re=new RegExp('(^|[^a-z0-9])'+key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'($|[^a-z0-9])','i'); hit=re.test(low); }
+    else hit=low.includes(key);
+    if(hit) seen.set(entry.slug,{...entry,matched:key});
+  }
+  return [...seen.values()];
+}
+function renderHits(hits){
+  $('hitn').textContent=hits.length?'（'+hits.length+' 則）':'（0 則）';
+  $('hits').innerHTML=hits.length?hits.map(h=>'<span title="'+esc(h.line)+'">'+esc(h.term)+(h.zh&&h.zh!==h.term?' <small>'+esc(h.zh)+'</small>':'')+'</span>').join(''):'<span class="dim" style="border:0;background:none;padding:0">沒有命中已知詞</span>';
+}
+$('match').onclick=()=>{const t=$('doc').value.trim();if(!t){log('文件是空的','no');return}const h=matchKnown(t);renderHits(h);log('本地比對命中 '+h.length+' 則');};
+$('clear').onclick=()=>{$('doc').value='';renderHits([]);$('findings').innerHTML='';$('doclen').textContent=''};
+$('doc').addEventListener('input',()=>{$('doclen').textContent=$('doc').value.length+' 字'});
+
+/* ---------- 提煉規則（feedDocument 回給 agent 的指示） ---------- */
+const STOPLIST=['導入','自架','本地','整合','平台','系統','流程','資料','知識庫','工具','應用','服務','方案','自動化','數位轉型','雲端','上線','部署','優化'];
+const RULES=`你正在幫使用者讀這份文件。請照下面的規則找出文中的 AI 名詞，用 submitFindings 回報給字典。
+1. 只抄，不解釋。term_raw 照原文寫法；sentence 抄它出現的那一整句（120 字內）；context 抄該句前後各一句。
+   definition_quote 只在文章自己有解釋這個詞時才填，且必須是 context 裡的原文引句。文章沒解釋的留空，不要用你自己的知識補。
+2. 每個詞回答三個單選：explained（有定義句／順帶提到／假設你懂）、intent（賣點／技術描述／風險或限制）、domain（是／邊緣／不是）。
+3. 不收：模型架構名、訓練參數、演算法名、統計名詞；也不收停用清單裡的詞：${STOPLIST.join('、')}。
+4. 已知詞清單附在 lexicon；命中的照樣回報，term_normalized 填字典主標（term 欄）；沒命中的 term_normalized 留空。
+5. 去識別化：sentence 與 context 裡的公司名、人名、金額、電話、email 換成 [公司]、[人名]、[金額]、[電話]、[email]。
+6. 一個詞多次出現只回報一筆，選有定義句的那一次。`;
+const FINDING_SCHEMA={type:'object',properties:{
+  term_raw:{type:'string',description:'原文寫法'},
+  term_normalized:{type:'string',description:'對到字典主標；不是已知詞則空字串'},
+  sentence:{type:'string',description:'出現那一句，去識別化，120 字內'},
+  context:{type:'string',description:'原句前後各一句'},
+  explained:{type:'string',enum:['有定義句','順帶提到','假設你懂']},
+  intent:{type:'string',enum:['賣點','技術描述','風險或限制']},
+  domain:{type:'string',enum:['是','邊緣','不是']},
+  definition_quote:{type:'string',description:'原文引句，須為 context 子字串；沒有就空字串'}
+},required:['term_raw','sentence','explained','intent','domain'],additionalProperties:false};
+
+/* ---------- 三條鎖（mock：伺服器端的規則先在這裡照做一遍） ---------- */
+const ENUMS={explained:FINDING_SCHEMA.properties.explained.enum,intent:FINDING_SCHEMA.properties.intent.enum,domain:FINDING_SCHEMA.properties.domain.enum};
+function check(f){
+  const why=[];
+  for(const k of ['explained','intent','domain']) if(!ENUMS[k].includes(f[k])) why.push(k+' 不在選項內');
+  if(!f.term_raw||!f.sentence) why.push('缺 term_raw 或 sentence');
+  else if(!f.sentence.toLowerCase().includes(String(f.term_raw).toLowerCase())) why.push('sentence 不含 term_raw');
+  if(f.sentence&&f.sentence.length>120) why.push('sentence 超過 120 字');
+  if(f.definition_quote){ const ctx=(f.context||f.sentence||''); if(!ctx.includes(f.definition_quote)) why.push('definition_quote 不在 context 裡'); }
+  if(f.domain==='邊緣'&&!f.definition_quote) why.push('domain=邊緣 且無定義句，丟棄');
+  if(STOPLIST.includes(String(f.term_raw).trim())) why.push('停用清單');
+  return why;
+}
+
+/* ---------- 目擊呈現 ---------- */
+let FINDINGS=[];
+function lookup(term){ if(!term) return null; const k=String(term).toLowerCase(); const a=ALIAS.find(x=>x.key===k); if(a) return a.entry; const m=matchKnown(String(term)); return m.length?m[0]:null; }
+function renderFindings(){
+  if(!FINDINGS.length){$('findings').innerHTML='<p class="dim">尚無目擊</p>';return}
+  $('findings').innerHTML=FINDINGS.map(f=>{
+    const e=lookup(f.term_normalized)||lookup(f.term_raw);
+    return '<div class="f"><span class="t">'+esc(f.term_raw)+'</span>'+(e?'<span class="known">已知 · '+esc(e.term)+'</span>':'<span class="new">新詞</span>')+
+      ' <span class="tags">'+esc(f.explained)+' · '+esc(f.intent)+' · domain '+esc(f.domain)+'</span>'+
+      (f.definition_quote?'<q>'+esc(f.definition_quote)+'</q>':'')+'</div>';
+  }).join('');
+}
+function submit(findings,from){
+  const acc=[],rej=[];
+  (findings||[]).forEach((f,i)=>{const why=check(f);if(why.length)rej.push({index:i,term_raw:f.term_raw,reasons:why});else acc.push(f)});
+  FINDINGS=FINDINGS.concat(acc);renderFindings();
+  log(from+'：收 '+acc.length+' 筆、擋 '+rej.length+' 筆'+(rej.length?'（'+rej.map(r=>r.term_raw+'：'+r.reasons.join('／')).join('；')+'）':''),rej.length?'no':'ok');
+  return {accepted:acc.length,rejected:rej,status:'mock — 未寫入伺服器'};
+}
+$('demo').onclick=async()=>{
+  try{const d=await (await fetch('fixtures/out_A.json')).json();
+    submit(d.map(x=>({term_raw:x.term,term_normalized:x.known?x.term:'',sentence:x.sentence,context:x.sentence,explained:x.explained,intent:x.intent,domain:x.domain,definition_quote:x.definition_quote||''})),'範例目擊');}
+  catch(e){log('範例載入失敗：'+e.message,'no')}
+};
+
+/* ---------- WebMCP 工具 ---------- */
+function pick(){return (typeof document.modelContext?.registerTool==='function')?document.modelContext:(navigator.modelContext&&typeof navigator.modelContext.registerTool==='function')?navigator.modelContext:null}
+let tries=0;
+const timer=setInterval(()=>{const mc=pick();tries++;
+  if(mc){clearInterval(timer);setup(mc)}
+  else if(tries>=20){clearInterval(timer);$('env').innerHTML='<span class="dim">無（退化模式：只做本地比對）</span>';log('無 modelContext，退化模式');}
+},500);
+function setup(mc){
+  const which=mc===document.modelContext?'document.modelContext':'navigator.modelContext';
+  $('env').innerHTML='<span class="ok">'+which+'</span>';
+  const tools=[
+    {name:'feedDocument',description:'取得使用者貼在頁面上的文件全文、已知 AI 詞命中、字典薄索引，以及找詞的提煉規則與回報格式。唯讀。找完請用 submitFindings 回報。',
+     inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
+     async execute(){
+       const text=$('doc').value.trim();
+       const hits=text?matchKnown(text):[];renderHits(hits);
+       log('feedDocument 被呼叫（文件 '+text.length+' 字、命中 '+hits.length+' 則）','ok');
+       return {document:text,known_hits:hits.map(h=>({term:h.term,zh:h.zh,slug:h.slug,matched:h.matched})),
+         lexicon:LEX.map(e=>({term:e.term,aka:e.aka,zh:e.zh})),rules:RULES,finding_schema:FINDING_SCHEMA};
+     }},
+    {name:'submitFindings',description:'把從文件找出的 AI 名詞目擊紀錄送回字典。每筆依 feedDocument 回傳的 finding_schema。伺服器會檢查三條規則並可能退回部分筆數。',
+     inputSchema:{type:'object',properties:{findings:{type:'array',items:FINDING_SCHEMA}},required:['findings'],additionalProperties:false},
+     async execute(input){ return submit(input&&input.findings,'submitFindings'); }}
+  ];
+  try{tools.forEach(t=>{const r=mc.registerTool(t);if(r&&r.then)r.catch(e=>log('registerTool '+t.name+' 失敗：'+e.message,'no'))});$('tools').textContent=tools.map(t=>t.name).join('、');log('已註冊 '+tools.length+' 個工具','ok');}
+  catch(e){$('tools').innerHTML='<span class="no">registerTool 失敗</span>';log('registerTool 失敗：'+e.message,'no');}
+}
+renderFindings();
+</script>
+</body>
+</html>

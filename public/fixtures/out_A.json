@@ -1,0 +1,16 @@
+[
+{"term":"AI Agent","known":true,"sentence":"理解 AI Agent 的技術架構，最簡單的方法就是把它比喻成一塊草莓蛋糕。","explained":"假設你懂","intent":"賣點","domain":"是","definition_quote":""},
+{"term":"大語言模型（LLM）","known":true,"sentence":"大語言模型（LLM）如同蛋糕的基底，支撐整體結構。","explained":"有定義句","intent":"技術描述","domain":"是","definition_quote":"它賦予 AI Agent 理解與生成語言的能力，能讀懂作業指引、解釋技術術語，甚至協助撰寫 SOP 或說明文件，是智慧代理人運作的核心引擎。"},
+{"term":"Retrieval-Augmented Generation（RAG）","known":true,"sentence":"Retrieval-Augmented Generation（RAG）技術好比蛋糕中的奶油，將企業的知識庫、FAQ、維修紀錄等資料整合進來，使 AI Agent 的回答不僅合理，還具備實際依據與上下文連貫性，強化其專業可信度。","explained":"有定義句","intent":"技術描述","domain":"是","definition_quote":"將企業的知識庫、FAQ、維修紀錄等資料整合進來，使 AI Agent 的回答不僅合理，還具備實際依據與上下文連貫性"},
+{"term":"MCP（Multi-Agent、Context、Process）","known":true,"sentence":"最上層的 MCP（Multi-Agent、Context、Process）如同蛋糕上的草莓，讓 AI Agent 能根據不同職場場景進行任務分工與決策，並整合於 CRM、MES、內訓平台等日常系統中，實現智慧協作與即時應對。","explained":"有定義句","intent":"技術描述","domain":"是","definition_quote":"讓 AI Agent 能根據不同職場場景進行任務分工與決策，並整合於 CRM、MES、內訓平台等日常系統中，實現智慧協作與即時應對"},
+{"term":"知識庫","known":false,"sentence":"Retrieval-Augmented Generation（RAG）技術好比蛋糕中的奶油，將企業的知識庫、FAQ、維修紀錄等資料整合進來，使 AI Agent 的回答不僅合理，還具備實際依據與上下文連貫性，強化其專業可信度。","explained":"順帶提到","intent":"技術描述","domain":"邊緣","definition_quote":""},
+{"term":"上下文","known":true,"sentence":"Retrieval-Augmented Generation（RAG）技術好比蛋糕中的奶油，將企業的知識庫、FAQ、維修紀錄等資料整合進來，使 AI Agent 的回答不僅合理，還具備實際依據與上下文連貫性，強化其專業可信度。","explained":"假設你懂","intent":"技術描述","domain":"是","definition_quote":""},
+{"term":"導入","known":true,"sentence":"台灣製造業、科技業紛紛在導入AI Agent，解決大量人員斷層問題。","explained":"順帶提到","intent":"賣點","domain":"邊緣","definition_quote":""},
+{"term":"模型訓練","known":true,"sentence":"企業無需重建系統，只要選擇支援模型訓練與語氣設定的平台，便能整合知識庫、內訓資料、CRM 系統等，打造出能理解企業語境並主動協作的 AI 助理。","explained":"順帶提到","intent":"賣點","domain":"是","definition_quote":""},
+{"term":"語氣設定","known":true,"sentence":"企業無需重建系統，只要選擇支援模型訓練與語氣設定的平台，便能整合知識庫、內訓資料、CRM 系統等，打造出能理解企業語境並主動協作的 AI 助理。","explained":"順帶提到","intent":"賣點","domain":"邊緣","definition_quote":""},
+{"term":"AI 助理","known":false,"sentence":"企業無需重建系統，只要選擇支援模型訓練與語氣設定的平台，便能整合知識庫、內訓資料、CRM 系統等，打造出能理解企業語境並主動協作的 AI 助理。","explained":"順帶提到","intent":"賣點","domain":"邊緣","definition_quote":""},
+{"term":"知識萃取","known":false,"sentence":"AI Agent 能在他們仍在職時進行知識萃取，將操作經驗轉化為結構化教材或互動式對話腳本。","explained":"順帶提到","intent":"賣點","domain":"邊緣","definition_quote":""},
+{"term":"提示詞","known":true,"sentence":"能互動學習：不是查資料，而是不斷將流程經驗設計成提示詞。","explained":"假設你懂","intent":"賣點","domain":"是","definition_quote":""},
+{"term":"提示詞設計","known":true,"sentence":"AI Agent 必須具備企業內部流程知識與提示詞設計能力，能根據對話歷程進行調整與補充。","explained":"順帶提到","intent":"技術描述","domain":"是","definition_quote":""},
+{"term":"ChatGPT","known":true,"sentence":"課程將結合 ChatGPT 與 [公司] AI Agent Hub 平台，從提示詞設計、流程拆解到平台操作實作。","explained":"假設你懂","intent":"賣點","domain":"是","definition_quote":""}
+]
