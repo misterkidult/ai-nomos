@@ -56,3 +56,11 @@
 - 34 篇來源自動抓取被反爬擋（iThome 429、INSIDE／天下／Medium 403），內容正常、連結能開，不是壞連結
 - `lookup()` 用最長別名比對，「MCP（Multi-Agent…）」曾被對到 Context，已修成「詞開頭優先」（`nomos.js` 沒有這段，`read.html` 有；詞條頁靠 `term_key` 不靠它）
 - 新詞的 `term_key` 是 `term_raw` 小寫，同一新詞不同大小寫會合併、不同寫法（中／英）不會 —— G 那題會撞到這個
+
+## 七、08-28 進度（第一輪假畫面已出，待拍板）
+
+- 假畫面在 `context/mock/`（`home-mock.html`、`term-mock.html?slug=…`、`mock.css`、`en.json`）。看法：repo 根目錄 `python3 -m http.server 8787 --bind 0.0.0.0`，開 `/context/mock/home-mock.html`；假畫面直接吃 `/public/` 的真 CSS／JS／資料
+- 做了：套 coreplay 2027 token（Inter／Noto Sans TC／IBM Plex Mono、果核藍 `#2540d8`、hairline、mono kicker）；白／紙／藍／墨黑正反交錯**全幅色帶**、無 inner container、內容寬 1600；`/term`＝義項 ①②…（A）＋寫法（G）＋賣 vs 擔心（B）＋術語濃度（C）＋「提到但沒解釋」註腳；首頁＝本週在夯（詞＋最多人用的那句，矛盾標籤已拿掉）＋賣 vs 擔心＋剛冒出來（D）＋動態牆（詞＋那句話）
+- **英文資料層** `en.json`：`lexicon`（133 句字典白話 slug→en）＋`quotes`（415 句引句去重，**原文當 key**→en）。畫面英文為主、原文縮小附下（原文才可查核）。契約／`public/`／`nomos.js` 未動；詞名（`term_raw`）與文章標題不翻。⚠ 不可逆：原文當 key，原文一改譯文就對不上 —— Supabase 建表時決定譯文是否與目擊同列
+- **待 Kidult 拍**：① Agent 頁「16 種寫法」要不要只留前 5 種 ② 動態牆同一篇文章要不要合併成一條（張力 F）③ 契約要不要加「translations are a display layer」（§3 agent never translates 的解讀）
+- 拍了之後：先搬 `/term`（`public/term.html`＋`nomos.css`），`en.json` 進 `public/`，再首頁
