@@ -4,6 +4,10 @@
 
 找得到定義句：127 篇｜找不到（果核自造詞，外面沒人定義）：6 則
 
+## 連結驗證（2026-08-27 17:50）
+
+127 條全部用真瀏覽器開過：**125 條頁面上找得到引句**；2 條頁面開得了但找不到引句（可能改版或被 cookie 牆擋）→ ☐ **Data Drift**（tredence.com）、☐ **SaaS**（azure.microsoft.com），要換文章。
+
 ## 待餵
 
 - ☐ **Adoption**｜https://larridin.com/blog/what-is-ai-adoption｜What is AI Adoption?
