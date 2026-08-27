@@ -22,9 +22,13 @@ function draw(){
   const name=e?e.term:(rows[0]?rows[0].term_raw:slug);document.title=name+' · ai-nomos';
   const st=N.stats(rows);
   if(!e&&!rows.length){$('card').innerHTML='<h1>'+esc(slug)+'</h1><p class="dim">'+T('notFound')+'</p>';return}
+  const explain=rows.filter(s=>s.definition_quote),mention=rows.filter(s=>!s.definition_quote);
+  const row=s=>'<div class="src"><a href="'+esc(s.source&&s.source.url||'#')+'" target="_blank" rel="noopener">'+esc(s.source&&s.source.title||s.source&&s.source.url||'—')+'</a><span class="meta">'+[s.source&&s.source.published,T('enums')[s.explained],T('enums')[s.intent]].filter(Boolean).join(' · ')+'</span>'+(s.definition_quote?'<q>'+esc(s.definition_quote)+'</q>':'')+'</div>';
   $('card').innerHTML='<h1>'+esc(name)+(e&&e.zh&&e.zh!==e.term?' <small class="meta">'+esc(e.zh)+'</small>':'')+(!e?'<span class="new">'+T('newTerm')+'</span>':'')+(st.conflicting?'<span class="conflict">'+T('conflict')+'</span>':'')+'</h1>'+
-    (e?'<p class="dim" style="margin:0">'+T('editorial')+esc(e.line)+'</p>'+(e.aka&&e.aka.length?'<p class="meta">aka：'+esc(e.aka.join('、'))+'</p>':''):'')+
-    (rows.length?'<p class="meta">'+N.metaLine(st)+'</p>'+(st.defs.length?st.defs.map(N.quoteHtml).join(''):'<p class="dim">'+T('noDefs')+'</p>'):'<p class="meta">'+T('noSightings')+'</p>')+
+    (e?'<p class="def">'+esc(e.line)+'</p><p class="meta">'+T('editorialTag')+(e.aka&&e.aka.length?' · aka '+esc(e.aka.join('、')):'')+'</p>':'')+
+    (rows.length?'<p class="meta">'+N.metaLine(st)+'</p>':'<p class="meta">'+T('noSightings')+'</p>')+
+    (explain.length?'<h2>'+T('explainedBy')(explain.length)+'</h2>'+explain.map(row).join(''):'')+
+    (mention.length?'<h2>'+T('mentionedBy')(mention.length)+'</h2>'+mention.map(row).join(''):'')+
     '<p class="dim" style="margin:12px 0 0">'+T('evidence')+'</p>';
   const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(SIGHT.interim){note.hidden=false;note.textContent=T('interim')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
 }
