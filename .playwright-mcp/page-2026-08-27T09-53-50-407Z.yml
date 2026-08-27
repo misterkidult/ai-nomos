@@ -1,0 +1,29 @@
+- generic [active] [ref=f329e1]:
+  - generic [ref=f329e2]:
+    - generic [ref=f329e3]:
+      - heading "ai-nomos" [level=1] [ref=f329e4]
+      - paragraph
+    - button "EN" [ref=f329e5] [cursor=pointer]
+  - generic [ref=f329e7]:
+    - generic [ref=f329e8]: —
+    - generic [ref=f329e10]: —
+    - generic [ref=f329e12]: —
+    - generic [ref=f329e14]: —
+    - generic [ref=f329e16]: —
+  - generic [ref=f329e18]:
+    - heading [level=2]
+  - generic [ref=f329e19]:
+    - generic [ref=f329e20]:
+      - heading [level=3]
+    - generic [ref=f329e21]:
+      - heading [level=3]
+  - generic [ref=f329e22]:
+    - heading [level=2]
+  - generic [ref=f329e23]:
+    - heading [level=2]
+  - generic [ref=f329e24]:
+    - textbox [ref=f329e25]
+    - link:
+      - /url: /terms
+  - link [ref=f329e27] [cursor=pointer]:
+    - /url: /read
