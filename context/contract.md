@@ -43,6 +43,12 @@ JSON Schema (also returned by `feedDocument` as `finding_schema`):
   "definition_quote":{"type":"string"}}}
 ```
 
+Optional, page ↔ server only (not required from the agent): `source.url` — see §4.
+
+```json
+{"source":{"url":"https://…","title":"","published":""}}
+```
+
 ## 2. Extraction rules (returned by `feedDocument` as `rules`, English, verbatim)
 
 ```
@@ -89,7 +95,7 @@ What the server keeps after a finding passes the locks. Public read surfaces onl
 | `sentence`, `context` | **never public** (plan v2 §2) |
 | ★ `origin` | `agent` (via `submitFindings`) · `seed` (`fixtures/seed-133.json`) · `editorial` (the 133 hand-written entries; not in the signal system) |
 | `source.hash` | salted hash of the document text, computed client-side; dedup key and the "N documents" counter |
-| ★ `source.url`, ★ `source.title`, `source.published` | present for `seed` only (public article) |
+| ★ `source.url`, ★ `source.title`, ★ `source.published` | **always public when present.** A sighting without a source is just a quote; the link is what lets a reader check it. Present for `seed` (public article). For `agent` origin the document is pasted, not uploaded, so `source.url` is `""` unless the agent can read the page URL — open for Matt: accept an optional `source.url` from `submitFindings`? |
 | ★ `submitted_at` | server time, ISO 8601 |
 | `submitter` | anonymous browser id (client-held; a limit, not a security feature) |
 | `contract_version` | integer, see §7 |

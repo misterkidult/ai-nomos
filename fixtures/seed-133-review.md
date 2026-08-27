@@ -7,6 +7,263 @@
 - 找不到定義句：**6** 則
 - 字典 133 則中未被覆蓋：**6** 則
 
+## 127 則通過的目擊：來源在前，引文在後（勾 ☐ 表示來源不可信、要換文章）
+
+- ☐ **Adoption**｜https://larridin.com/blog/what-is-ai-adoption｜What is AI Adoption?｜2026-02-13
+  - AI adoption is the process by which an organization moves from experimenting with artificial intelligence tools to embedding them into daily workflows across teams, functions, and business units.
+- ☐ **Agent**｜https://www.gvm.com.tw/article/113965｜AI Agent來了，但它是什麼？AI代理定義、應用、挑戰全解讀｜2026-05-26
+  - 所謂AI Agent，是指具備自主運作（autonomous）能力、無需人類介入的AI系統。
+- ☐ **Agent Loop**｜https://www.mindstudio.ai/blog/what-is-an-agentic-loop-autonomous-ai-agents｜What Is an Agentic Loop? The Core Pattern Behind Autonomous AI Agents｜2026-06-21
+  - An agentic loop is a repeated cycle of three steps: think, act, observe.
+- ☐ **AI Governance**｜https://ai-coding.wiselychen.com/ai-governance-not-it-problem/｜AI 治理是什麼？企業在 AI 時代必須回答的 3 個責任問題｜2026-01-10
+  - AI 治理（AI Governance）是指企業在使用 AI 系統時，如何設計責任歸屬、決策權與問責機制，而不只是資安或技術控制。
+- ☐ **AI in Design Tools**｜https://hundredtabs.com/blog/figma-ai-vs-canva-ai-vs-adobe-firefly｜Figma AI vs Canva AI vs Adobe Firefly: Which AI Design Tool Should You Use? (2026) | HundredTabs｜2026-05-23
+  - Figma's AI creates product interfaces on a collaborative canvas.
+- ☐ **AI Music Generation**｜https://rar.design/posts/suno-ai-music-generator-guide｜Suno AI 完整介紹：用文字做一首歌的 AI 音樂生成平台，功能、價格與創作者應用｜2026-03-10
+  - 它的核心概念很簡單：你用文字描述想要的音樂，AI 幫你生成一首完整的歌——包含人聲、歌詞、旋律、編曲、混音，全部一次到位。
+- ☐ **AI Video Generation**｜https://www.econtrol.com.tw/blogs/life/sora-ai-%E5%BD%B1%E7%89%87%E7%94%9F%E6%88%90-%E6%95%99%E5%AD%B8｜SORA 懶人包：OpenAI AI 影片生成器，如何用文字秒拍出「好萊塢級」超逼真影像？｜2025-10-22
+  - SORA 由 OpenAI 推出，是一款能根據自然語言文字輸入，自動生成完整動態影片的 AI 模型。
+- ☐ **AI Voice Generation**｜https://aiterms.tw/terms/speech-synthesis｜語音合成技術（Speech Synthesis）是什麼？ - AITerms.tw｜2026-04-05
+  - 語音合成技術是一種將文字轉換成人類語音的技術，也稱為文字轉語音（TTS）。
+- ☐ **AIaaS**｜https://stli.iii.org.tw/article-detail.aspx?no=67&tp=5&d=8269｜人工智慧即服務（AI as a Service, AIaaS）｜2019-07
+  - 人工智慧即服務（AIaaS）之定義為由第三方提供人工智慧（AI）外包服務，其可使個人和公司基於各種目的進行AI相關實驗，同時毋須於初期即大規模投資或承受高度風險。
+- ☐ **Alignment**｜https://aiterms.tw/terms/alignment｜對齊校準（Alignment）是什麼？ - AITerms.tw｜2026-04-05
+  - 對齊校準是指使AI模型，特別是大型語言模型，的行為與人類意圖、價值觀和倫理規範相符的過程，降低潛在風險。
+- ☐ **Anomaly Detection**｜https://docs.oracle.com/zh-tw/solutions/learn-anomaly-detection/index.html｜瞭解偵測異常值以預測失敗｜2021-11
+  - 異常偵測是資料中很少見的項目、事件或監測項目的識別，與預期值大致不同。
+- ☐ **API**｜https://www.dottedsign.com/zh-tw/blog/product/api｜API是什麼？快速搞懂API串接意思＆5大應用環境實例！｜2025-05-08
+  - API 全名為 Application Programming Interface，而 API 中文則是「應用程式介面」，是一種提供不同軟體系統間互動的工具，定義了不同軟體間的互動規範。
+- ☐ **API Key**｜https://www.bnext.com.tw/article/84941/ai-api-key-security-guide｜API Key是什麼？為什麼Vibe Coding也可能噴掉上萬元？該怎麼做才不會外洩？｜2026-02-17
+  - 他就是一串開啟 AI 大門的鑰匙，讓 OpenAI 或 Gemini 知道要跟哪一戶收款。
+- ☐ **Automation Platform**｜https://welly.tw/blog/what-is-zapier｜Zapier是什麼？怎麼設定？5步驟學會超實用自動化工具！｜2024-08-14
+  - Zapier 是一個自動化工具平台，可以協助用戶串接 2 個以上的應用程式
+- ☐ **Benchmark**｜https://aiterms.tw/terms/benchmark/｜基準測試（Benchmark）是什麼？AI 術語完整說明 - AITerms.tw｜2026-04-05
+  - 基準測試是用於評估和比較不同AI模型、演算法或系統性能的標準化方法，提供客觀的性能指標。
+- ☐ **Black Box**｜https://www.yucc.org.tw/info/6733｜不只是黑盒子：AI 代表的混沌｜2024-11-26
+  - 黑盒子多被用以描述深度學習（deeplearning）的不可預測性，由於其複雜性和不透明性，使用者往往無法理解其決策過程。
+- ☐ **Blind Spot**｜https://www.managertoday.com.tw/english/vocabulary/view/649｜盲點|blind spot|經理人｜2017-12-20
+  - blind spot也可用來指某人不擅長、不了解或忽略的地方。
+- ☐ **Build vs Buy**｜https://howmarketingtechnology.works/define/build-vs-buy/｜What is Build vs Buy?｜日期不明
+  - Build vs buy is the decision about whether to develop a capability in-house or license it from a vendor.
+- ☐ **Chain of Thought**｜https://realnewbie.com/posts/complete-beginner-tutorial-what-is-chain-of-thought-%E8%A9%A2%E5%95%8F-chatgpt｜初學者完整教學：什麼是 Chain-of-Thought 思維鏈？｜2025-07-07
+  - Chain-of-Thought（思維鏈）是一種讓 AI 模型在回答問題時，像人類一樣「逐步推理、條理清楚地表達解答過程」的方法。
+- ☐ **ChatGPT**｜https://reading.udn.com/read/story/122749/8016247｜你認識AI和ChatGPT的差異嗎？人工智慧造成哪些改變又有何限制？｜2024-06-10
+  - ChatGPT是[company]運用大型AI模型「GPT-3.5」語言技術開發的產物，能對詞彙結構做數學分析，透過事先學習（pre-trained）具備生成對話（chat generative）的功能。
+- ☐ **Citation**｜https://www.yext.com/knowledge-center/ai-citations｜What Are AI Citations?｜日期不明
+  - A citation acts as the digital footnote: the system's way of saying, 'Here's where I got this.'
+- ☐ **Citizen Developer**｜https://www.pmi.org.tw/%E3%80%90pmi-insight-%E7%BF%BB%E8%AD%AF%E7%B2%BE%E9%81%B8%E3%80%91%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%EF%BC%9A%E5%B8%82%E6%B0%91%E9%96%8B%E7%99%BC%E8%80%85/｜【PMI Insight 翻譯精選】需要了解：市民開發者｜2023-06-07
+  - 市民開發者(citizen developer)，也就是那些不太會編寫程式碼的團隊成員
+- ☐ **Claude**｜https://frankchiu.io/ai-claude-intro/｜Claude 是什麼？Claude 怎麼用？Claude 中文使用技巧懶人包｜2026-07-25
+  - Claude 是 [company] 推出的大型語言模型家族，也是 [company] 面向一般使用者與開發者的核心 AI 產品名稱。
+- ☐ **Claude Code**｜https://frankchiu.io/ai-claude-code/｜Claude Code 是什麼？中文教學：安裝、用法與避坑｜2026-06-12
+  - Claude Code 是 [company] 官方推出的 agentic coding tool，也就是「能使用工具完成開發任務的 AI 程式助理」。
+- ☐ **CLAUDE.md**｜https://www.builder.io/blog/claude-md-guide｜How to Write a Good CLAUDE.md File｜2026-01-13
+  - CLAUDE.md is a markdown file that Claude automatically reads at the start of each session.
+- ☐ **Clustering**｜https://hackmd.io/@joanne8826/H1wm1antu｜分群 Clustering - HackMD｜日期不明
+  - 分群（集群），clustering，屬於非監督式學習方法。
+- ☐ **Context**｜https://hackmd.io/@TommyHuang/SkiIsT_qbe｜第二篇：模型的記憶與視野 — Context 與 Context Window｜日期不明
+  - Context（上下文）是 LLM 在生成回應時，所能「看到」的全部資訊。
+- ☐ **Context Engineering**｜https://ihower.tw/blog/12817-context-engineering｜什麼是 Context Engineering 上下文工程?｜2025-07-03
+  - 動態根據當前任務和狀態，提供正確的資訊和工具給 LLM 大模型，讓它有足夠的條件完成任務，這就叫做 Context Engineering 上下文工程。
+- ☐ **Context Window**｜https://hackmd.io/@TommyHuang/SkiIsT_qbe｜第二篇：模型的記憶與視野 — Context 與 Context Window｜日期不明
+  - Context Window（上下文視窗）是 LLM 一次能處理的最大 token 數量。
+- ☐ **Copilot**｜https://www.microsoft.com/zh-tw/microsoft-copilot/copilot-101/what-is-copilot｜Copilot 是什麼以及它如何運作？ | Microsoft Copilot｜日期不明
+  - Copilot 是一個交談式、AI 支援的助理，透過提供內容相關的協助、自動化例行工作，以及分析資料，協助提高生產力並簡化工作流程。
+- ☐ **Copyright**｜https://puripr.pu.edu.tw/p/16-1132-60703.php?Lang=zh-tw｜2025-04-01 AI所生成的作品是否受著作權法所保護｜2025-04-01
+  - AI並非自然人或法人，所創作之作品不受著作權法保護
+- ☐ **Cursor**｜https://adbest.com.tw/blog/what-is-cursor/｜Cursor是什麼？4步驟安裝＋基本3設定，入門到實戰指南！｜2025-07-04
+  - Cursor 是一款結合 AI 功能的程式碼編輯器，外觀與操作類似 Visual Studio Code，旨在加速程式開發流程。
+- ☐ **Data Cleaning**｜https://tw.alphacamp.co/blog/data-cleaning｜Data Cleaning：資料清洗的方法與重要性｜2023-04-13
+  - Data Cleaning 指的是從原始資料中識別並修正（或移除）不完整、不準確或不一致的資料的過程。
+- ☐ **Data Drift**｜https://www.tredence.com/blog/what-is-data-drift｜What is Data Drift? - (Types, vs ml model drift)｜2022-03-11
+  - Data drift is a metric that measures the change in distribution between two data sets.
+- ☐ **Data Labeling**｜https://www.equityx.ai/ai-article-2023714-data-labeling/｜【AI 教室】甚麼是數據標記 (Data Labeling)?｜2023-07-14
+  - Data Labeling（數據標記）是將原始數據（例如圖像、聲音或文本）加上標籤或標記，以便訓練機器學習模型。
+- ☐ **Data Retention**｜https://www.onetrust.com/glossary/data-retention-policy/｜What is a data retention policy? | OneTrust Glossary｜日期不明
+  - A data retention policy establishes rules for how long data is kept before it is securely deleted or anonymized.
+- ☐ **Decision Tree**｜https://blog.tibame.com/?p=17923｜【AI60問】Q23什麼是決策樹演算法？｜2021-04-28
+  - 決策樹 (Decision tree) ，它是一種機器學習演算法，可以使用它來處理分類問題，同時也稱為分類分析。
+- ☐ **Deep Learning**｜https://case.ntu.edu.tw/blog/?p=26340｜機器學習與人工神經網路(二)：深度學習(Deep Learning)｜2016-12-13
+  - 深度學習是指具有層次性的機器學習法，能透過層層處理將大量無序的訊號漸漸轉為有用的資訊並解決問題。
+- ☐ **Deepfake**｜https://blog.trendmicro.com.tw/?p=63452｜讓阿湯哥真假難辨的 Deepfake 技術,是什麼?如何捍衛隱私?｜2023-09-02
+  - 深偽（Deepfake）一詞於2017年問世，是深度學習（Deep Learning）與偽造（Fake）混合而成的單字。
+- ☐ **Definition of Done**｜https://www.atlassian.com/agile/project-management/definition-of-done｜What is the Definition of Done (DoD) in Agile? | Atlassian｜2026-02-11
+  - The DoD is a set of high-level criteria that defines when a product increment is complete.
+- ☐ **Design Token**｜https://www.webguide.nat.gov.tw/article/384/show｜跨越設計與程式的鴻溝–Design Tokens(一)｜2024-03-15
+  - 設計標籤是一種幫助設計師和開發人員能進行有效溝通的代碼化語言
+- ☐ **Differential Privacy**｜https://blog.cloudflare.com/zh-tw/have-your-data-and-hide-it-too-an-introduction-to-differential-privacy/｜擁有資料的同時隱藏資料：差分隱私介紹｜2023-12-22
+  - 差分隱私 (DP) 是一種統計框架，可為安全彙總系統提供額外的資料保護層。
+- ☐ **Diffusion**｜https://www.jyes.com.tw/news.php?act=view&id=15240｜【AI專知】擴散模型（Diffusion Model）是什麼？AI 生圖的原理、應用一次看｜2026-07-29
+  - 擴散模型的做法有點反直覺：先把圖片「弄壞」成一團雜訊，再訓練 AI 學會把雜訊一步步還原回來。
+- ☐ **Discriminative AI**｜https://www.ctee.com.tw/news/20231028700002-431001｜判別式 AI 和生成式 AI 存在哪些差異？｜2023-10-28
+  - 判別式 AI (也被稱作決策式 AI )學習資料中的條件機率分布，即一個樣本歸屬於特定類別的機率，再對新的場景進行判斷、分析和預測。
+- ☐ **Embedding**｜https://signals.tw/articles/what-is-embedding/｜embedding 是什麼？把文字變成向量、讓電腦判斷相似度的技術｜2026-04-25
+  - Embedding 是把文字 / 圖片 / 音訊轉成「一串數字」(向量)的技術。
+- ☐ **Expert System**｜https://ai.iias.sinica.edu.tw/glossary/expert-system/｜Expert System - 臺灣人工智慧行動網 Taiwan AI Wise Agent Network｜2020-08-06
+  - 專家系統 (expert system) 「是一套能表示或代表某專業知識領域，比如內科醫學或地質學等，並進行推論以解決問題與提供建議的電腦系統」
+- ☐ **Explainable AI**｜https://www.bnc-technology.com/article-11.html｜為什麼可解釋人工智慧（Explainable AI， XAI）是人工智慧的未來｜2021-09-27
+  - 可解釋人工智慧這個研究領域所關心的是，如何讓人類瞭解人工智慧下判斷的理由。
+- ☐ **Few-shot**｜https://learnprompting.org/zh-tw/docs/basics/few_shot｜多範例提示｜2024-08-07
+  - 多範例提示（few shot prompting）, 這種策略將為模型展示一些例子（shots），從而更具象地描述你的需求。
+- ☐ **Fine-tuning**｜https://www.explainthis.io/zh-hant/ai/fine-tuning-gpt｜什麼是微調 (fine-tuning)? 如何微調 GPT-3.5 模型?｜2023-08-23
+  - 微調 (Fine-tuning) 是指在已經訓練好的模型基礎上，進一步調整，讓你模型的輸出能夠更符合你的預期。
+- ☐ **GAN**｜https://iaic.nccu.edu.tw/column-articles/30｜生成對抗網路原理｜2022-08-25
+  - 生成對抗網路（Generative Adversarial Networks, GAN）是一個很有趣的機器 學習方法，它用來訓練一個可以產生資料的模型。
+- ☐ **Gemini**｜https://gemini.google/overview/｜Gemini 是什麼？如何運作？｜2024-07-25
+  - Gemini 是多模態 LLM 的介面，可處理文字、音訊和圖像等內容。
+- ☐ **Generative AI**｜https://www.microsoft.com/zh-tw/ai/ai-101/generative-ai-vs-other-types-of-ai｜生成式 AI 與其他類型的 AI | Microsoft AI｜日期不明
+  - 生成式 AI 會使用深度學習(可處理複雜工作與大型資料集的一種精密機器學習 (ML) 形式) 來建立新內容以回應簡單的自然語言提示。
+- ☐ **Graph Engineering**｜https://www.analyticsvidhya.com/blog/2026/07/graph-engineering/｜Graph Engineering for AI Agents: Beyond the Single-Agent Loop｜2026-07-28
+  - Graph engineering controls how multiple agents, loops, functions, validators, tools, and humans work together.
+- ☐ **Grill me**｜https://azukiazusa.dev/en/blog/before-implementation-interview-design-requirements-grill-me/｜The `/grill-me` Skill for Thoroughly Interviewing a Design and Clarifying Requirements Before Implementation｜2026-06-14
+  - `/grill-me`, a skill for clarifying requirements and aligning humans and AI.
+- ☐ **Grounding**｜https://frankchiu.io/ai-grounding-intro/｜Grounding 介紹：被 Google AI 引用的祕密，就在 Grounding 中｜2025-08-03
+  - Grounding 就是：當 AI 給出答案時，同時指出能夠驗證這個答案的來源，並且保證內容真的出自那些來源。
+- ☐ **Guardrail**｜https://www.sharecrm.com/zh/glossary/ai-guardrails｜AI Guardrails（AI 防護機制）定義 | ShareCRM 術語表｜日期不明
+  - AI Guardrails（AI 防護機制）是讓 AI 系統在安全、經核准的界線內運作的規則與控管，涵蓋它能存取什麼、能採取哪些動作，以及如何回應。
+- ☐ **Hallucination**｜https://frankknow.com/ai-hallucination/｜別被 AI 騙了！1 次看懂「 AI 幻覺 」是什麼？搞懂原因、風險與解法｜2026-02-25
+  - AI 幻覺（AI Hallucination）指的是 生成式 AI 產出看似合理、語氣自信，但實際上包含錯誤、虛假或無法被驗證資訊的內容。
+- ☐ **Harness**｜https://www.databricks.com/blog/ai-harness｜What is an AI Agent Harness?｜日期不明
+  - The harness is the execution layer that provides tools, memory, guardrails and workflow control.
+- ☐ **Harness Engineering**｜https://www.louisbouchard.ai/harness-engineering/｜Harness Engineering: The Missing Layer Behind AI Agents｜2026-03-25
+  - Harness engineering is the work around an AI agent that makes its behavior inspectable, testable, and constrained.
+- ☐ **Human in the Loop**｜https://aiterms.tw/terms/human-in-the-loop｜人機迴路（Human-in-the-Loop）是什麼？ - AITerms.tw｜2026-04-05
+  - 人機迴路 (HITL) 是一種 AI 方法，其中人類參與模型訓練和決策過程，以提高準確性、可靠性和倫理考量。
+- ☐ **Inference**｜https://aiterms.tw/terms/inference｜推論（Inference）是什麼？ - AITerms.tw｜2026-04-05
+  - 推論是指利用已訓練好的機器學習模型，對新的、未曾見過的資料進行預測或判斷的過程。
+- ☐ **Iteration**｜https://yylab.dev/how-to-do-iteration/｜迭代開發的核心：如何規劃、展示與回顧｜2025-10-03
+  - 迭代開發就是小步快跑、持續回饋、逐步改進，讓團隊在短週期內交付可用的成果，並快速獲得回饋調整方向。
+- ☐ **Jailbreak**｜https://learnprompting.org/zh-tw/docs/prompt_hacking/jailbreaking｜越獄 | Learn Prompting｜2024-08-07
+  - 越獄（Jailbreaking）是一種提示注入技術，用於繞過語言模型（LLM）的建立者放置在其上的安全和審查功能。
+- ☐ **Knowledge Cutoff**｜https://llmpulse.ai/blog/glossary/knowledge-cutoff-in-ai/｜Knowledge Cutoff in AI: what it is and how models handle it｜2026-03-30
+  - The knowledge cutoff in AI is the date after which an AI model’s training data no longer includes new information.
+- ☐ **License Terms**｜https://www.fineart-tech.com/index.php/ch/news/612-fineartsecurity-licensemgmt｜軟體授權傻傻分不清楚? 盤點授權好困擾｜日期不明
+  - 軟體授權是軟體供應商（版權所有者）與終端用戶之間的法律協議，它定義了用戶對軟體、應用程式能夠做和不能做什麼的權利。
+- ☐ **LLM**｜https://solwen.ai/posts/what-is-large-language-model｜LLM 是什麼？LLM 快速入門：大型語言模型的定義與應用指南｜2024-10-14
+  - LLM 意思是一種利用大量文本資料訓練出來的人工智慧模型，能夠生成文字、翻譯語言、撰寫不同種類的創意內容，並且用接近人類的口吻來回應問題。
+- ☐ **Local Inference**｜https://www.infoai.com.tw/blog/what-is-on-device-ai｜洞察觀點｜什麼是裝置端AI？蘋果為什麼選擇裝置端AI？｜日期不明
+  - 裝置端AI（On-device AI）是指將人工智慧運算直接放在裝置本地完成，不需依賴雲端伺服器。
+- ☐ **Loop Engineering**｜https://www.mindstudio.ai/blog/what-is-loop-engineering-ai-coding-agents｜What Is Loop Engineering? The New Meta for AI Coding Agents｜2026-06-09
+  - Loop engineering is specifically the design discipline of structuring those actions in iterative cycles with feedback.
+- ☐ **Machine Learning**｜https://www.cake.me/resources/machine-learning-job｜什麼是機器學習？解析機器學習 4 大模型、常見產業應用和職缺 | Cake｜2024-04-24
+  - 機器學習是一種讓電腦系統能夠透過資料自行學習並改進自身性能的技術，而不需要由人類輸入精確指令來執行任務。
+- ☐ **Maintainability**｜https://devindeving.blogspot.com/2019/12/code-maintainability.html｜淺談程式碼的可維護性 | 軟工現場觀察｜2019-12-10
+  - 一套系統沒辦法讓工程師在有限、合理的時間內完成適當地需求，就不具備「可維護性」。
+- ☐ **MCP**｜https://zh.wikipedia.org/zh-tw/%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%94%E8%AD%B0｜模型上下文協定 - 維基百科，自由的百科全書｜日期不明
+  - 模型上下文協定（英語：Model Context Protocol，縮寫：MCP）是[company]所推動的一項開放標準[1]，目的是為大型語言模型應用提供一個標準化介面，使其能夠連接外部資料來源和工具，並與其互動[2]。
+- ☐ **Memory**｜https://www.bnext.com.tw/article/91400/chatgpt-memory-tutorial｜ChatGPT記憶功能怎麼用？3步驟設定教學、免費付費差異、隱私管理一次看｜數位時代 BusinessNext｜2026-07-03
+  - ChatGPT 記憶功能可以讓 AI 跨對話記住你的工作背景、寫作偏好與常用格式，不必每次開新對話都重新說明「我是誰、需要什麼風格」。
+- ☐ **Midjourney**｜https://steam.oxxostudio.tw/category/aigc/mj/about-midjourney.html｜認識 Midjourney - Midjourney 教學 ( AI 繪圖教學 ) | STEAM 教育學習網｜日期不明
+  - Midjourney 是一個基於 AI 圖像生成的工具，可以透過輸入自然語言的文字提示，產生高品質、精細和充滿想像力的影像
+- ☐ **Model**｜https://research.sinica.edu.tw/llm-transformer-misinformation-mitigation-lun-wei-ku/｜大型語言模型 LLM 究竟是什麼？如何用 LLM 對付假新聞？ - 研之有物｜2024-08-22
+  - 語言模型就是用數學方式去模擬人類語言的行為
+- ☐ **Model Collapse**｜https://www.bnext.com.tw/article/79978/ai-model-collapse｜白話科技｜模型崩潰Model collapse是什麼？為什麼AI「近親繁殖」對模型訓練有毒？｜數位時代｜2025-03-02
+  - 模型崩潰（Model collapse）指的是「使用由AI模型生成的內容來訓練AI。」
+- ☐ **Multimodal**｜https://egenthub.com/egenthub-perspect/2026-03-06-what-is-multimodal-ai｜多模態 AI（Multimodal AI）完整解析：從單一文字到多重感官的智能進化｜EgentHub｜2026-03-06
+  - 多模態 AI 則是一個能同時處理、理解並整合來自多種模態資訊的人工智慧系統
+- ☐ **No-code / Low-code**｜https://www.anywhere.today/low-code-no-code-platform/｜不寫程式也可以開發軟體！一文搞懂 Low-Code／No-Code 開發是什麼？ - Anywhere｜2022-04-14
+  - Low-Code（低程式碼）／No-Code （無程式碼）是用來幫助使用者快速開發軟體或應用程式的方法
+- ☐ **NotebookLM**｜https://www.microfusion.cloud/news/what-is-notebooklm-01/｜什麼是 NotebookLM？你的 AI 筆記好幫手(上) - Microfusion 宏庭科技｜日期不明
+  - NotebookLM 是一款用 AI 技術打造的筆記工具，它可以幫你更有效率地整理、分析和理解筆記內容
+- ☐ **OCR**｜https://pdf-reader.kdandoc.com/zh-tw/blog/product/pdf-ocr｜OCR光學字元辨識技術是什麼？5大優勢、6大應用實例一次看！｜2024-11-04
+  - OCR 全名為 Optical Character Recognition，中文是「光學字元辨識」，是一種可以把列印文件或影像中的文字，轉換為能被機器讀取文字檔案的一種技術
+- ☐ **On-premise**｜https://ai.com.tw/cloud-ai-on-premises-ai/｜雲端 AI 與地端 AI 差別解析 2025｜AI.com.tw 台灣AI第一站｜2025-10-01
+  - 地端 AI（On‑Premises AI）指企業在自己的伺服器或資料中心部署 AI 平台，所有資料處理和模型運算都在內部完成
+- ☐ **Open Source Model**｜https://hoonting.blogspot.com/2025/01/blog-post_31.html｜雲程的雙魚鏡 HoonTing's View: 約略理解：開源模型、專有模型｜2025-01-31
+  - 開源模型是指其架構、訓練方法，甚至權重（weights）都對外開放的 AI 模型，任何人都可以下載、修改、重新訓練或部署這些模型
+- ☐ **Outlier**｜https://ithelp.ithome.com.tw/articles/10236317｜Day14 - Feature Engineering -- 5. 異常值 (Outlier)(1) - iT 邦幫忙｜2020-09-14
+  - 在資料集中一個數值與其他數值相比差異非常大，我們稱這個數值為異常值(Outlier)
+- ☐ **Output Style**｜https://moksaweb.com/claude-code-output-styles/｜Claude Code Output Styles 完整教學：3 種內建風格 + 客製化 5 步驟｜2026-04-28
+  - Claude Code Output Styles 是直接修改 Claude Code 系統提示詞的機制，用來改變 Claude 的角色定位、回應語氣、輸出格式
+- ☐ **Overfitting**｜https://www.bnext.com.tw/article/84686/ai-model-overfitting｜白話科技｜過擬合overfitting是什麼？解密AI犯錯原理，過擬合怎麼解決？｜數位時代｜2025-10-08
+  - 過擬合是一種不理想的機器學習行為。 當演算法與訓練資料過於接近，就會發生過擬合，使得AI學到的只是資料的細節，甚至是不具代表性的巧合，而不是規律，以至於根本無法對新資料進行準確預測
+- ☐ **Parameters**｜https://kidsmedia.com.tw/2026/07/09/what-do-7b-and-70b-mean-how-ai-models-use-parameters-and-mixture-of-experts/｜AI模型的7B、70B是什麼意思？現在開源模型跟ChatGPT、Claude、Gemini差距多少？ – KidsMedia｜2026-07-09
+  - 所謂的「參數」，可以想像成AI大腦裡數量非常龐大的「調整旋鈕」
+- ☐ **Perplexity**｜https://frankchiu.io/ai-perplexity-intro/｜Perplexity AI 怎麼用？中文教學：功能、價格與使用技巧 | 白話文商學院｜2026-06-18
+  - Perplexity AI 是一款主打「AI 搜尋」與「答案引擎」的工具，可以幫我們快速查資料、整理重點，並在回答中附上參考來源
+- ☐ **Persona**｜https://ithelp.ithome.com.tw/articles/10380133｜Prompt 的三大要素：角色、任務、格式 - iT 邦幫忙｜2025-09-15
+  - 角色就是我們希望 AI 扮演的身份，AI 會根據我們賦予的角色，採用相應的語氣、知識深度與思考角度來回答我們的問題
+- ☐ **Plan mode**｜https://essevin.com/blog/claude-code-plan-mode-hant｜Claude Code 的 Plan Mode：先審計劃再動手，少走冤枉路 · Essevin｜2026-07-29
+  - Plan Mode 是 Claude Code 的一種權限模式（permission mode）。開啟後，Claude 可以讀、可以查、可以搜尋，但不能改動任何東西，最後產出的是一份計劃，等你批准
+- ☐ **POC**｜https://www.startupterrace.com/post/startup-basics-%E5%90%8D%E8%A9%9E%E8%A7%A3%E9%87%8B%EF%BC%9A%E6%A6%82%E5%BF%B5%E9%A9%97%E8%AD%89-poc-proof-of-concept｜概念驗證 (POC, Proof of Concept) ：運用時機、執行方式為何？｜2024-04-06
+  - 概念驗證 (POC, Proof of Concept) 是指在專案或產品開發過程中，透過建立原型、進行實驗、收集數據來證明一個概念的可行性和有效性的過程
+- ☐ **Prompt**｜https://frankchiu.io/ai-prompt-intro/｜Prompt 是什麼？AI 提示詞入門：寫法、範例與錯誤｜2026-06-19
+  - Prompt，中文常翻譯成「提示詞」或「提示語」，指的是你輸入給 AI 的指令、問題、背景資料與要求
+- ☐ **Prompt Engineering**｜https://tw.alphacamp.co/blog/prompt-engineering｜Prompt Engineering 提示工程是什麼？新手必學指南 - ALPHA Camp｜2023-10-02
+  - Prompt Engineering 是指設計和構建一個提示或問題，以指導機器生成所需的內容或回答
+- ☐ **Prompt Injection**｜https://www.ahha.tw/blog/what-is-prompt-injection-ai-security｜什麼是提示詞（Prompt Injection）注入？當你請 AI 幫你查資料，網頁可能正在操縱它｜2026-03-08
+  - Prompt Injection 就是利用這個盲點，在正常內容裡夾帶可以改變 AI 行為的指令。
+- ☐ **Prompt Template**｜https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/prompt-templates?hl=zh-tw｜使用提示範本 | Gemini Enterprise Agent Platform | Google Cloud Documentation｜日期不明
+  - 提示範本是包含可替換變數的提示。
+- ☐ **Quantization**｜https://vocus.cc/article/6803b975fd8978000153e4ad｜什麼是模型量化（Quantization）？解析FP32、FP16、BF16、int8、int4與GGUF的關聯｜2025-04-19
+  - Quantization（量化）是一種模型壓縮技術，其主要目的是降低模型中數值（主要是權重）的精度，從而減少模型的體積、記憶體佔用（RAM/VRAM）和計算量，並可能加速模型的推論速度。
+- ☐ **RAG**｜https://www.webcomm.com.tw/blog/tw/rag/｜什麼是RAG檢索增強生成 - 偉康科技洞察室｜2024-02-19
+  - 檢索增強生成（RAG）模型是一種結合了檢索和生成技術的自然語言處理（NLP）模型。
+- ☐ **Reasoning Model**｜https://signals.tw/articles/what-is-reasoning-model/｜reasoning model 是什麼？推理模型讓 AI 先想再答｜矽基前沿 [Si]gnals｜2026-04-25
+  - Reasoning model 是讓 LLM 在輸出最終答案之前，先生成一段內部「思考過程」(chain-of-thought)的設計。
+- ☐ **Reinforcement Learning**｜https://iaic.nccu.edu.tw/column-articles/17｜何謂強化學習（Reinforcement Leaning） - 國立政治大學人工智慧跨域研究中心｜2021-11-02
+  - 強化學習是機器學習中針對「行為」的演算法。
+- ☐ **Risk Matrix**｜https://vocus.cc/article/68aa27fcfd897800015e40b9｜風險矩陣（Risk Matrix）｜2025-08-24
+  - 風險矩陣是一種常見的風險評估工具，用來量化和可視化風險，通過將風險的「發生可能性」與「影響嚴重程度」兩個維度構建一個矩陣，將風險分級為高、中、低等不同風險等級，便於識別和管理。
+- ☐ **RLHF**｜https://aiterms.tw/terms/rlhf/｜人類回饋強化學習（RLHF）是什麼？ - AITerms.tw｜2026-04-05
+  - 人類回饋強化學習（RLHF）是一種利用人類回饋訊號，訓練強化學習模型，使其行為更符合人類偏好的方法。
+- ☐ **ROI**｜https://welly.tw/blog/roi-return-on-investment｜ROI 是什麼？投資報酬率怎麼算？ROI 意思、公式、算法一次看 - Welly｜2024-01-03
+  - ROI 中文投資報酬率（ Return On Investment ）是一種用衡量績效的標準，其含義為投資獲利相對投入成本的比值。
+- ☐ **SaaS**｜https://azure.microsoft.com/zh-tw/resources/cloud-computing-dictionary/what-is-saas｜什麼是軟體即服務 (SaaS)？ | Microsoft Azure｜日期不明
+  - 軟體即服務 (SaaS) 是一種透過網際網路傳遞軟體的方式。
+- ☐ **Scheduled Automation**｜https://kucw.io/blog/cron/｜Cron 是什麼？定時任務的語法怎麼寫？｜日期不明
+  - 所謂的 Cron，其實是 Linux 系統下的一個定時任務管理服務，但是因為 Cron 的表達式實在是太萬用了，所以目前也很廣泛用在 GitHub Actions、Spring Boot 的 @Scheduled…等框架上。
+- ☐ **Semantic Search**｜https://sec-site.com/wiki-semantic-search/｜語意搜尋（Semantic Search）是什麼？｜SEO・GEO 百科｜2026-07-28
+  - 語意搜尋是一種資訊檢索技術，重點在於理解使用者查詢背後的「上下文與意圖」，而不是單純比對字面上的關鍵字。
+- ☐ **Skill**｜https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview｜Agent Skills - Claude Platform Docs｜日期不明
+  - Agent Skills are modular capabilities that extend Claude's functionality.
+- ☐ **SLA**｜https://www.astralweb.com.tw/service-level-agreement/｜服務水準協議 (SLA) - Astral Web 歐斯瑞有限公司｜2020-06-02
+  - 服務水準協議（英語：service-level agreement，縮寫SLA）也稱服務級別協定、服務等級協定、服務水平協定，是服務提供商與客戶之間定義的正式承諾。
+- ☐ **Spec-driven Development**｜https://aict.nkust.edu.tw/digitrans/?p=10064｜規格驅動開發 (Spec-Driven Development) 與 AI 協作全流程實戰 – 資料治理與數位轉型產學聯盟｜日期不明
+  - 而 SDD 旨在整合兩者優勢—將開發流程的重心從撰寫程式碼轉移至定義規格，透過 AI 執行具體實作，讓人類工程師能專注在架構設計與品質把關。
+- ☐ **Speech-to-Text**｜https://www.largitdata.com/blog/asr-speech-to-text-applications/｜ASR 是什麼？語音辨識原理與實際應用完整解析（2026 更新） | LargitData Blog｜2025-03-15
+  - ASR技術，也稱為語音轉文字技術，是一項將語音內容轉換成可識別文字的技術。
+- ☐ **Structured Data**｜https://vocus.cc/article/5f7e816afd897800016c0a68｜認識「結構化/半結構化/非結構化」資料｜2020-10-09
+  - 結構化資料: 事先定義好每個欄位可以存放什麼資料，這種儲存的資料就是結構化資料。
+- ☐ **SubAgent**｜https://code.claude.com/docs/en/sub-agents｜Create custom subagents - Claude Code Docs｜日期不明
+  - Subagents are specialized AI assistants that handle specific types of tasks.
+- ☐ **Subscription**｜https://www.metamatch.market/news/detail/METAMatch_SaaS｜淺談 訂閱制 V.S 買斷制，一次搞懂 SaaS 訂閱制與買斷差異｜日期不明
+  - 訂閱制：按月或年支付金額，使用過程若發覺不符合需求，也較容易停止訂閱，減輕不必要的營運支出。
+- ☐ **Supervised Learning**｜https://aiterms.tw/terms/supervised-learning｜監督式學習（Supervised Learning）是什麼？ - AITerms.tw｜2026-04-04
+  - 監督式學習是一種 AI 方法，透過提供帶有正確標籤的輸入資料，訓練模型學習預測新資料的標籤
+- ☐ **Synthetic Data**｜https://blogs.nvidia.com.tw/blog/what-is-synthetic-data/｜何謂合成資料?｜2021-06-08
+  - 以電腦模擬或演算法產生出且含有註釋資訊的合成資料，用來取代真實環境資料。
+- ☐ **System Prompt**｜https://signals.tw/articles/what-is-system-prompt/｜什麼是 system prompt（系統提示）？AI 產品的底層規則｜2026-04-26
+  - System prompt 是 AI 應用在使用者輸入之前提供給模型的高優先級指令，用來設定長期角色、規則、語氣、工具使用與安全邊界。
+- ☐ **TCO**｜https://www.everpuredata.com/tw/knowledge/what-is-total-cost-of-ownership.html｜什麼是總體擁有成本 | Everpure｜日期不明
+  - 就資料儲存而言，TCO 是貴組織在採購、安裝、運行和維護 IT 基礎架構時，對所產生之全部成本進行的評估。
+- ☐ **Technical Debt**｜https://newsleopard.com/blog/what-is-technical-debt/｜程式設計師的無形債務：技術債 | 電子豹部落格｜2018-11-16
+  - 技術負債（英語：Technical debt），又譯技術債，也稱為設計負債（design debt）、程式碼負債（code debt），是編程及軟體工程中的一個比喻。指開發人員為了加速軟體開發，在應該採用最佳方案時進行了妥協，改用了短期內能加速軟體開發的方案，從而在未來給自己帶來的額外開發負擔。
+- ☐ **Temperature**｜https://blog.miniasp.com/post/2024/05/21/LLM-Temperature-Top-P-Nucleus-Sampling-Top-K｜淺談 LLM 大型語言模型的 Temperature、Top-P 和 Top-K 參數 | The Will Will Web｜2024-05-21
+  - 在自然語言處理中，Temperature 就像一個控制語言模型創造力的旋鈕。它調整模型選擇低機率詞彙的傾向，進而影響生成文本的多樣性。
+- ☐ **Text-to-Speech**｜https://www.ecapsule.com.tw/AI-Application-Services/AI-TTS｜AI-TTS - 文字轉語音系統｜日期不明
+  - TTS (Text to Speech)就是「文字轉語音」，即輸入一段文字，透過TTS轉換後念出文字。
+- ☐ **Token**｜https://frankknow.com/ai-token/｜AI Token 是什麼？一次搞懂 Token 計算、收費邏輯與省錢技巧！｜日期不明
+  - Token 是大型語言模型（LLM）處理文字的基本單位，就像是 AI 世界的「 跳表計費 」，無論你是輸入指令還是讓 AI 產出內容，收費高低全看 Token 用了多少。
+- ☐ **Training**｜https://www.recruit.com.hk/Resources/ArticleDetail.aspx?articleId=45355｜大型語言模型是如何調教？深入了解LLM訓練三部曲｜2026-02-12
+  - 預訓練是LLM訓練中最基礎、也最耗費資源的階段。模型會學習大量未標註的文本資料，例如百科全書、新聞、書籍與公開網站內容，資料量通常以兆個詞元計算。
+- ☐ **Transformer**｜https://blogs.nvidia.com.tw/blog/what-is-a-transformer-model/｜何謂 Transformer 模型？｜2022-06-21
+  - Transformer 模型是一種神經網路，藉由追蹤序列資料中的關係，學習上下文之間的脈絡及意義，就如同句子中的每一個字。
+- ☐ **Unsupervised Learning**｜https://aiterms.tw/terms/unsupervised-learning｜非監督式學習（Unsupervised Learning）是什麼？ - AITerms.tw｜2026-04-04
+  - 非監督式學習是機器學習方法，讓模型在沒有標籤的輸入資料中，自行探索隱藏的結構與模式
+- ☐ **Usage-based Pricing**｜https://www.aitoken.com.tw/post/monthly-vs-usage-based-ai-token-pricing｜AI Token 月費制和用量制差在哪？哪種比較適合你｜日期不明
+  - 用量制，通常是你透過 API 呼叫模型，系統再依照你實際消耗的 input tokens、output tokens、快取輸入、工具呼叫或多模態處理量來計費。
+- ☐ **Vector Database**｜https://www.omniwaresoft.com.tw/product-news/vector-database-usecase/what-is-vector-database/｜什麼是向量資料庫？向量資料庫運作、應用、趨勢懶人包！｜2025-03-04
+  - 向量資料庫（Vector Database，簡稱 Vector DB）是一種用向量來存儲資訊的資料庫。
+- ☐ **Vendor Lock-in**｜https://www.mendix.com/blog/vendor-lock-in-6-tips-to-avoid-getting-trapped/｜What is Vendor Lock-In? 6 Tips to Avoid Getting Trapped | Mendix｜日期不明
+  - Vendor lock-in occurs when various restrictions prevent a customer from choosing a new vendor, product, or service.
+- ☐ **Vibe coding**｜https://www.bnext.com.tw/article/82704/how-to-vibe-coding-2025｜影片｜Vibe Coding是什麼？3款好用AI工具＋6步驟教學，程式小白上手必懂！｜2025-12-25
+  - Vibe Coding是一種全新的程式設計方式，開發者透過自然語言向AI描述需求，由AI自動生成程式碼。
+- ☐ **Watermarking**｜https://aiterms.tw/terms/ai-watermarking/｜AI浮水印（AI Watermarking）是什麼？ - AITerms.tw｜2026-04-05
+  - AI 浮水印（AI Watermarking）是一種將隱藏資訊嵌入 AI 模型或其生成內容中的技術，用於驗證來源、追蹤使用情況、或防止未經授權的複製。
+- ☐ **個資法**｜https://vocus.cc/article/6837bae1fd89780001439dd4｜「資料」不是誰都能碰！搞懂《個資法》第一章，保護自己也保護客戶｜2025-05-31
+  - 這條說明了《個資法》為什麼存在——它的核心目的是保護我們的個人資料不被濫用，同時也考慮企業、政府等在合理情況下的使用需求。
+
 ## 找不到定義句（勾 ☐ 表示放掉，這些詞暫無 seed 目擊）
 
 - ☐ **Division of Labor**：搜到的文章只講「人機協作」或把「人機分工」當時代標籤用，沒有一句直接定義它；bnext 與 techorange 頁面亦抓不到（試過：人機分工 定義 是指 AI 人類 分工；"人機分工" 是指 人類負責 AI 負責 判斷）
