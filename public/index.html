@@ -74,7 +74,7 @@ function draw(){
   /* feed */
   const feed=[...S].sort((a,b)=>when(b)-when(a)).slice(0,10);
   $('feed').innerHTML=feed.length?feed.map(s=>{const k=N.termKey(s),e=N.bySlug(k);return '<div><span class="ago">'+N.ago(+when(s))+'</span>'+T('seenIn')('<a href="'+esc(s.source&&s.source.url||'#')+'" target="_blank" rel="noopener">'+esc(s.source&&s.source.title||s.source&&s.source.url||'—')+'</a>','<a href="'+href(k)+'"><b>'+esc(s.term_raw)+'</b></a>')+'<span class="meta">'+[e?null:T('newTerm'),T('enums')[s.explained],T('enums')[s.intent]].filter(Boolean).join(' · ')+'</span></div>'}).join(''):'<p class="dim">'+T('feedEmpty')+'</p>';
-  const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
+  const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(SIGHT.interim){note.hidden=false;note.textContent=T('interim')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
   render($('filter').value);
 }
 $('filter').oninput=e=>render(e.target.value);

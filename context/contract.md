@@ -166,7 +166,7 @@ Top 10 by sightings in the last 30 days. `contributors` = distinct `submitter` i
 
 ### `GET /api/sightings` (server → pages, Matt)
 
-Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"sightings":[…]}`. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint; until it exists the pages show empty states (and `?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
+Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"sightings":[…]}`. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint; until it exists the pages read the interim file `public/sightings.json` (same response shape; Matt imports it into Upstash on 8/29, then deletes it) and fall back to empty states (and `?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
 
 ## 6. No seeding
 

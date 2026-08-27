@@ -26,7 +26,7 @@ function draw(){
     (e?'<p class="dim" style="margin:0">'+T('editorial')+esc(e.line)+'</p>'+(e.aka&&e.aka.length?'<p class="meta">aka：'+esc(e.aka.join('、'))+'</p>':''):'')+
     (rows.length?'<p class="meta">'+N.metaLine(st)+'</p>'+(st.defs.length?st.defs.map(N.quoteHtml).join(''):'<p class="dim">'+T('noDefs')+'</p>'):'<p class="meta">'+T('noSightings')+'</p>')+
     '<p class="dim" style="margin:12px 0 0">'+T('evidence')+'</p>';
-  const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
+  const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(SIGHT.interim){note.hidden=false;note.textContent=T('interim')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
 }
 Promise.all([N.loadLexicon(),N.loadSightings('?term_key='+encodeURIComponent(slug))]).then(([,s])=>{SIGHT=s;draw()});
 </script>
