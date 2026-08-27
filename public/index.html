@@ -1,3 +1,63 @@
-<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"><title>ai-nomos</title>
-<style>body{font-family:system-ui,"Noto Sans TC",sans-serif;max-width:640px;margin:60px auto;padding:0 20px;line-height:1.7;background:#EAEAEA;color:#212529}a{color:inherit}</style></head>
-<body><h1>ai-nomos</h1><p>約定成俗 —— AI 的詞，由大家怎麼用決定。</p><ul><li><a href="read.html">讀一篇文件（/read）</a></li><li><a href="probe.html">WebMCP 探針</a></li></ul></body></html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ai-nomos</title>
+<link rel="stylesheet" href="/nomos.css">
+</head>
+<body>
+<div class="top"><div><h1>ai-nomos</h1><p class="sub" data-i="tagline"></p></div><button class="lang" id="lang">EN</button></div>
+<p class="note" id="note" hidden></p>
+
+<div class="box"><div class="nums">
+  <div><b id="n-terms">—</b><span data-i="nTerms"></span></div>
+  <div><b id="n-sightings">—</b><span><span data-i="nSightings"></span> <small id="n-sources"></small></span></div>
+  <div><b id="n-fresh">—</b><span data-i="nFresh"></span></div>
+  <div><b id="n-contrib">—</b><span data-i="nContrib"></span></div>
+</div></div>
+
+<div class="box">
+  <h2><span data-i="fresh"></span> <span class="dim" data-i="freshNote"></span></h2>
+  <div id="fresh"></div>
+</div>
+
+<div class="box">
+  <h2><span data-i="active"></span> <span class="dim" data-i="activeNote"></span></h2>
+  <div class="act" id="active"></div>
+</div>
+
+<div class="box">
+  <h2><span data-i="all"></span> <span class="dim" id="cnt"></span></h2>
+  <input id="filter" data-i="filterPh" data-attr="placeholder">
+  <div class="list" id="list"></div>
+</div>
+
+<div class="box act"><span data-i="contribute"></span><a class="btn" href="/read" data-i="bring"></a><span class="dim" data-i="contributeNote"></span></div>
+
+<script src="/nomos.js"></script>
+<script>
+const N=NOMOS,$=id=>document.getElementById(id),esc=N.esc,T=N.T;
+$('lang').onclick=()=>{N.toggleLang();$('lang').textContent=T('lang');draw()};
+let SIGHT={ok:false,sightings:[],contributors:0};
+function render(q){q=(q||'').toLowerCase();const rows=N.lex().filter(e=>!q||[e.term,e.zh,...(e.aka||[])].some(k=>k&&k.toLowerCase().includes(q)));
+  $('cnt').textContent=T('count')(rows.length);
+  $('list').innerHTML=rows.map(e=>'<div class="e"><a href="/term/'+esc(e.slug)+'">'+esc(e.term)+'</a>'+(e.zh&&e.zh!==e.term?'<small>'+esc(e.zh)+'</small>':'')+'<span class="line">'+esc(e.line)+'</span></div>').join('')}
+function draw(){
+  N.applyLang();$('lang').textContent=T('lang');
+  const S=SIGHT.sightings,groups=N.groupByTerm(S);
+  $('n-terms').textContent=N.lex().length;$('n-sightings').textContent=S.length;$('n-sources').textContent=S.length?T('nSources')(new Set(S.map(s=>s.source&&s.source.url).filter(Boolean)).size):'';
+  $('n-contrib').textContent=SIGHT.contributors;
+  const fresh=[...groups].filter(([k])=>!N.bySlug(k)).map(([k,rows])=>({k,rows,st:N.stats(rows)})).sort((a,b)=>(b.st.last||'')>(a.st.last||'')?1:-1);
+  $('n-fresh').textContent=fresh.length;
+  $('fresh').innerHTML=fresh.length?fresh.map(f=>'<div class="fresh"><b>'+esc(f.rows[0].term_raw)+'</b><span class="new">'+T('newTerm')+'</span> <span class="meta">'+N.metaLine(f.st)+(f.st.defs.length?'':' · '+T('assumedNoDef'))+'</span>'+(f.st.defs[0]?N.quoteHtml(f.st.defs[0]):'')+'</div>').join(''):'<p class="dim">'+T('freshEmpty')+'</p>';
+  const cut=Date.now()-30*864e5;
+  const active=[...groups].filter(([k])=>N.bySlug(k)).map(([k,rows])=>({e:N.bySlug(k),n:rows.filter(s=>new Date((s.source&&s.source.published)||s.submitted_at||0)>=cut).length,st:N.stats(rows)})).filter(a=>a.n).sort((a,b)=>b.n-a.n).slice(0,8);
+  $('active').innerHTML=active.length?active.map(a=>'<span><a href="/term/'+esc(a.e.slug)+'"><b>'+esc(a.e.term)+'</b></a> <span class="meta">'+T('times')(a.n)+'</span>'+(a.st.conflicting?'<span class="conflict">'+T('conflict')+'</span>':'')+'</span>').join(''):'<p class="dim">'+T('activeEmpty')+'</p>';
+  const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
+  render($('filter').value);
+}
+$('filter').oninput=e=>render(e.target.value);
+Promise.all([N.loadLexicon(),N.loadSightings()]).then(([,s])=>{SIGHT=s;draw()});
+</script>
+</body>
+</html>

@@ -164,6 +164,10 @@ The read side of the loop: another agent asks the dictionary what a term current
 
 Top 10 by sightings in the last 30 days. `contributors` = distinct `submitter` in the window and is always exposed: with one feeder the ranking is that person's feeding order, and the reader must be able to see that.
 
+### `GET /api/sightings` (server → pages, Matt)
+
+Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"sightings":[…]}`. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint; until it exists the pages show empty states (and `?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
+
 ## 6. No seeding
 
 There is no seed origin. The existing 133 entries enter the signal system the same way as anything else: Kidult pastes an article into `/read` and the agent submits findings. `fixtures/feed-list-133.md` is his queue of articles, not data. Fixtures under `fixtures/` are lock regression inputs only and are never loaded into storage.

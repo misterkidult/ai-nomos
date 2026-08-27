@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title id="title">ai-nomos</title>
+<link rel="stylesheet" href="/nomos.css">
+</head>
+<body>
+<div class="top"><p class="dim" style="margin:0"><a href="/" data-i="back"></a></p><button class="lang" id="lang">EN</button></div>
+<p class="note" id="note" hidden></p>
+<div class="box card" id="card"></div>
+<div class="box act"><span data-i="contribute"></span><a class="btn" href="/read" data-i="bring"></a></div>
+<script src="/nomos.js"></script>
+<script>
+const N=NOMOS,$=id=>document.getElementById(id),esc=N.esc,T=N.T;
+const slug=decodeURIComponent((location.pathname.match(/\/term\/([^/]+)/)||[])[1]||new URLSearchParams(location.search).get('slug')||'');
+$('lang').onclick=()=>{N.toggleLang();$('lang').textContent=T('lang');draw()};
+let SIGHT={ok:false,sightings:[]};
+function draw(){
+  N.applyLang();$('lang').textContent=T('lang');
+  const e=N.bySlug(slug);const rows=SIGHT.sightings.filter(s=>N.termKey(s)===slug);
+  const name=e?e.term:(rows[0]?rows[0].term_raw:slug);document.title=name+' · ai-nomos';
+  const st=N.stats(rows);
+  if(!e&&!rows.length){$('card').innerHTML='<h1>'+esc(slug)+'</h1><p class="dim">'+T('notFound')+'</p>';return}
+  $('card').innerHTML='<h1>'+esc(name)+(e&&e.zh&&e.zh!==e.term?' <small class="meta">'+esc(e.zh)+'</small>':'')+(!e?'<span class="new">'+T('newTerm')+'</span>':'')+(st.conflicting?'<span class="conflict">'+T('conflict')+'</span>':'')+'</h1>'+
+    (e?'<p class="dim" style="margin:0">'+T('editorial')+esc(e.line)+'</p>'+(e.aka&&e.aka.length?'<p class="meta">aka：'+esc(e.aka.join('、'))+'</p>':''):'')+
+    (rows.length?'<p class="meta">'+N.metaLine(st)+'</p>'+(st.defs.length?st.defs.map(N.quoteHtml).join(''):'<p class="dim">'+T('noDefs')+'</p>'):'<p class="meta">'+T('noSightings')+'</p>')+
+    '<p class="dim" style="margin:12px 0 0">'+T('evidence')+'</p>';
+  const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
+}
+Promise.all([N.loadLexicon(),N.loadSightings('?term_key='+encodeURIComponent(slug))]).then(([,s])=>{SIGHT=s;draw()});
+</script>
+</body>
+</html>
