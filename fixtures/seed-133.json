@@ -1,0 +1,2034 @@
+[
+ {
+  "term_raw": "AI 治理",
+  "term_normalized": "AI Governance",
+  "sentence": "AI 治理不是模型或資安工具的問題，而是企業如何設計責任、決策權與問責機制。",
+  "context": "AI 治理（AI Governance）是指企業在使用 AI 系統時，如何設計責任歸屬、決策權與問責機制，而不只是資安或技術控制。AI 治理不是模型或資安工具的問題，而是企業如何設計責任、決策權與問責機制。本文從 AI Agent、資安失控案例與台灣 AI 基本法，解析企業 AI 治理的 3 個核心問題。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "core",
+  "definition_quote": "AI 治理（AI Governance）是指企業在使用 AI 系統時，如何設計責任歸屬、決策權與問責機制，而不只是資安或技術控制。",
+  "origin": "seed",
+  "source": {
+   "url": "https://ai-coding.wiselychen.com/ai-governance-not-it-problem/",
+   "title": "AI 治理是什麼？企業在 AI 時代必須回答的 3 個責任問題",
+   "published": "2026-01-10"
+  }
+ },
+ {
+  "term_raw": "AI 音樂生成平台",
+  "term_normalized": "AI Music Generation",
+  "sentence": "Suno 是一個 AI 音樂生成平台，總部位於美國麻州劍橋，由一群機器學習專家創辦。",
+  "context": "Suno 是什麼？為什麼值得關注Suno 是一個 AI 音樂生成平台，總部位於美國麻州劍橋，由一群機器學習專家創辦。它的核心概念很簡單：你用文字描述想要的音樂，AI 幫你生成一首完整的歌——包含人聲、歌詞、旋律、編曲、混音，全部一次到位。",
+  "explained": "has_definition",
+  "intent": "selling_point",
+  "domain": "core",
+  "definition_quote": "它的核心概念很簡單：你用文字描述想要的音樂，AI 幫你生成一首完整的歌——包含人聲、歌詞、旋律、編曲、混音，全部一次到位。",
+  "origin": "seed",
+  "source": {
+   "url": "https://rar.design/posts/suno-ai-music-generator-guide",
+   "title": "Suno AI 完整介紹：用文字做一首歌的 AI 音樂生成平台，功能、價格與創作者應用",
+   "published": "2026-03-10"
+  }
+ },
+ {
+  "term_raw": "SORA",
+  "term_normalized": "AI Video Generation",
+  "sentence": "SORA 由 OpenAI 推出，是一款能根據自然語言文字輸入，自動生成完整動態影片的 AI 模型。",
+  "context": "但現在，隨著 AI 技術的飛速進步，這一切正在被改寫。SORA 由 OpenAI 推出，是一款能根據自然語言文字輸入，自動生成完整動態影片的 AI 模型。不論是電影感畫面、產品介紹、甚至武俠打鬥場景，只要文字描述夠清楚，SORA 就能幫你「拍出」理想中的畫面。",
+  "explained": "has_definition",
+  "intent": "selling_point",
+  "domain": "core",
+  "definition_quote": "SORA 由 OpenAI 推出，是一款能根據自然語言文字輸入，自動生成完整動態影片的 AI 模型。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.econtrol.com.tw/blogs/life/sora-ai-%E5%BD%B1%E7%89%87%E7%94%9F%E6%88%90-%E6%95%99%E5%AD%B8",
+   "title": "SORA 懶人包：OpenAI AI 影片生成器，如何用文字秒拍出「好萊塢級」超逼真影像？",
+   "published": "2025-10-22"
+  }
+ },
+ {
+  "term_raw": "語音合成技術",
+  "term_normalized": "AI Voice Generation",
+  "sentence": "語音合成技術是一種將文字轉換成人類語音的技術，也稱為文字轉語音（TTS）。",
+  "context": "你有沒有按下朗讀按鈕，想知道電腦怎麼把文字念得像人一樣？語音合成技術是一種將文字轉換成人類語音的技術，也稱為文字轉語音（TTS）。它廣泛應用於語音助理、導航系統和輔助科技等領域。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "語音合成技術是一種將文字轉換成人類語音的技術，也稱為文字轉語音（TTS）。",
+  "origin": "seed",
+  "source": {
+   "url": "https://aiterms.tw/terms/speech-synthesis",
+   "title": "語音合成技術（Speech Synthesis）是什麼？ - AITerms.tw",
+   "published": "2026-04-05"
+  }
+ },
+ {
+  "term_raw": "Figma's AI",
+  "term_normalized": "AI in Design Tools",
+  "sentence": "Figma's AI creates product interfaces on a collaborative canvas.",
+  "context": "The three dominant design platforms all have AI now — but they're using it for very different things. Figma's AI creates product interfaces on a collaborative canvas. Canva's Magic Studio generates marketing content for non-designers.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "Figma's AI creates product interfaces on a collaborative canvas.",
+  "origin": "seed",
+  "source": {
+   "url": "https://hundredtabs.com/blog/figma-ai-vs-canva-ai-vs-adobe-firefly",
+   "title": "Figma AI vs Canva AI vs Adobe Firefly: Which AI Design Tool Should You Use? (2026) | HundredTabs",
+   "published": "2026-05-23"
+  }
+ },
+ {
+  "term_raw": "人工智慧即服務（AIaaS）",
+  "term_normalized": "AIaaS",
+  "sentence": "人工智慧即服務（AIaaS）之定義為由第三方提供人工智慧（AI）外包服務，其可使個人和公司基於各種目的進行AI相關實驗，同時毋須於初期即大規模投資或承受高度風險。",
+  "context": "摘要項目人工智慧即服務（AIaaS）之定義為由第三方提供人工智慧（AI）外包服務，其可使個人和公司基於各種目的進行AI相關實驗，同時毋須於初期即大規模投資或承受高度風險。著名之四大AIaaS供應商為Amazon AWS雲端運算服務、Microsoft Azure 雲端運算平台與服務、Google雲服務、以及IBM雲服務。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "人工智慧即服務（AIaaS）之定義為由第三方提供人工智慧（AI）外包服務，其可使個人和公司基於各種目的進行AI相關實驗，同時毋須於初期即大規模投資或承受高度風險。",
+  "origin": "seed",
+  "source": {
+   "url": "https://stli.iii.org.tw/article-detail.aspx?no=67&tp=5&d=8269",
+   "title": "人工智慧即服務（AI as a Service, AIaaS）",
+   "published": "2019-07"
+  }
+ },
+ {
+  "term_raw": "API",
+  "term_normalized": "API",
+  "sentence": "API 全名為 Application Programming Interface，而 API 中文則是「應用程式介面」，是一種提供不同軟體系統間互動的工具，定義了不同軟體間的互動規範。",
+  "context": "（一）什麼是 API？API 有什麼作用？API 全名為 Application Programming Interface，而 API 中文則是「應用程式介面」，是一種提供不同軟體系統間互動的工具，定義了不同軟體間的互動規範。API 允許不同的應用程式、服務或系統之間能夠共享資訊與功能，以約定好的 API 接口實現互聯互通。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "API 全名為 Application Programming Interface，而 API 中文則是「應用程式介面」，是一種提供不同軟體系統間互動的工具，定義了不同軟體間的互動規範。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.dottedsign.com/zh-tw/blog/product/api",
+   "title": "API是什麼？快速搞懂API串接意思＆5大應用環境實例！",
+   "published": "2025-05-08"
+  }
+ },
+ {
+  "term_raw": "API key",
+  "term_normalized": "API Key",
+  "sentence": "OpenAI 或 Gemini 的API key，就像你的信用卡號，使用這些 Key 能直接呼叫 AI，所以拿到的人就能用你的帳號跑 AI、產生費用。",
+  "context": "什麼是 AI 的 API key？OpenAI 或 Gemini 的API key，就像你的信用卡號，使用這些 Key 能直接呼叫 AI，所以拿到的人就能用你的帳號跑 AI、產生費用。你也可以理解，他就是一串開啟 AI 大門的鑰匙，讓 OpenAI 或 Gemini 知道要跟哪一戶收款。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "edge",
+  "definition_quote": "他就是一串開啟 AI 大門的鑰匙，讓 OpenAI 或 Gemini 知道要跟哪一戶收款。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.bnext.com.tw/article/84941/ai-api-key-security-guide",
+   "title": "API Key是什麼？為什麼Vibe Coding也可能噴掉上萬元？該怎麼做才不會外洩？",
+   "published": "2026-02-17"
+  }
+ },
+ {
+  "term_raw": "AI adoption",
+  "term_normalized": "Adoption",
+  "sentence": "AI adoption is how deeply and broadly your organization actually uses AI — not just how many licenses you've bought.",
+  "context": "AI adoption is how deeply and broadly your organization actually uses AI — not just how many licenses you've bought. AI adoption is the process by which an organization moves from experimenting with artificial intelligence tools to embedding them into daily workflows across teams, functions, and business units.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "AI adoption is the process by which an organization moves from experimenting with artificial intelligence tools to embedding them into daily workflows across teams, functions, and business units.",
+  "origin": "seed",
+  "source": {
+   "url": "https://larridin.com/blog/what-is-ai-adoption",
+   "title": "What is AI Adoption?",
+   "published": "2026-02-13"
+  }
+ },
+ {
+  "term_raw": "AI Agent",
+  "term_normalized": "Agent",
+  "sentence": "所謂AI Agent，是指具備自主運作（autonomous）能力、無需人類介入的AI系統。",
+  "context": "進入2026年，伴隨OpenClaw熱潮，AI Agent已經進入企業工作現場與日常應用場景。所謂AI Agent，是指具備自主運作（autonomous）能力、無需人類介入的AI系統。使用者只需下達指令，AI Agent便能感知環境、解讀意圖；面對高複雜度任務時，它會自行拆解步驟、制定計劃並執行。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "所謂AI Agent，是指具備自主運作（autonomous）能力、無需人類介入的AI系統。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.gvm.com.tw/article/113965",
+   "title": "AI Agent來了，但它是什麼？AI代理定義、應用、挑戰全解讀",
+   "published": "2026-05-26"
+  }
+ },
+ {
+  "term_raw": "agentic loop",
+  "term_normalized": "Agent Loop",
+  "sentence": "An agentic loop is a repeated cycle of three steps: think, act, observe.",
+  "context": "This article breaks down what an agentic loop is, how it's structured, when to use one, and what separates a loop that works from one that spins out of control. An agentic loop is a repeated cycle of three steps: think, act, observe. An AI agent runs through this cycle as many times as needed to complete a task.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "An agentic loop is a repeated cycle of three steps: think, act, observe.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.mindstudio.ai/blog/what-is-an-agentic-loop-autonomous-ai-agents",
+   "title": "What Is an Agentic Loop? The Core Pattern Behind Autonomous AI Agents",
+   "published": "2026-06-21"
+  }
+ },
+ {
+  "term_raw": "對齊校準",
+  "term_normalized": "Alignment",
+  "sentence": "對齊校準是指使AI模型，特別是大型語言模型，的行為與人類意圖、價值觀和倫理規範相符的過程，降低潛在風險。",
+  "context": "對齊校準（Alignment）對齊校準是指使AI模型，特別是大型語言模型，的行為與人類意圖、價值觀和倫理規範相符的過程，降低潛在風險。你有沒有遇過模型很會答題，卻不一定照你的意思做？",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "對齊校準是指使AI模型，特別是大型語言模型，的行為與人類意圖、價值觀和倫理規範相符的過程，降低潛在風險。",
+  "origin": "seed",
+  "source": {
+   "url": "https://aiterms.tw/terms/alignment",
+   "title": "對齊校準（Alignment）是什麼？ - AITerms.tw",
+   "published": "2026-04-05"
+  }
+ },
+ {
+  "term_raw": "異常偵測",
+  "term_normalized": "Anomaly Detection",
+  "sentence": "異常偵測是資料中很少見的項目、事件或監測項目的識別，與預期值大致不同。",
+  "context": "瞭解偵測異常值以預測失敗異常偵測是資料中很少見的項目、事件或監測項目的識別，與預期值大致不同。這在許多產業中都用於資產監控與維護。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "異常偵測是資料中很少見的項目、事件或監測項目的識別，與預期值大致不同。",
+  "origin": "seed",
+  "source": {
+   "url": "https://docs.oracle.com/zh-tw/solutions/learn-anomaly-detection/index.html",
+   "title": "瞭解偵測異常值以預測失敗",
+   "published": "2021-11"
+  }
+ },
+ {
+  "term_raw": "自動化工具平台",
+  "term_normalized": "Automation Platform",
+  "sentence": "Zapier 是一個自動化工具平台，可以協助用戶串接 2 個以上的應用程式，可以將 Zapier 想像成樓梯，而應用程式就是被串起來的樓層。",
+  "context": "網路工具越來越多元，大部分的工作者一天都會使用到各種不同的應用程式，像是打開 Gmail 確認信件、查看 Google 日曆的行程，同時還需開啟 Slack 與公司聯繫。Zapier 是一個自動化工具平台，可以協助用戶串接 2 個以上的應用程式，可以將 Zapier 想像成樓梯，而應用程式就是被串起來的樓層。Zapier 共支援超過 7,000 款應用程式，包含 Gmail、Slack、Google 試算表等。",
+  "explained": "has_definition",
+  "intent": "selling_point",
+  "domain": "edge",
+  "definition_quote": "Zapier 是一個自動化工具平台，可以協助用戶串接 2 個以上的應用程式",
+  "origin": "seed",
+  "source": {
+   "url": "https://welly.tw/blog/what-is-zapier",
+   "title": "Zapier是什麼？怎麼設定？5步驟學會超實用自動化工具！",
+   "published": "2024-08-14"
+  }
+ },
+ {
+  "term_raw": "基準測試",
+  "term_normalized": "Benchmark",
+  "sentence": "基準測試是用於評估和比較不同AI模型、演算法或系統性能的標準化方法，提供客觀的性能指標。",
+  "context": "兩個模型都說自己很強，該用什麼同一套標準來比？基準測試是用於評估和比較不同AI模型、演算法或系統性能的標準化方法，提供客觀的性能指標。你可以把基準測試想成統一考卷，用同一份題目、同一套規則比較表現。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "基準測試是用於評估和比較不同AI模型、演算法或系統性能的標準化方法，提供客觀的性能指標。",
+  "origin": "seed",
+  "source": {
+   "url": "https://aiterms.tw/terms/benchmark/",
+   "title": "基準測試（Benchmark）是什麼？AI 術語完整說明 - AITerms.tw",
+   "published": "2026-04-05"
+  }
+ },
+ {
+  "term_raw": "黑盒子",
+  "term_normalized": "Black Box",
+  "sentence": "作為最常被使用的譬喻，黑盒子多被用以描述深度學習（deeplearning）的不可預測性，由於其複雜性和不透明性，使用者往往無法理解其決策過程。",
+  "context": "對人類來說，現階段的AI並沒那麼容易理解，我們通常一籮筐地把所有難以解釋的種種通通打包，稱之為「黑盒子」。作為最常被使用的譬喻，黑盒子多被用以描述深度學習（deeplearning）的不可預測性，由於其複雜性和不透明性，使用者往往無法理解其決策過程。輸入數據後經過複雜計算生成結果的過程，這一過程對最終用戶及甚至開發者來說都不透明。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "core",
+  "definition_quote": "黑盒子多被用以描述深度學習（deeplearning）的不可預測性，由於其複雜性和不透明性，使用者往往無法理解其決策過程。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.yucc.org.tw/info/6733",
+   "title": "不只是黑盒子：AI 代表的混沌",
+   "published": "2024-11-26"
+  }
+ },
+ {
+  "term_raw": "blind spot",
+  "term_normalized": "Blind Spot",
+  "sentence": "blind spot也可用來指某人不擅長、不了解或忽略的地方。",
+  "context": "blind spot（盲點）本指視野死角，開車時無法直接看到、靠後視鏡（rearview mirror）也看不到的地方就稱為blind spot，如：Watch out for cars in your blind spot when you change lanes.（轉換車道時要注意視野死角的來車。）blind spot也可用來指某人不擅長、不了解或忽略的地方。而網路上流行的「你突破盲點∕盲腸了。」指的就是弄懂某件事或找出關鍵。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "not",
+  "definition_quote": "blind spot也可用來指某人不擅長、不了解或忽略的地方。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.managertoday.com.tw/english/vocabulary/view/649",
+   "title": "盲點|blind spot|經理人",
+   "published": "2017-12-20"
+  }
+ },
+ {
+  "term_raw": "Build vs buy",
+  "term_normalized": "Build vs Buy",
+  "sentence": "Build vs buy is the decision about whether to develop a capability in-house or license it from a vendor.",
+  "context": "Build vs buy is the strategic decision framework for whether to develop custom technology in-house or purchase an existing commercial solution. Build vs buy is the decision about whether to develop a capability in-house or license it from a vendor. The question gets framed as two choices: write the code yourself or buy someone else's product.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "not",
+  "definition_quote": "Build vs buy is the decision about whether to develop a capability in-house or license it from a vendor.",
+  "origin": "seed",
+  "source": {
+   "url": "https://howmarketingtechnology.works/define/build-vs-buy/",
+   "title": "What is Build vs Buy?",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "CLAUDE.md",
+  "term_normalized": "CLAUDE.md",
+  "sentence": "CLAUDE.md is a markdown file that Claude automatically reads at the start of each session.",
+  "context": "If you're using Claude Code, this is where your setup time pays off most. CLAUDE.md is a markdown file that Claude automatically reads at the start of each session. It holds project-specific instructions you'd otherwise repeat in every prompt.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "CLAUDE.md is a markdown file that Claude automatically reads at the start of each session.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.builder.io/blog/claude-md-guide",
+   "title": "How to Write a Good CLAUDE.md File",
+   "published": "2026-01-13"
+  }
+ },
+ {
+  "term_raw": "Chain-of-Thought（思維鏈）",
+  "term_normalized": "Chain of Thought",
+  "sentence": "Chain-of-Thought（思維鏈）是一種讓 AI 模型在回答問題時，像人類一樣「逐步推理、條理清楚地表達解答過程」的方法。",
+  "context": "在人工智慧（AI）領域，這種模擬人類「一步步思考」的方式，就被稱為 Chain-of-Thought（思維鏈）。 Chain-of-Thought（思維鏈）是一種讓 AI 模型在回答問題時，像人類一樣「逐步推理、條理清楚地表達解答過程」的方法。 當 AI 使用思維鏈時，它不會像以往那樣直接輸出最終答案，而是會先展開自己的思考脈絡，先寫出每個中間步驟，再慢慢推導出結論。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Chain-of-Thought（思維鏈）是一種讓 AI 模型在回答問題時，像人類一樣「逐步推理、條理清楚地表達解答過程」的方法。",
+  "origin": "seed",
+  "source": {
+   "url": "https://realnewbie.com/posts/complete-beginner-tutorial-what-is-chain-of-thought-%E8%A9%A2%E5%95%8F-chatgpt",
+   "title": "初學者完整教學：什麼是 Chain-of-Thought 思維鏈？",
+   "published": "2025-07-07"
+  }
+ },
+ {
+  "term_raw": "ChatGPT",
+  "term_normalized": "ChatGPT",
+  "sentence": "ChatGPT是[company]運用大型AI模型「GPT-3.5」語言技術開發的產物，能對詞彙結構做數學分析，透過事先學習（pre-trained）具備生成對話（chat generative）的功能。",
+  "context": "ChatGPT在一般人工智慧裡加入了聊天功能，能與人類自然對話（文字對話），如同專門負責對話的AI機器人（聊天機器人）。 ChatGPT是[company]運用大型AI模型「GPT-3.5」語言技術開發的產物，能對詞彙結構做數學分析，透過事先學習（pre-trained）具備生成對話（chat generative）的功能。 下面做進一步說明。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "ChatGPT是[company]運用大型AI模型「GPT-3.5」語言技術開發的產物，能對詞彙結構做數學分析，透過事先學習（pre-trained）具備生成對話（chat generative）的功能。",
+  "origin": "seed",
+  "source": {
+   "url": "https://reading.udn.com/read/story/122749/8016247",
+   "title": "你認識AI和ChatGPT的差異嗎？人工智慧造成哪些改變又有何限制？",
+   "published": "2024-06-10"
+  }
+ },
+ {
+  "term_raw": "citation",
+  "term_normalized": "Citation",
+  "sentence": "A citation acts as the digital footnote: the system's way of saying, 'Here's where I got this.'",
+  "context": "Unlike traditional search results, which list 10 blue links, AI-generated answers are conversational and often summarize multiple sources in a single response. A citation acts as the digital footnote: the system's way of saying, 'Here's where I got this.' But not every answer includes a citation.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "A citation acts as the digital footnote: the system's way of saying, 'Here's where I got this.'",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.yext.com/knowledge-center/ai-citations",
+   "title": "What Are AI Citations?",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "市民開發者(citizen developer)",
+  "term_normalized": "Citizen Developer",
+  "sentence": "這些平台可以讓市民開發者(citizen developer)，也就是那些不太會編寫程式碼的團隊成員，透過視覺化介面與拖放功能(drag-and-drop)來建立應用程式，而不需要大量編寫程式碼。",
+  "context": "面對這種情況，越來越多的專案團隊轉向市民開發。 這些平台可以讓市民開發者(citizen developer)，也就是那些不太會編寫程式碼的團隊成員，透過視覺化介面與拖放功能(drag-and-drop)來建立應用程式，而不需要大量編寫程式碼。 而平台可以幫助團隊自動化流程或蒐集分析數據，同時彌補了可能需要建立開發團隊、或聘請供應商的量身定制解決方案之間的差距。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "市民開發者(citizen developer)，也就是那些不太會編寫程式碼的團隊成員",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.pmi.org.tw/%E3%80%90pmi-insight-%E7%BF%BB%E8%AD%AF%E7%B2%BE%E9%81%B8%E3%80%91%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%EF%BC%9A%E5%B8%82%E6%B0%91%E9%96%8B%E7%99%BC%E8%80%85/",
+   "title": "【PMI Insight 翻譯精選】需要了解：市民開發者",
+   "published": "2023-06-07"
+  }
+ },
+ {
+  "term_raw": "Claude",
+  "term_normalized": "Claude",
+  "sentence": "Claude 是 [company] 推出的大型語言模型家族，也是 [company] 面向一般使用者與開發者的核心 AI 產品名稱。",
+  "context": "Claude 是什麼？ Claude 是 [company] 推出的大型語言模型家族，也是 [company] 面向一般使用者與開發者的核心 AI 產品名稱。 [company] 目前把 Claude 提供在網頁、桌面與手機端，也同時提供 Claude API，並支援 [company] Bedrock、[company] Vertex AI 與 [company] Foundry 等平台。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Claude 是 [company] 推出的大型語言模型家族，也是 [company] 面向一般使用者與開發者的核心 AI 產品名稱。",
+  "origin": "seed",
+  "source": {
+   "url": "https://frankchiu.io/ai-claude-intro/",
+   "title": "Claude 是什麼？Claude 怎麼用？Claude 中文使用技巧懶人包",
+   "published": "2026-07-25"
+  }
+ },
+ {
+  "term_raw": "Claude Code",
+  "term_normalized": "Claude Code",
+  "sentence": "Claude Code 是 [company] 官方推出的 agentic coding tool，也就是「能使用工具完成開發任務的 AI 程式助理」。",
+  "context": "Claude Code 是什麼？ Claude Code 是 [company] 官方推出的 agentic coding tool，也就是「能使用工具完成開發任務的 AI 程式助理」。 根據官方說明，Claude Code 可以讀取你的 codebase、編輯檔案、執行 command，並整合在 terminal、IDE、桌面 App、Web 與 Slack 等環境中使用。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "Claude Code 是 [company] 官方推出的 agentic coding tool，也就是「能使用工具完成開發任務的 AI 程式助理」。",
+  "origin": "seed",
+  "source": {
+   "url": "https://frankchiu.io/ai-claude-code/",
+   "title": "Claude Code 是什麼？中文教學：安裝、用法與避坑",
+   "published": "2026-06-12"
+  }
+ },
+ {
+  "term_raw": "clustering",
+  "term_normalized": "Clustering",
+  "sentence": "分群（集群），clustering，屬於非監督式學習方法。",
+  "context": "分群 Clustering 分群（集群），clustering，屬於非監督式學習方法。 非監督學習式機器學習的一種方法，沒有給定事先標記的資料（ground truth），會對自動對輸入的資料進行分類或分群。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "分群（集群），clustering，屬於非監督式學習方法。",
+  "origin": "seed",
+  "source": {
+   "url": "https://hackmd.io/@joanne8826/H1wm1antu",
+   "title": "分群 Clustering - HackMD",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Context（上下文）",
+  "term_normalized": "Context",
+  "sentence": "Context（上下文）是 LLM 在生成回應時，所能「看到」的全部資訊。",
+  "context": "一、Context 是什麼？ Context（上下文）是 LLM 在生成回應時，所能「看到」的全部資訊。 LLM 沒有持久記憶。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Context（上下文）是 LLM 在生成回應時，所能「看到」的全部資訊。",
+  "origin": "seed",
+  "source": {
+   "url": "https://hackmd.io/@TommyHuang/SkiIsT_qbe",
+   "title": "第二篇：模型的記憶與視野 — Context 與 Context Window",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Context Engineering 上下文工程",
+  "term_normalized": "Context Engineering",
+  "sentence": "開發 AI 應用需要建構一個系統，動態根據當前任務和狀態，提供正確的資訊和工具給 LLM 大模型，讓它有足夠的條件完成任務，這就叫做 Context Engineering 上下文工程。",
+  "context": "Context Engineering 這個詞最近在 AI 技術圈被提出，包括 [person] ([company] CEO)、大神 [person]、[person] ([company] 創辦人)、[person] ([company] 創辦人)、[person] 等大大都在討論+1。 開發 AI 應用需要建構一個系統，動態根據當前任務和狀態，提供正確的資訊和工具給 LLM 大模型，讓它有足夠的條件完成任務，這就叫做 Context Engineering 上下文工程。 [person] ([company] CEO) 說：「我真的喜歡 context engineering 這個詞勝過 prompt engineering。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "動態根據當前任務和狀態，提供正確的資訊和工具給 LLM 大模型，讓它有足夠的條件完成任務，這就叫做 Context Engineering 上下文工程。",
+  "origin": "seed",
+  "source": {
+   "url": "https://ihower.tw/blog/12817-context-engineering",
+   "title": "什麼是 Context Engineering 上下文工程?",
+   "published": "2025-07-03"
+  }
+ },
+ {
+  "term_raw": "Context Window（上下文視窗）",
+  "term_normalized": "Context Window",
+  "sentence": "Context Window（上下文視窗）是 LLM 一次能處理的最大 token 數量。",
+  "context": "把它想像成一個滑動的閱讀窗口： Context Window（上下文視窗）是 LLM 一次能處理的最大 token 數量。 超過這個上限，模型就「看不到」更早的內容了。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Context Window（上下文視窗）是 LLM 一次能處理的最大 token 數量。",
+  "origin": "seed",
+  "source": {
+   "url": "https://hackmd.io/@TommyHuang/SkiIsT_qbe",
+   "title": "第二篇：模型的記憶與視野 — Context 與 Context Window",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Copilot",
+  "term_normalized": "Copilot",
+  "sentence": "Copilot 是一個交談式、AI 支援的助理，透過提供內容相關的協助、自動化例行工作，以及分析資料，協助提高生產力並簡化工作流程。",
+  "context": "探索 Copilot 是什麼、如何使用 Copilot，以及 Copilot 如何提高生產力。 Copilot 是一個交談式、AI 支援的助理，透過提供內容相關的協助、自動化例行工作，以及分析資料，協助提高生產力並簡化工作流程。 主要重點",
+  "explained": "has_definition",
+  "intent": "selling_point",
+  "domain": "edge",
+  "definition_quote": "Copilot 是一個交談式、AI 支援的助理，透過提供內容相關的協助、自動化例行工作，以及分析資料，協助提高生產力並簡化工作流程。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.microsoft.com/zh-tw/microsoft-copilot/copilot-101/what-is-copilot",
+   "title": "Copilot 是什麼以及它如何運作？ | Microsoft Copilot",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "著作權",
+  "term_normalized": "Copyright",
+  "sentence": "A:AI並非自然人或法人，所創作之作品不受著作權法保護",
+  "context": "Q:AI所生成的作品是否受著作權法所保護 A:AI並非自然人或法人，所創作之作品不受著作權法保護 1. 著作權法只保護自然人和法人的著作",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "edge",
+  "definition_quote": "AI並非自然人或法人，所創作之作品不受著作權法保護",
+  "origin": "seed",
+  "source": {
+   "url": "https://puripr.pu.edu.tw/p/16-1132-60703.php?Lang=zh-tw",
+   "title": "2025-04-01 AI所生成的作品是否受著作權法所保護",
+   "published": "2025-04-01"
+  }
+ },
+ {
+  "term_raw": "Cursor",
+  "term_normalized": "Cursor",
+  "sentence": "Cursor 是一款結合 AI 功能的程式碼編輯器，外觀與操作類似 Visual Studio Code，旨在加速程式開發流程。",
+  "context": "總覽： Cursor 是一款結合 AI 功能的程式碼編輯器，外觀與操作類似 Visual Studio Code，旨在加速程式開發流程。 它整合了頂尖 AI 模型，能協助你撰寫程式碼、修改 Bug、理解專案架構",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "Cursor 是一款結合 AI 功能的程式碼編輯器，外觀與操作類似 Visual Studio Code，旨在加速程式開發流程。",
+  "origin": "seed",
+  "source": {
+   "url": "https://adbest.com.tw/blog/what-is-cursor/",
+   "title": "Cursor是什麼？4步驟安裝＋基本3設定，入門到實戰指南！",
+   "published": "2025-07-04"
+  }
+ },
+ {
+  "term_raw": "Data Cleaning",
+  "term_normalized": "Data Cleaning",
+  "sentence": "Data Cleaning 指的是從原始資料中識別並修正（或移除）不完整、不準確或不一致的資料的過程。",
+  "context": "什麼是 Data Cleaning？ Data Cleaning 指的是從原始資料中識別並修正（或移除）不完整、不準確或不一致的資料的過程。 資料清理旨在提高資料品質，從而確保後續的資料分析或模型建立能夠基於高品質的資料進行。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "Data Cleaning 指的是從原始資料中識別並修正（或移除）不完整、不準確或不一致的資料的過程。",
+  "origin": "seed",
+  "source": {
+   "url": "https://tw.alphacamp.co/blog/data-cleaning",
+   "title": "Data Cleaning：資料清洗的方法與重要性",
+   "published": "2023-04-13"
+  }
+ },
+ {
+  "term_raw": "Data drift",
+  "term_normalized": "Data Drift",
+  "sentence": "Data drift is a metric that measures the change in distribution between two data sets.",
+  "context": "Changes in the data distribution are monitored with Data Drift, one of the most common indicators when monitoring MLOps models. Data drift is a metric that measures the change in distribution between two data sets. Before diving deeper into it, let us examine how ML Works defines drift for a time series use case and how the different drift components provide valuable insights and recommendations.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Data drift is a metric that measures the change in distribution between two data sets.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.tredence.com/blog/what-is-data-drift",
+   "title": "What is Data Drift? - (Types, vs ml model drift)",
+   "published": "2022-03-11"
+  }
+ },
+ {
+  "term_raw": "Data Labeling（數據標記）",
+  "term_normalized": "Data Labeling",
+  "sentence": "Data Labeling（數據標記）是將原始數據（例如圖像、聲音或文本）加上標籤或標記，以便訓練機器學習模型。",
+  "context": "甚麼是數據標記 (Data Labeling)? Data Labeling（數據標記）是將原始數據（例如圖像、聲音或文本）加上標籤或標記，以便訓練機器學習模型。 這樣機器學習模型就可以像我們一樣學習，從標籤中辨認出正確的資料。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Data Labeling（數據標記）是將原始數據（例如圖像、聲音或文本）加上標籤或標記，以便訓練機器學習模型。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.equityx.ai/ai-article-2023714-data-labeling/",
+   "title": "【AI 教室】甚麼是數據標記 (Data Labeling)?",
+   "published": "2023-07-14"
+  }
+ },
+ {
+  "term_raw": "data retention policy",
+  "term_normalized": "Data Retention",
+  "sentence": "A data retention policy establishes rules for how long data is kept before it is securely deleted or anonymized.",
+  "context": "A data retention policy defines how long an organization stores different categories of data and outlines when and how that data should be deleted or anonymized. A data retention policy establishes rules for how long data is kept before it is securely deleted or anonymized. It ensures that personal and business data are stored only for as long as necessary to meet legal, regulatory, or operational requirements.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "A data retention policy establishes rules for how long data is kept before it is securely deleted or anonymized.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.onetrust.com/glossary/data-retention-policy/",
+   "title": "What is a data retention policy? | OneTrust Glossary",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "決策樹 (Decision tree)",
+  "term_normalized": "Decision Tree",
+  "sentence": "決策樹 (Decision tree) ，它是一種機器學習演算法，可以使用它來處理分類問題，同時也稱為分類分析。",
+  "context": "決策樹 (Decision tree) ，它是一種機器學習演算法，可以使用它來處理分類問題，同時也稱為分類分析。 那為什麼要稱為決策樹呢？主要是借用樹的階層概念，分類過程可以用一個倒著的樹形結構而表達。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "決策樹 (Decision tree) ，它是一種機器學習演算法，可以使用它來處理分類問題，同時也稱為分類分析。",
+  "origin": "seed",
+  "source": {
+   "url": "https://blog.tibame.com/?p=17923",
+   "title": "【AI60問】Q23什麼是決策樹演算法？",
+   "published": "2021-04-28"
+  }
+ },
+ {
+  "term_raw": "深度學習",
+  "term_normalized": "Deep Learning",
+  "sentence": "廣泛地說，深度學習是指具有層次性的機器學習法，能透過層層處理將大量無序的訊號漸漸轉為有用的資訊並解決問題。",
+  "context": "■戰勝圍棋九段的 [company] AlphaGo 正是以深度學習作為核心。比起一般的機器學習，深度學習是如何有深度呢？ 廣泛地說，深度學習是指具有層次性的機器學習法，能透過層層處理將大量無序的訊號漸漸轉為有用的資訊並解決問題。 但通常提到深度學習，人們指的是一種特定的機器學習法─「深度神經網路」(Deep Neural Network)。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "深度學習是指具有層次性的機器學習法，能透過層層處理將大量無序的訊號漸漸轉為有用的資訊並解決問題。",
+  "origin": "seed",
+  "source": {
+   "url": "https://case.ntu.edu.tw/blog/?p=26340",
+   "title": "機器學習與人工神經網路(二)：深度學習(Deep Learning)",
+   "published": "2016-12-13"
+  }
+ },
+ {
+  "term_raw": "Deepfake",
+  "term_normalized": "Deepfake",
+  "sentence": "深偽（Deepfake）一詞於2017年問世，是深度學習（Deep Learning）與偽造（Fake）混合而成的單字。",
+  "context": "什麼是 Deepfake（深偽技術） 深偽（Deepfake）一詞於2017年問世，是深度學習（Deep Learning）與偽造（Fake）混合而成的單字。 透過換臉、控制嘴唇,植入假造的音源檔,製作色情、政治宣傳或嘲諷影片。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "core",
+  "definition_quote": "深偽（Deepfake）一詞於2017年問世，是深度學習（Deep Learning）與偽造（Fake）混合而成的單字。",
+  "origin": "seed",
+  "source": {
+   "url": "https://blog.trendmicro.com.tw/?p=63452",
+   "title": "讓阿湯哥真假難辨的 Deepfake 技術,是什麼?如何捍衛隱私?",
+   "published": "2023-09-02"
+  }
+ },
+ {
+  "term_raw": "DoD",
+  "term_normalized": "Definition of Done",
+  "sentence": "The DoD is a set of high-level criteria that defines when a product increment is complete.",
+  "context": "Definition of done vs. definition of ready The DoD is a set of high-level criteria that defines when a product increment is complete. It ensures the quality and consistency of a deliverable.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "not",
+  "definition_quote": "The DoD is a set of high-level criteria that defines when a product increment is complete.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.atlassian.com/agile/project-management/definition-of-done",
+   "title": "What is the Definition of Done (DoD) in Agile? | Atlassian",
+   "published": "2026-02-11"
+  }
+ },
+ {
+  "term_raw": "設計標籤",
+  "term_normalized": "Design Token",
+  "sentence": "設計標籤是一種幫助設計師和開發人員能進行有效溝通的代碼化語言，透過將數值（例如色碼、字體、間距等）編寫至設計標籤中，建立統一的代碼化語言，讓組件和設計系統可以被快速的管理，並有效的運用至 UI 設計中。",
+  "context": "Design token 的中文有很多種說法，可以翻譯成設計令牌、設計權杖、或是設計變量，但我們覺得上述用語不是很容易理解，最終我們選擇了設計標籤來稱呼。 設計標籤是一種幫助設計師和開發人員能進行有效溝通的代碼化語言，透過將數值（例如色碼、字體、間距等）編寫至設計標籤中，建立統一的代碼化語言，讓組件和設計系統可以被快速的管理，並有效的運用至 UI 設計中。 如同你會製作很多標籤去標註物品類別，讓你和他人都很好找到物品。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "not",
+  "definition_quote": "設計標籤是一種幫助設計師和開發人員能進行有效溝通的代碼化語言",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.webguide.nat.gov.tw/article/384/show",
+   "title": "跨越設計與程式的鴻溝–Design Tokens(一)",
+   "published": "2024-03-15"
+  }
+ },
+ {
+  "term_raw": "差分隱私",
+  "term_normalized": "Differential Privacy",
+  "sentence": "差分隱私 (DP) 是一種統計框架，可為安全彙總系統提供額外的資料保護層。",
+  "context": "幸運的是，有一條前進的道路：包括 [company]、[company]、美國人口普查局以及越來越多的產業和政府參與者在內的各種組織現在都在使用差分隱私來保護他們的資料。 差分隱私 (DP) 是一種統計框架，可為安全彙總系統提供額外的資料保護層。 它會向彙總資料新增干擾資訊，防止攻擊者過多地瞭解任何個人的資訊。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "差分隱私 (DP) 是一種統計框架，可為安全彙總系統提供額外的資料保護層。",
+  "origin": "seed",
+  "source": {
+   "url": "https://blog.cloudflare.com/zh-tw/have-your-data-and-hide-it-too-an-introduction-to-differential-privacy/",
+   "title": "擁有資料的同時隱藏資料：差分隱私介紹",
+   "published": "2023-12-22"
+  }
+ },
+ {
+  "term_raw": "擴散模型",
+  "term_normalized": "Diffusion",
+  "sentence": "擴散模型的做法有點反直覺：先把圖片「弄壞」成一團雜訊，再訓練 AI 學會把雜訊一步步還原回來。",
+  "context": "在網路上看到的 AI 插畫、AI 生成的短影片，甚至是修圖軟體裡的「一鍵消除路人」，背後常常都是同一種技術：擴散模型（Diffusion Model），也是目前生成式 AI 領域最主流的技術路線之一。 擴散模型的做法有點反直覺：先把圖片「弄壞」成一團雜訊，再訓練 AI 學會把雜訊一步步還原回來。 當 AI 學會了還原，它就有能力從一團隨機雜訊中，生成一張全新的、原本不存在的圖片。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "擴散模型的做法有點反直覺：先把圖片「弄壞」成一團雜訊，再訓練 AI 學會把雜訊一步步還原回來。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.jyes.com.tw/news.php?act=view&id=15240",
+   "title": "【AI專知】擴散模型（Diffusion Model）是什麼？AI 生圖的原理、應用一次看",
+   "published": "2026-07-29"
+  }
+ },
+ {
+  "term_raw": "判別式 AI",
+  "term_normalized": "Discriminative AI",
+  "sentence": "判別式 AI (也被稱作決策式 AI )學習資料中的條件機率分布，即一個樣本歸屬於特定類別的機率，再對新的場景進行判斷、分析和預測。",
+  "context": "判別式 AI 和生成式 AI人工智慧可從不同的面向進行劃分，如果按其模型來劃分（人工智慧是由模型支撐的），可以分為判別式 AI 和生成式 AI。 判別式 AI (也被稱作決策式 AI )學習資料中的條件機率分布，即一個樣本歸屬於特定類別的機率，再對新的場景進行判斷、分析和預測。 判別式 AI 有幾個主要的應用領域：人臉辨識、推薦系統、風控系統、其他智慧決策系統、機器人、自動駕駛。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "判別式 AI (也被稱作決策式 AI )學習資料中的條件機率分布，即一個樣本歸屬於特定類別的機率，再對新的場景進行判斷、分析和預測。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.ctee.com.tw/news/20231028700002-431001",
+   "title": "判別式 AI 和生成式 AI 存在哪些差異？",
+   "published": "2023-10-28"
+  }
+ },
+ {
+  "term_raw": "Embedding",
+  "term_normalized": "Embedding",
+  "sentence": "Embedding 是把文字 / 圖片 / 音訊轉成「一串數字」(向量)的技術。",
+  "context": "Embedding 的角色：把語義變成數字。 Embedding 是把文字 / 圖片 / 音訊轉成「一串數字」(向量)的技術。 語義相似的東西，在這個數字空間裡的距離也相近。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Embedding 是把文字 / 圖片 / 音訊轉成「一串數字」(向量)的技術。",
+  "origin": "seed",
+  "source": {
+   "url": "https://signals.tw/articles/what-is-embedding/",
+   "title": "embedding 是什麼？把文字變成向量、讓電腦判斷相似度的技術",
+   "published": "2026-04-25"
+  }
+ },
+ {
+  "term_raw": "專家系統 (expert system)",
+  "term_normalized": "Expert System",
+  "sentence": "根據[person]的定義，專家系統 (expert system) 「是一套能表示或代表某專業知識領域，比如內科醫學或地質學等，並進行推論以解決問題與提供建議的電腦系統」(1)。",
+  "context": "專家系統也被認為是人工智慧發展初期成功的分支系統之一。 根據[person]的定義，專家系統 (expert system) 「是一套能表示或代表某專業知識領域，比如內科醫學或地質學等，並進行推論以解決問題與提供建議的電腦系統」(1)。 我們初步可以由三個面向區分專家系統與人工智慧：",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "專家系統 (expert system) 「是一套能表示或代表某專業知識領域，比如內科醫學或地質學等，並進行推論以解決問題與提供建議的電腦系統」",
+  "origin": "seed",
+  "source": {
+   "url": "https://ai.iias.sinica.edu.tw/glossary/expert-system/",
+   "title": "Expert System - 臺灣人工智慧行動網 Taiwan AI Wise Agent Network",
+   "published": "2020-08-06"
+  }
+ },
+ {
+  "term_raw": "可解釋人工智慧",
+  "term_normalized": "Explainable AI",
+  "sentence": "可解釋人工智慧這個研究領域所關心的是，如何讓人類瞭解人工智慧下判斷的理由。",
+  "context": "可解釋人工智慧（Explainable AI， XAI） 可解釋人工智慧這個研究領域所關心的是，如何讓人類瞭解人工智慧下判斷的理由。 如果人工智慧相關技術要推廣到更多的領域，例如在法院裡協助量刑、在醫療上協助診斷、在保險與金融上判斷一個投資策略的優劣，或是在社會福利政策裡主導資源的分配，我們都會更迫切需要知道模型到底怎麼得出結論的。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "可解釋人工智慧這個研究領域所關心的是，如何讓人類瞭解人工智慧下判斷的理由。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.bnc-technology.com/article-11.html",
+   "title": "為什麼可解釋人工智慧（Explainable AI， XAI）是人工智慧的未來",
+   "published": "2021-09-27"
+  }
+ },
+ {
+  "term_raw": "few shot prompting",
+  "term_normalized": "Few-shot",
+  "sentence": "另一個提示策略是多範例提示（few shot prompting）, 這種策略將為模型展示一些例子（shots），從而更具象地描述你的需求。",
+  "context": "提示技巧來導引模型產出結果 另一個提示策略是多範例提示（few shot prompting）, 這種策略將為模型展示一些例子（shots），從而更具象地描述你的需求。 在上圖的例子中，我們嘗試對使用者反饋進行正面（positive）或反面（negative）的分類。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "多範例提示（few shot prompting）, 這種策略將為模型展示一些例子（shots），從而更具象地描述你的需求。",
+  "origin": "seed",
+  "source": {
+   "url": "https://learnprompting.org/zh-tw/docs/basics/few_shot",
+   "title": "多範例提示",
+   "published": "2024-08-07"
+  }
+ },
+ {
+  "term_raw": "微調 (Fine-tuning)",
+  "term_normalized": "Fine-tuning",
+  "sentence": "在機器學習領域當中，微調 (Fine-tuning) 是指在已經訓練好的模型基礎上，進一步調整，讓你模型的輸出能夠更符合你的預期。",
+  "context": "什麼是微調 (Fine-tuning)? 有什麼好處? 在機器學習領域當中，微調 (Fine-tuning) 是指在已經訓練好的模型基礎上，進一步調整，讓你模型的輸出能夠更符合你的預期。 透過微調，我們可以不用重新訓練一個新的模型，這讓我們能夠省去訓練新模型的高昂成本。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "微調 (Fine-tuning) 是指在已經訓練好的模型基礎上，進一步調整，讓你模型的輸出能夠更符合你的預期。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.explainthis.io/zh-hant/ai/fine-tuning-gpt",
+   "title": "什麼是微調 (fine-tuning)? 如何微調 GPT-3.5 模型?",
+   "published": "2023-08-23"
+  }
+ },
+ {
+  "term_raw": "GAN",
+  "term_normalized": "GAN",
+  "sentence": "生成對抗網路（Generative Adversarial Networks, GAN）是一個很有趣的機器 學習方法，它用來訓練一個可以產生資料的模型。",
+  "context": "生成對抗網路原理 生成對抗網路（Generative Adversarial Networks, GAN）是一個很有趣的機器 學習方法，它用來訓練一個可以產生資料的模型。 為什麼要瞭解 GAN?",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "生成對抗網路（Generative Adversarial Networks, GAN）是一個很有趣的機器 學習方法，它用來訓練一個可以產生資料的模型。",
+  "origin": "seed",
+  "source": {
+   "url": "https://iaic.nccu.edu.tw/column-articles/30",
+   "title": "生成對抗網路原理",
+   "published": "2022-08-25"
+  }
+ },
+ {
+  "term_raw": "Gemini",
+  "term_normalized": "Gemini",
+  "sentence": "Gemini 是多模態 LLM 的介面，可處理文字、音訊和圖像等內容。",
+  "context": "Gemini 是什麼？ Gemini 是多模態 LLM 的介面，可處理文字、音訊和圖像等內容。 Gemini 奠基於 [company] 最先進的 LLM 研究成果，包括 2013 年 Word2Vec 論文提出的創新模型架構 (以數學概念對應文字)，以及 2015 年發表的 類神經對話式模型。",
+  "explained": "has_definition",
+  "intent": "selling_point",
+  "domain": "core",
+  "definition_quote": "Gemini 是多模態 LLM 的介面，可處理文字、音訊和圖像等內容。",
+  "origin": "seed",
+  "source": {
+   "url": "https://gemini.google/overview/",
+   "title": "Gemini 是什麼？如何運作？",
+   "published": "2024-07-25"
+  }
+ },
+ {
+  "term_raw": "生成式 AI",
+  "term_normalized": "Generative AI",
+  "sentence": "生成式 AI 會使用深度學習(可處理複雜工作與大型資料集的一種精密機器學習 (ML) 形式) 來建立新內容以回應簡單的自然語言提示。",
+  "context": "什麼是生成式 AI? 生成式 AI 會使用深度學習(可處理複雜工作與大型資料集的一種精密機器學習 (ML) 形式) 來建立新內容以回應簡單的自然語言提示。 就像廚師會烹調獨特的菜餚、音樂家會創作歌曲、作家會寫故事一樣，生成式 AI 具有創意與創新性。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "生成式 AI 會使用深度學習(可處理複雜工作與大型資料集的一種精密機器學習 (ML) 形式) 來建立新內容以回應簡單的自然語言提示。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.microsoft.com/zh-tw/ai/ai-101/generative-ai-vs-other-types-of-ai",
+   "title": "生成式 AI 與其他類型的 AI | Microsoft AI",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Graph engineering",
+  "term_normalized": "Graph Engineering",
+  "sentence": "Graph engineering controls how multiple agents, loops, functions, validators, tools, and humans work together.",
+  "context": "Agent loops control how an agent reasons and uses tools. Graph engineering controls how multiple agents, loops, functions, validators, tools, and humans work together. The broader lesson is simple:",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Graph engineering controls how multiple agents, loops, functions, validators, tools, and humans work together.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.analyticsvidhya.com/blog/2026/07/graph-engineering/",
+   "title": "Graph Engineering for AI Agents: Beyond the Single-Agent Loop",
+   "published": "2026-07-28"
+  }
+ },
+ {
+  "term_raw": "/grill-me",
+  "term_normalized": "Grill me",
+  "sentence": "This article introduces `/grill-me`, a skill for clarifying requirements and aligning humans and AI.",
+  "context": "As coding agents grow more autonomous and parallel agent work becomes normal, shared understanding before implementation matters more than ever. This article introduces `/grill-me`, a skill for clarifying requirements and aligning humans and AI. What Is the /grill-me Skill?",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "`/grill-me`, a skill for clarifying requirements and aligning humans and AI.",
+  "origin": "seed",
+  "source": {
+   "url": "https://azukiazusa.dev/en/blog/before-implementation-interview-design-requirements-grill-me/",
+   "title": "The `/grill-me` Skill for Thoroughly Interviewing a Design and Clarifying Requirements Before Implementation",
+   "published": "2026-06-14"
+  }
+ },
+ {
+  "term_raw": "Grounding",
+  "term_normalized": "Grounding",
+  "sentence": "Grounding 就是：當 AI 給出答案時，同時指出能夠驗證這個答案的來源，並且保證內容真的出自那些來源。",
+  "context": "Grounding 是什麼？ Grounding 就是：當 AI 給出答案時，同時指出能夠驗證這個答案的來源，並且保證內容真的出自那些來源。 [company] Vertex AI 文件說明：「Grounding is the ability to connect model output to verifiable sources of information.」（Grounding 指的是將模型輸出與可驗證的資訊來源相連結的能力。）",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Grounding 就是：當 AI 給出答案時，同時指出能夠驗證這個答案的來源，並且保證內容真的出自那些來源。",
+  "origin": "seed",
+  "source": {
+   "url": "https://frankchiu.io/ai-grounding-intro/",
+   "title": "Grounding 介紹：被 Google AI 引用的祕密，就在 Grounding 中",
+   "published": "2025-08-03"
+  }
+ },
+ {
+  "term_raw": "AI Guardrails",
+  "term_normalized": "Guardrail",
+  "sentence": "AI Guardrails（AI 防護機制）是讓 AI 系統在安全、經核准的界線內運作的規則與控管，涵蓋它能存取什麼、能採取哪些動作，以及如何回應。",
+  "context": "AI Guardrails（AI 防護機制）是讓 AI 系統在安全、經核准的界線內運作的規則與控管，涵蓋它能存取什麼、能採取哪些動作，以及如何回應。它是組織讓 AI 對齊政策、資安與業務意圖的方式。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "AI Guardrails（AI 防護機制）是讓 AI 系統在安全、經核准的界線內運作的規則與控管，涵蓋它能存取什麼、能採取哪些動作，以及如何回應。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.sharecrm.com/zh/glossary/ai-guardrails",
+   "title": "AI Guardrails（AI 防護機制）定義 | ShareCRM 術語表",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "AI 幻覺（AI Hallucination）",
+  "term_normalized": "Hallucination",
+  "sentence": "AI 幻覺（AI Hallucination）指的是 生成式 AI 產出看似合理、語氣自信，但實際上包含錯誤、虛假或無法被驗證資訊的內容。",
+  "context": "AI 幻覺（AI Hallucination）指的是 生成式 AI 產出看似合理、語氣自信，但實際上包含錯誤、虛假或無法被驗證資訊的內容。像 ChatGPT、Perplexity、Gemini 等 AI 工具已經不只是輔助，而是逐漸融入很多人的日常或工作中。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "core",
+  "definition_quote": "AI 幻覺（AI Hallucination）指的是 生成式 AI 產出看似合理、語氣自信，但實際上包含錯誤、虛假或無法被驗證資訊的內容。",
+  "origin": "seed",
+  "source": {
+   "url": "https://frankknow.com/ai-hallucination/",
+   "title": "別被 AI 騙了！1 次看懂「 AI 幻覺 」是什麼？搞懂原因、風險與解法",
+   "published": "2026-02-25"
+  }
+ },
+ {
+  "term_raw": "harness",
+  "term_normalized": "Harness",
+  "sentence": "The harness is the execution layer that provides tools, memory, guardrails and workflow control.",
+  "context": "Without a harness, a model can answer questions, but it can't reliably run code, call APIs, access files, remember prior work or complete multi-step workflows on its own. The harness is the execution layer that provides tools, memory, guardrails and workflow control. You interact with the agent.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "The harness is the execution layer that provides tools, memory, guardrails and workflow control.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.databricks.com/blog/ai-harness",
+   "title": "What is an AI Agent Harness?",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Harness engineering",
+  "term_normalized": "Harness Engineering",
+  "sentence": "Harness engineering is the work around an AI agent that makes its behavior inspectable, testable, and constrained.",
+  "context": "Harness engineering is the work around an AI agent that makes its behavior inspectable, testable, and constrained. It controls the tools, permissions, context, state, tests, traces, retries, approvals, and evals surrounding the model.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Harness engineering is the work around an AI agent that makes its behavior inspectable, testable, and constrained.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.louisbouchard.ai/harness-engineering/",
+   "title": "Harness Engineering: The Missing Layer Behind AI Agents",
+   "published": "2026-03-25"
+  }
+ },
+ {
+  "term_raw": "人機迴路 (HITL)",
+  "term_normalized": "Human in the Loop",
+  "sentence": "人機迴路 (HITL) 是一種 AI 方法，其中人類參與模型訓練和決策過程，以提高準確性、可靠性和倫理考量。",
+  "context": "你可以把它想成一個把抽象概念拉回日常判斷的提示，先知道它解決什麼問題，再看技術細節。人機迴路 (HITL) 是一種 AI 方法，其中人類參與模型訓練和決策過程，以提高準確性、可靠性和倫理考量。人機迴路（Human-in-the-Loop）你有沒有想過，為什麼很多 AI 系統都不是全自動，而是先給人看一眼？",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "人機迴路 (HITL) 是一種 AI 方法，其中人類參與模型訓練和決策過程，以提高準確性、可靠性和倫理考量。",
+  "origin": "seed",
+  "source": {
+   "url": "https://aiterms.tw/terms/human-in-the-loop",
+   "title": "人機迴路（Human-in-the-Loop）是什麼？ - AITerms.tw",
+   "published": "2026-04-05"
+  }
+ },
+ {
+  "term_raw": "推論",
+  "term_normalized": "Inference",
+  "sentence": "推論是指利用已訓練好的機器學習模型，對新的、未曾見過的資料進行預測或判斷的過程。",
+  "context": "你可以把它想成學生考試，把讀過的內容拿來回答新題目，重點是應用，不是再學一次。推論是指利用已訓練好的機器學習模型，對新的、未曾見過的資料進行預測或判斷的過程。是模型部署後的核心環節。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "推論是指利用已訓練好的機器學習模型，對新的、未曾見過的資料進行預測或判斷的過程。",
+  "origin": "seed",
+  "source": {
+   "url": "https://aiterms.tw/terms/inference",
+   "title": "推論（Inference）是什麼？ - AITerms.tw",
+   "published": "2026-04-05"
+  }
+ },
+ {
+  "term_raw": "迭代",
+  "term_normalized": "Iteration",
+  "sentence": "簡單來說，迭代開發就是小步快跑、持續回饋、逐步改進，讓團隊在短週期內交付可用的成果，並快速獲得回饋調整方向。",
+  "context": "每一輪的成果都是可用、可交付的，意味著我們隨時都可以釋出最新版本，讓使用者和公司及早受益。簡單來說，迭代開發就是小步快跑、持續回饋、逐步改進，讓團隊在短週期內交付可用的成果，並快速獲得回饋調整方向。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "迭代開發就是小步快跑、持續回饋、逐步改進，讓團隊在短週期內交付可用的成果，並快速獲得回饋調整方向。",
+  "origin": "seed",
+  "source": {
+   "url": "https://yylab.dev/how-to-do-iteration/",
+   "title": "迭代開發的核心：如何規劃、展示與回顧",
+   "published": "2025-10-03"
+  }
+ },
+ {
+  "term_raw": "越獄（Jailbreaking）",
+  "term_normalized": "Jailbreak",
+  "sentence": "越獄（Jailbreaking）是一種提示注入技術，用於繞過語言模型（LLM）的建立者放置在其上的安全和審查功能。",
+  "context": "越獄（Jailbreaking）是一種提示注入技術，用於繞過語言模型（LLM）的建立者放置在其上的安全和審查功能。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "core",
+  "definition_quote": "越獄（Jailbreaking）是一種提示注入技術，用於繞過語言模型（LLM）的建立者放置在其上的安全和審查功能。",
+  "origin": "seed",
+  "source": {
+   "url": "https://learnprompting.org/zh-tw/docs/prompt_hacking/jailbreaking",
+   "title": "越獄 | Learn Prompting",
+   "published": "2024-08-07"
+  }
+ },
+ {
+  "term_raw": "knowledge cutoff",
+  "term_normalized": "Knowledge Cutoff",
+  "sentence": "The knowledge cutoff in AI is the date after which an AI model’s training data no longer includes new information.",
+  "context": "The knowledge cutoff in AI is the date after which an AI model’s training data no longer includes new information. Content published after that date is invisible to the base model unless the platform adds real-time retrieval (web search) or applies subsequent fine-tuning.",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "core",
+  "definition_quote": "The knowledge cutoff in AI is the date after which an AI model’s training data no longer includes new information.",
+  "origin": "seed",
+  "source": {
+   "url": "https://llmpulse.ai/blog/glossary/knowledge-cutoff-in-ai/",
+   "title": "Knowledge Cutoff in AI: what it is and how models handle it",
+   "published": "2026-03-30"
+  }
+ },
+ {
+  "term_raw": "LLM",
+  "term_normalized": "LLM",
+  "sentence": "LLM 意思是一種利用大量文本資料訓練出來的人工智慧模型，能夠生成文字、翻譯語言、撰寫不同種類的創意內容，並且用接近人類的口吻來回應問題。",
+  "context": "LLM 中文是「大型語言模型」，大型語言模型英文全名則是 Large Language Model。LLM 意思是一種利用大量文本資料訓練出來的人工智慧模型，能夠生成文字、翻譯語言、撰寫不同種類的創意內容，並且用接近人類的口吻來回應問題。而 LLM 作為 AI 技術的一個重要應用，其發展與 AI 的推動進步息息相關。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "LLM 意思是一種利用大量文本資料訓練出來的人工智慧模型，能夠生成文字、翻譯語言、撰寫不同種類的創意內容，並且用接近人類的口吻來回應問題。",
+  "origin": "seed",
+  "source": {
+   "url": "https://solwen.ai/posts/what-is-large-language-model",
+   "title": "LLM 是什麼？LLM 快速入門：大型語言模型的定義與應用指南",
+   "published": "2024-10-14"
+  }
+ },
+ {
+  "term_raw": "軟體授權",
+  "term_normalized": "License Terms",
+  "sentence": "軟體授權是軟體供應商（版權所有者）與終端用戶之間的法律協議，它定義了用戶對軟體、應用程式能夠做和不能做什麼的權利。",
+  "context": "軟體授權是軟體供應商（版權所有者）與終端用戶之間的法律協議，它定義了用戶對軟體、應用程式能夠做和不能做什麼的權利。有許多不同的授權方式，略去部分企業不使用的，它們包括：",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "軟體授權是軟體供應商（版權所有者）與終端用戶之間的法律協議，它定義了用戶對軟體、應用程式能夠做和不能做什麼的權利。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.fineart-tech.com/index.php/ch/news/612-fineartsecurity-licensemgmt",
+   "title": "軟體授權傻傻分不清楚? 盤點授權好困擾",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "裝置端AI（On-device AI）",
+  "term_normalized": "Local Inference",
+  "sentence": "裝置端AI（On-device AI）是指將人工智慧運算直接放在裝置本地完成，不需依賴雲端伺服器。",
+  "context": "裝置端AI（On-device AI）是指將人工智慧運算直接放在裝置本地完成，不需依賴雲端伺服器。[company]選擇端側AI路線，強化用戶隱私保護、提升即時反應速度、優化能源效率，並藉此建立硬體與AI深度融合的新世代體驗。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "裝置端AI（On-device AI）是指將人工智慧運算直接放在裝置本地完成，不需依賴雲端伺服器。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.infoai.com.tw/blog/what-is-on-device-ai",
+   "title": "洞察觀點｜什麼是裝置端AI？蘋果為什麼選擇裝置端AI？",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Loop engineering",
+  "term_normalized": "Loop Engineering",
+  "sentence": "Loop engineering is specifically the design discipline of structuring those actions in iterative cycles with feedback.",
+  "context": "Agentic AI is a broader term for AI systems that take autonomous actions toward goals. Loop engineering is specifically the design discipline of structuring those actions in iterative cycles with feedback. Most agentic systems use loops as their operating model, but the engineering choices within those loops — how they’re structured, terminated, and managed — vary widely.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Loop engineering is specifically the design discipline of structuring those actions in iterative cycles with feedback.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.mindstudio.ai/blog/what-is-loop-engineering-ai-coding-agents",
+   "title": "What Is Loop Engineering? The New Meta for AI Coding Agents",
+   "published": "2026-06-09"
+  }
+ },
+ {
+  "term_raw": "MCP",
+  "term_normalized": "MCP",
+  "sentence": "模型上下文協定（英語：Model Context Protocol，縮寫：MCP）是[company]所推動的一項開放標準[1]，目的是為大型語言模型應用提供一個標準化介面，使其能夠連接外部資料來源和工具，並與其互動[2]。",
+  "context": "模型上下文協定（英語：Model Context Protocol，縮寫：MCP）是[company]所推動的一項開放標準[1]，目的是為大型語言模型應用提供一個標準化介面，使其能夠連接外部資料來源和工具，並與其互動[2]。MCP的目標在克服大型語言模型應用僅依賴其訓練資料的局限性，使其能夠取得所需的上下文資訊，以執行更廣泛的任務。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "模型上下文協定（英語：Model Context Protocol，縮寫：MCP）是[company]所推動的一項開放標準[1]，目的是為大型語言模型應用提供一個標準化介面，使其能夠連接外部資料來源和工具，並與其互動[2]。",
+  "origin": "seed",
+  "source": {
+   "url": "https://zh.wikipedia.org/zh-tw/%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%94%E8%AD%B0",
+   "title": "模型上下文協定 - 維基百科，自由的百科全書",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "機器學習",
+  "term_normalized": "Machine Learning",
+  "sentence": "機器學習是一種讓電腦系統能夠透過資料自行學習並改進自身性能的技術，而不需要由人類輸入精確指令來執行任務。",
+  "context": "機器學習是一種讓電腦系統能夠透過資料自行學習並改進自身性能的技術，而不需要由人類輸入精確指令來執行任務。機器學習的一個分支則是深度學習，它使用以人類大腦為模型的特定演算法結構，又稱「類神經網路」（ANN）來模擬和學習複雜的特徵和層次性表示，是機器學習中一種強大的方法，兩者密切相關，且兩者都在 AI 人工智慧的範疇之下。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "機器學習是一種讓電腦系統能夠透過資料自行學習並改進自身性能的技術，而不需要由人類輸入精確指令來執行任務。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.cake.me/resources/machine-learning-job",
+   "title": "什麼是機器學習？解析機器學習 4 大模型、常見產業應用和職缺 | Cake",
+   "published": "2024-04-24"
+  }
+ },
+ {
+  "term_raw": "可維護性",
+  "term_normalized": "Maintainability",
+  "sentence": "一套系統沒辦法讓工程師在有限、合理的時間內完成適當地需求，就不具備「可維護性」。",
+  "context": "在沒有時間壓力的情況下，一支程式再怎麼難懂、再怎麼複雜，至少時間花下去，多少可以處理掉大部分的問題，但是在時間壓力之下，面對一團亂的程式，怎麼有辦法想出好解法、或真正地找出問題的根本？一套系統沒辦法讓工程師在有限、合理的時間內完成適當地需求，就不具備「可維護性」。那麼要怎麼提升「可維護性」？",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "一套系統沒辦法讓工程師在有限、合理的時間內完成適當地需求，就不具備「可維護性」。",
+  "origin": "seed",
+  "source": {
+   "url": "https://devindeving.blogspot.com/2019/12/code-maintainability.html",
+   "title": "淺談程式碼的可維護性 | 軟工現場觀察",
+   "published": "2019-12-10"
+  }
+ },
+ {
+  "term_raw": "記憶功能",
+  "term_normalized": "Memory",
+  "sentence": "ChatGPT 記憶功能可以讓 AI 跨對話記住你的工作背景、寫作偏好與常用格式，不必每次開新對話都重新說明「我是誰、需要什麼風格」。",
+  "context": "ChatGPT 記憶功能可以讓 AI 跨對話記住你的工作背景、寫作偏好與常用格式，不必每次開新對話都重新說明「我是誰、需要什麼風格」。這項重新複製貼上的繁瑣流程，現在可以交由 ChatGPT 的「記憶功能（Memory）」 代勞，只需設定一次，AI就能跨對話牢記你的工作背景與寫作習慣，讓每一次的溝通都精準到位，大幅降低反覆溝通的時間成本。",
+  "explained": "has_definition",
+  "intent": "selling_point",
+  "domain": "core",
+  "definition_quote": "ChatGPT 記憶功能可以讓 AI 跨對話記住你的工作背景、寫作偏好與常用格式，不必每次開新對話都重新說明「我是誰、需要什麼風格」。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.bnext.com.tw/article/91400/chatgpt-memory-tutorial",
+   "title": "ChatGPT記憶功能怎麼用？3步驟設定教學、免費付費差異、隱私管理一次看｜數位時代 BusinessNext",
+   "published": "2026-07-03"
+  }
+ },
+ {
+  "term_raw": "Midjourney",
+  "term_normalized": "Midjourney",
+  "sentence": "Midjourney 是一個基於 AI 圖像生成的工具，可以透過輸入自然語言的文字提示，產生高品質、精細和充滿想像力的影像，這篇教學會介紹 Midjourney 的發展歷史、技術特點、應用領域以及未來展望。",
+  "context": "認識 Midjourney Midjourney 是一個基於 AI 圖像生成的工具，可以透過輸入自然語言的文字提示，產生高品質、精細和充滿想像力的影像，這篇教學會介紹 Midjourney 的發展歷史、技術特點、應用領域以及未來展望。快速導覽：",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Midjourney 是一個基於 AI 圖像生成的工具，可以透過輸入自然語言的文字提示，產生高品質、精細和充滿想像力的影像",
+  "origin": "seed",
+  "source": {
+   "url": "https://steam.oxxostudio.tw/category/aigc/mj/about-midjourney.html",
+   "title": "認識 Midjourney - Midjourney 教學 ( AI 繪圖教學 ) | STEAM 教育學習網",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "語言模型",
+  "term_normalized": "Model",
+  "sentence": "[person]說，語言模型就是用數學方式去模擬人類語言的行為。",
+  "context": "但是，你是否好奇大型語言模型背後的基礎架構是什麼？又為什麼叫做「大型」呢？《研之有物》訪談中研院資訊所[person]，請她一一為我們解開謎底。[person]說，語言模型就是用數學方式去模擬人類語言的行為。圖｜研之有物",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "語言模型就是用數學方式去模擬人類語言的行為",
+  "origin": "seed",
+  "source": {
+   "url": "https://research.sinica.edu.tw/llm-transformer-misinformation-mitigation-lun-wei-ku/",
+   "title": "大型語言模型 LLM 究竟是什麼？如何用 LLM 對付假新聞？ - 研之有物",
+   "published": "2024-08-22"
+  }
+ },
+ {
+  "term_raw": "模型崩潰（Model collapse）",
+  "term_normalized": "Model Collapse",
+  "sentence": "模型崩潰（Model collapse）指的是「使用由AI模型生成的內容來訓練AI。」",
+  "context": "一項研究指出，當網路上存在越來越多生成式AI產出的內容，最終會導致各個模型被污染、無法正常運轉，只能吐出無意義內容，陷入「模型崩潰」危機。模型崩潰（Model collapse）指的是「使用由AI模型生成的內容來訓練AI。」但英國研究團隊在《自然》期刊上發布的研究揭露，這樣的作法會導致模型快速退化，漸漸從產出失真內容惡化到生成無意義的亂碼，最終變得毫無用處。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "core",
+  "definition_quote": "模型崩潰（Model collapse）指的是「使用由AI模型生成的內容來訓練AI。」",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.bnext.com.tw/article/79978/ai-model-collapse",
+   "title": "白話科技｜模型崩潰Model collapse是什麼？為什麼AI「近親繁殖」對模型訓練有毒？｜數位時代",
+   "published": "2025-03-02"
+  }
+ },
+ {
+  "term_raw": "多模態 AI",
+  "term_normalized": "Multimodal",
+  "sentence": "多模態 AI 則是一個能同時處理、理解並整合來自多種模態資訊的人工智慧系統。",
+  "context": "在 AI 領域中，模態指的是資訊的特定形式或管道——文字、圖像、聲音、影片、感測器數據都分別是一種模態。多模態 AI 則是一個能同時處理、理解並整合來自多種模態資訊的人工智慧系統。最直觀的類比就是人類的感知方式：我們透過視覺、聽覺、觸覺等多種感官來全面認識環境。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "多模態 AI 則是一個能同時處理、理解並整合來自多種模態資訊的人工智慧系統",
+  "origin": "seed",
+  "source": {
+   "url": "https://egenthub.com/egenthub-perspect/2026-03-06-what-is-multimodal-ai",
+   "title": "多模態 AI（Multimodal AI）完整解析：從單一文字到多重感官的智能進化｜EgentHub",
+   "published": "2026-03-06"
+  }
+ },
+ {
+  "term_raw": "Low-Code（低程式碼）／No-Code （無程式碼）",
+  "term_normalized": "No-code / Low-code",
+  "sentence": "Low-Code（低程式碼）／No-Code （無程式碼）是用來幫助使用者快速開發軟體或應用程式的方法。",
+  "context": "Low-Code（低程式碼）／No-Code （無程式碼）是用來幫助使用者快速開發軟體或應用程式的方法。Low-Code 和 No-Code 雖然經常被相提並論，但兩者之間存在著少許差異。Low-Code 是指使用少量程式碼去開發軟體，所以使用者需要具備一定的技術知識；而 No-Code 則是指完全不用任何技術背景即可開發軟體，因為 No-Code 開發平台會提供現成的功能模組以及直觀的產品設計畫面，使用者只要把所需功能以拖拉或點擊的方式進行排列組合，即可完成自己的軟體產品。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "Low-Code（低程式碼）／No-Code （無程式碼）是用來幫助使用者快速開發軟體或應用程式的方法",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.anywhere.today/low-code-no-code-platform/",
+   "title": "不寫程式也可以開發軟體！一文搞懂 Low-Code／No-Code 開發是什麼？ - Anywhere",
+   "published": "2022-04-14"
+  }
+ },
+ {
+  "term_raw": "NotebookLM",
+  "term_normalized": "NotebookLM",
+  "sentence": "NotebookLM 是一款用 AI 技術打造的筆記工具，它可以幫你更有效率地整理、分析和理解筆記內容，進而提升你學習、工作和研究的效率。",
+  "context": "NotebookLM是一款由[company] 2023年推出的AI筆記程式，並使用了[company]最強大的AI模型Gemini 1.5 Pro，直到2024年6月，才開放給200多個國家使用，其中包括台灣。NotebookLM 是一款用 AI 技術打造的筆記工具，它可以幫你更有效率地整理、分析和理解筆記內容，進而提升你學習、工作和研究的效率。*貼心提醒：NotebookLM 已於 2026 年 7 月正式更名為 Gemini Notebook。",
+  "explained": "has_definition",
+  "intent": "selling_point",
+  "domain": "core",
+  "definition_quote": "NotebookLM 是一款用 AI 技術打造的筆記工具，它可以幫你更有效率地整理、分析和理解筆記內容",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.microfusion.cloud/news/what-is-notebooklm-01/",
+   "title": "什麼是 NotebookLM？你的 AI 筆記好幫手(上) - Microfusion 宏庭科技",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "OCR",
+  "term_normalized": "OCR",
+  "sentence": "OCR 全名為 Optical Character Recognition，中文是「光學字元辨識」，是一種可以把列印文件或影像中的文字，轉換為能被機器讀取文字檔案的一種技術。",
+  "context": "（一）OCR 定義介紹 OCR 全名為 Optical Character Recognition，中文是「光學字元辨識」，是一種可以把列印文件或影像中的文字，轉換為能被機器讀取文字檔案的一種技術。簡單來說，如果使用者沒有辦法直接對影像中的數據、文字資料進行編輯或計算，就可以利用 OCR 將該影像檔案轉換為文字、PDF 或 TXT 檔，讓文件能夠被讀取、記錄與保存。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "OCR 全名為 Optical Character Recognition，中文是「光學字元辨識」，是一種可以把列印文件或影像中的文字，轉換為能被機器讀取文字檔案的一種技術",
+  "origin": "seed",
+  "source": {
+   "url": "https://pdf-reader.kdandoc.com/zh-tw/blog/product/pdf-ocr",
+   "title": "OCR光學字元辨識技術是什麼？5大優勢、6大應用實例一次看！",
+   "published": "2024-11-04"
+  }
+ },
+ {
+  "term_raw": "地端 AI（On‑Premises AI）",
+  "term_normalized": "On-premise",
+  "sentence": "地端 AI（On‑Premises AI）指企業在自己的伺服器或資料中心部署 AI 平台，所有資料處理和模型運算都在內部完成。",
+  "context": "什麼是地端 AI？地端 AI（On‑Premises AI）指企業在自己的伺服器或資料中心部署 AI 平台，所有資料處理和模型運算都在內部完成。地端 AI 需要企業建立自有資料中心，包含硬體、軟體與儲存設備。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "地端 AI（On‑Premises AI）指企業在自己的伺服器或資料中心部署 AI 平台，所有資料處理和模型運算都在內部完成",
+  "origin": "seed",
+  "source": {
+   "url": "https://ai.com.tw/cloud-ai-on-premises-ai/",
+   "title": "雲端 AI 與地端 AI 差別解析 2025｜AI.com.tw 台灣AI第一站",
+   "published": "2025-10-01"
+  }
+ },
+ {
+  "term_raw": "開源模型",
+  "term_normalized": "Open Source Model",
+  "sentence": "開源模型是指其架構、訓練方法，甚至權重（weights）都對外開放的 AI 模型，任何人都可以下載、修改、重新訓練或部署這些模型，通常還允許在商業應用中使用（但可能帶有特定許可條款）。",
+  "context": "開源模型（Open-Source Models）開源模型是指其架構、訓練方法，甚至權重（weights）都對外開放的 AI 模型，任何人都可以下載、修改、重新訓練或部署這些模型，通常還允許在商業應用中使用（但可能帶有特定許可條款）。特點：",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "開源模型是指其架構、訓練方法，甚至權重（weights）都對外開放的 AI 模型，任何人都可以下載、修改、重新訓練或部署這些模型",
+  "origin": "seed",
+  "source": {
+   "url": "https://hoonting.blogspot.com/2025/01/blog-post_31.html",
+   "title": "雲程的雙魚鏡 HoonTing's View: 約略理解：開源模型、專有模型",
+   "published": "2025-01-31"
+  }
+ },
+ {
+  "term_raw": "異常值(Outlier)",
+  "term_normalized": "Outlier",
+  "sentence": "由於資料收集測量方法的變異、人為的疏失或是實驗誤差，在資料集中一個數值與其他數值相比差異非常大，我們稱這個數值為異常值(Outlier)。",
+  "context": "5. Outlier 由於資料收集測量方法的變異、人為的疏失或是實驗誤差，在資料集中一個數值與其他數值相比差異非常大，我們稱這個數值為異常值(Outlier)。異常值在統計分析上會引起各種問題，可能對期望值和標準差產生顯著的影響。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "在資料集中一個數值與其他數值相比差異非常大，我們稱這個數值為異常值(Outlier)",
+  "origin": "seed",
+  "source": {
+   "url": "https://ithelp.ithome.com.tw/articles/10236317",
+   "title": "Day14 - Feature Engineering -- 5. 異常值 (Outlier)(1) - iT 邦幫忙",
+   "published": "2020-09-14"
+  }
+ },
+ {
+  "term_raw": "Output Styles",
+  "term_normalized": "Output Style",
+  "sentence": "Claude Code Output Styles 是直接修改 Claude Code 系統提示詞的機制，用來改變 Claude 的角色定位、回應語氣、輸出格式。",
+  "context": "1. 什麼是 Claude Code Output Styles？Claude Code Output Styles 是直接修改 Claude Code 系統提示詞的機制，用來改變 Claude 的角色定位、回應語氣、輸出格式。它不改變 Claude 的知識或能力——Bash 執行、檔案編輯、TODO 追蹤這些核心工具都還在——只改變 Claude 怎麼「表達」自己。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "Claude Code Output Styles 是直接修改 Claude Code 系統提示詞的機制，用來改變 Claude 的角色定位、回應語氣、輸出格式",
+  "origin": "seed",
+  "source": {
+   "url": "https://moksaweb.com/claude-code-output-styles/",
+   "title": "Claude Code Output Styles 完整教學：3 種內建風格 + 客製化 5 步驟",
+   "published": "2026-04-28"
+  }
+ },
+ {
+  "term_raw": "過擬合",
+  "term_normalized": "Overfitting",
+  "sentence": "過擬合是一種不理想的機器學習行為。",
+  "context": "「過擬合」是什麼？AI學太仔細也不行？過擬合是一種不理想的機器學習行為。 當演算法與訓練資料過於接近，就會發生過擬合，使得AI學到的只是資料的細節，甚至是不具代表性的巧合，而不是規律，以至於根本無法對新資料進行準確預測。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "core",
+  "definition_quote": "過擬合是一種不理想的機器學習行為。 當演算法與訓練資料過於接近，就會發生過擬合，使得AI學到的只是資料的細節，甚至是不具代表性的巧合，而不是規律，以至於根本無法對新資料進行準確預測",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.bnext.com.tw/article/84686/ai-model-overfitting",
+   "title": "白話科技｜過擬合overfitting是什麼？解密AI犯錯原理，過擬合怎麼解決？｜數位時代",
+   "published": "2025-10-08"
+  }
+ },
+ {
+  "term_raw": "概念驗證 (POC, Proof of Concept)",
+  "term_normalized": "POC",
+  "sentence": "概念驗證 (POC, Proof of Concept) 是指在專案或產品開發過程中，透過建立原型、進行實驗、收集數據來證明一個概念的可行性和有效性的過程，目的在於減少風險與資源浪費，並為後續改進提供資訊。",
+  "context": "什麼是POC？概念驗證 (POC, Proof of Concept) 是指在專案或產品開發過程中，透過建立原型、進行實驗、收集數據來證明一個概念的可行性和有效性的過程，目的在於減少風險與資源浪費，並為後續改進提供資訊。功能",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "概念驗證 (POC, Proof of Concept) 是指在專案或產品開發過程中，透過建立原型、進行實驗、收集數據來證明一個概念的可行性和有效性的過程",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.startupterrace.com/post/startup-basics-%E5%90%8D%E8%A9%9E%E8%A7%A3%E9%87%8B%EF%BC%9A%E6%A6%82%E5%BF%B5%E9%A9%97%E8%AD%89-poc-proof-of-concept",
+   "title": "概念驗證 (POC, Proof of Concept) ：運用時機、執行方式為何？",
+   "published": "2024-04-06"
+  }
+ },
+ {
+  "term_raw": "參數",
+  "term_normalized": "Parameters",
+  "sentence": "所謂的「參數」，可以想像成AI大腦裡數量非常龐大的「調整旋鈕」。",
+  "context": "如果一個模型標示為400B，意思就是它的總參數量大約為4000億個。所謂的「參數」，可以想像成AI大腦裡數量非常龐大的「調整旋鈕」。AI在訓練過程中閱讀大量文字和其他資料，經過一次又一次的學習與調整，逐漸改變這些參數的數值。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "所謂的「參數」，可以想像成AI大腦裡數量非常龐大的「調整旋鈕」",
+  "origin": "seed",
+  "source": {
+   "url": "https://kidsmedia.com.tw/2026/07/09/what-do-7b-and-70b-mean-how-ai-models-use-parameters-and-mixture-of-experts/",
+   "title": "AI模型的7B、70B是什麼意思？現在開源模型跟ChatGPT、Claude、Gemini差距多少？ – KidsMedia",
+   "published": "2026-07-09"
+  }
+ },
+ {
+  "term_raw": "Perplexity AI",
+  "term_normalized": "Perplexity",
+  "sentence": "Perplexity AI 是一款主打「AI 搜尋」與「答案引擎」的工具，可以幫我們快速查資料、整理重點，並在回答中附上參考來源。",
+  "context": "Perplexity AI 是一款主打「AI 搜尋」與「答案引擎」的工具，可以幫我們快速查資料、整理重點，並在回答中附上參考來源。如果你平常會用 [company] 找資料、用 ChatGPT 問問題，那 Perplexity 會是你很值得認識的 AI 工具。",
+  "explained": "has_definition",
+  "intent": "selling_point",
+  "domain": "core",
+  "definition_quote": "Perplexity AI 是一款主打「AI 搜尋」與「答案引擎」的工具，可以幫我們快速查資料、整理重點，並在回答中附上參考來源",
+  "origin": "seed",
+  "source": {
+   "url": "https://frankchiu.io/ai-perplexity-intro/",
+   "title": "Perplexity AI 怎麼用？中文教學：功能、價格與使用技巧 | 白話文商學院",
+   "published": "2026-06-18"
+  }
+ },
+ {
+  "term_raw": "角色",
+  "term_normalized": "Persona",
+  "sentence": "角色就是我們希望 AI 扮演的身份，AI 會根據我們賦予的角色，採用相應的語氣、知識深度與思考角度來回答我們的問題。",
+  "context": "角色是什麼？角色就是我們希望 AI 扮演的身份，AI 會根據我們賦予的角色，採用相應的語氣、知識深度與思考角度來回答我們的問題。為什麼要設定角色？",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "角色就是我們希望 AI 扮演的身份，AI 會根據我們賦予的角色，採用相應的語氣、知識深度與思考角度來回答我們的問題",
+  "origin": "seed",
+  "source": {
+   "url": "https://ithelp.ithome.com.tw/articles/10380133",
+   "title": "Prompt 的三大要素：角色、任務、格式 - iT 邦幫忙",
+   "published": "2025-09-15"
+  }
+ },
+ {
+  "term_raw": "Plan Mode",
+  "term_normalized": "Plan mode",
+  "sentence": "Plan Mode 是 Claude Code 的一種權限模式（permission mode）。",
+  "context": "Plan Mode 是什麼 Plan Mode 是 Claude Code 的一種權限模式（permission mode）。開啟後，Claude 可以讀、可以查、可以搜尋，但不能改動任何東西，最後產出的是一份計劃，等你批准。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "Plan Mode 是 Claude Code 的一種權限模式（permission mode）。開啟後，Claude 可以讀、可以查、可以搜尋，但不能改動任何東西，最後產出的是一份計劃，等你批准",
+  "origin": "seed",
+  "source": {
+   "url": "https://essevin.com/blog/claude-code-plan-mode-hant",
+   "title": "Claude Code 的 Plan Mode：先審計劃再動手，少走冤枉路 · Essevin",
+   "published": "2026-07-29"
+  }
+ },
+ {
+  "term_raw": "Prompt",
+  "term_normalized": "Prompt",
+  "sentence": "Prompt，中文常翻譯成「提示詞」或「提示語」，指的是你輸入給 AI 的指令、問題、背景資料與要求。",
+  "context": "Prompt 是什麼？Prompt，中文常翻譯成「提示詞」或「提示語」，指的是你輸入給 AI 的指令、問題、背景資料與要求。[company] 官方說明中，Prompt 可以是給大型語言模型的文字輸入；在現在的多模態 AI 工具裡，Prompt 也可能包含圖片、音訊、檔案或其他資料。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Prompt，中文常翻譯成「提示詞」或「提示語」，指的是你輸入給 AI 的指令、問題、背景資料與要求",
+  "origin": "seed",
+  "source": {
+   "url": "https://frankchiu.io/ai-prompt-intro/",
+   "title": "Prompt 是什麼？AI 提示詞入門：寫法、範例與錯誤",
+   "published": "2026-06-19"
+  }
+ },
+ {
+  "term_raw": "Prompt Engineering",
+  "term_normalized": "Prompt Engineering",
+  "sentence": "Prompt Engineering 是指設計和構建一個提示或問題，以指導機器生成所需的內容或回答。",
+  "context": "什麼是 Prompt Engineering？Prompt Engineering 是指設計和構建一個提示或問題，以指導機器生成所需的內容或回答。這種技術主要應用於自然語言處理（NLP）領域，用於控制語言模型的輸出。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Prompt Engineering 是指設計和構建一個提示或問題，以指導機器生成所需的內容或回答",
+  "origin": "seed",
+  "source": {
+   "url": "https://tw.alphacamp.co/blog/prompt-engineering",
+   "title": "Prompt Engineering 提示工程是什麼？新手必學指南 - ALPHA Camp",
+   "published": "2023-10-02"
+  }
+ },
+ {
+  "term_raw": "Prompt Injection",
+  "term_normalized": "Prompt Injection",
+  "sentence": "Prompt Injection 就是利用這個盲點，在正常內容裡夾帶可以改變 AI 行為的指令。",
+  "context": "問題在於：AI 沒有辦法自動分辨哪些是「給人看的正文」，哪些是「給 AI 看的隱藏指令」。 Prompt Injection 就是利用這個盲點，在正常內容裡夾帶可以改變 AI 行為的指令。 直接注入（Direct Injection） 是攻擊者直接修改你輸入給 AI 的內容。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "core",
+  "definition_quote": "Prompt Injection 就是利用這個盲點，在正常內容裡夾帶可以改變 AI 行為的指令。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.ahha.tw/blog/what-is-prompt-injection-ai-security",
+   "title": "什麼是提示詞（Prompt Injection）注入？當你請 AI 幫你查資料，網頁可能正在操縱它",
+   "published": "2026-03-08"
+  }
+ },
+ {
+  "term_raw": "提示範本",
+  "term_normalized": "Prompt Template",
+  "sentence": "提示範本是包含可替換變數的提示。",
+  "context": "本文說明如何使用提示範本。 提示範本是包含可替換變數的提示。 提示範本可讓您測試不同提示格式搭配不同提示資料的成效，不必編寫多個個別提示。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "提示範本是包含可替換變數的提示。",
+  "origin": "seed",
+  "source": {
+   "url": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/prompt-templates?hl=zh-tw",
+   "title": "使用提示範本 | Gemini Enterprise Agent Platform | Google Cloud Documentation",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Quantization",
+  "term_normalized": "Quantization",
+  "sentence": "Quantization（量化）是一種模型壓縮技術，其主要目的是降低模型中數值（主要是權重）的精度，從而減少模型的體積、記憶體佔用（RAM/VRAM）和計算量，並可能加速模型的推論速度。",
+  "context": "Quantization（量化）是一種模型壓縮技術，其主要目的是降低模型中數值（主要是權重）的精度，從而減少模型的體積、記憶體佔用（RAM/VRAM）和計算量，並可能加速模型的推論速度。 大型語言模型在訓練時，其參數（權重）通常使用高精度的浮點數來表示，最常見的是 FP32 (32位元單精度浮點數)。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Quantization（量化）是一種模型壓縮技術，其主要目的是降低模型中數值（主要是權重）的精度，從而減少模型的體積、記憶體佔用（RAM/VRAM）和計算量，並可能加速模型的推論速度。",
+  "origin": "seed",
+  "source": {
+   "url": "https://vocus.cc/article/6803b975fd8978000153e4ad",
+   "title": "什麼是模型量化（Quantization）？解析FP32、FP16、BF16、int8、int4與GGUF的關聯",
+   "published": "2025-04-19"
+  }
+ },
+ {
+  "term_raw": "RAG",
+  "term_normalized": "RAG",
+  "sentence": "檢索增強生成（RAG）模型是一種結合了檢索和生成技術的自然語言處理（NLP）模型。",
+  "context": "這種自然語言生成的能力使得對話系統能夠更好地理解使用者搜尋的意圖，並且提供更加貼心、人性化的服務。 檢索增強生成（RAG）模型是一種結合了檢索和生成技術的自然語言處理（NLP）模型。 RAG 模型可以從外部知識庫中檢索與用戶查詢相關的信息，並使用這些資訊生成更準確、更全面的答案。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "檢索增強生成（RAG）模型是一種結合了檢索和生成技術的自然語言處理（NLP）模型。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.webcomm.com.tw/blog/tw/rag/",
+   "title": "什麼是RAG檢索增強生成 - 偉康科技洞察室",
+   "published": "2024-02-19"
+  }
+ },
+ {
+  "term_raw": "RLHF",
+  "term_normalized": "RLHF",
+  "sentence": "人類回饋強化學習（RLHF）是一種利用人類回饋訊號，訓練強化學習模型，使其行為更符合人類偏好的方法。",
+  "context": "人類回饋強化學習（RLHF）是什麼？ 人類回饋強化學習（RLHF）是一種利用人類回饋訊號，訓練強化學習模型，使其行為更符合人類偏好的方法。 ｜本頁含完整原理、應用場景、iPAS 考試重點與 3 個常見問答。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "人類回饋強化學習（RLHF）是一種利用人類回饋訊號，訓練強化學習模型，使其行為更符合人類偏好的方法。",
+  "origin": "seed",
+  "source": {
+   "url": "https://aiterms.tw/terms/rlhf/",
+   "title": "人類回饋強化學習（RLHF）是什麼？ - AITerms.tw",
+   "published": "2026-04-05"
+  }
+ },
+ {
+  "term_raw": "ROI",
+  "term_normalized": "ROI",
+  "sentence": "ROI 中文投資報酬率（ Return On Investment ）是一種用衡量績效的標準，其含義為投資獲利相對投入成本的比值。",
+  "context": "ROI 中文投資報酬率（ Return On Investment ）是一種用衡量績效的標準，其含義為投資獲利相對投入成本的比值。 通常會用於評估投資的效率，或是比較不同投資項目的效率，而投資報酬率若為正，則代表者該項投資有獲利；反之，如果投資報酬率為負，則代表這項投資是虧損的。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "ROI 中文投資報酬率（ Return On Investment ）是一種用衡量績效的標準，其含義為投資獲利相對投入成本的比值。",
+  "origin": "seed",
+  "source": {
+   "url": "https://welly.tw/blog/roi-return-on-investment",
+   "title": "ROI 是什麼？投資報酬率怎麼算？ROI 意思、公式、算法一次看 - Welly",
+   "published": "2024-01-03"
+  }
+ },
+ {
+  "term_raw": "Reasoning model",
+  "term_normalized": "Reasoning Model",
+  "sentence": "Reasoning model 是讓 LLM 在輸出最終答案之前，先生成一段內部「思考過程」(chain-of-thought)的設計。",
+  "context": "這就是 reasoning model 的核心轉折。 Reasoning model 是讓 LLM 在輸出最終答案之前，先生成一段內部「思考過程」(chain-of-thought)的設計。 模型先寫推理草稿，再基於草稿生成答案。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Reasoning model 是讓 LLM 在輸出最終答案之前，先生成一段內部「思考過程」(chain-of-thought)的設計。",
+  "origin": "seed",
+  "source": {
+   "url": "https://signals.tw/articles/what-is-reasoning-model/",
+   "title": "reasoning model 是什麼？推理模型讓 AI 先想再答｜矽基前沿 [Si]gnals",
+   "published": "2026-04-25"
+  }
+ },
+ {
+  "term_raw": "強化學習",
+  "term_normalized": "Reinforcement Learning",
+  "sentence": "強化學習是機器學習中針對「行為」的演算法。",
+  "context": "強化學習是機器學習中針對「行為」的演算法。 其目的是訓練能夠學會「做什麼」的一種技術。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "強化學習是機器學習中針對「行為」的演算法。",
+  "origin": "seed",
+  "source": {
+   "url": "https://iaic.nccu.edu.tw/column-articles/17",
+   "title": "何謂強化學習（Reinforcement Leaning） - 國立政治大學人工智慧跨域研究中心",
+   "published": "2021-11-02"
+  }
+ },
+ {
+  "term_raw": "風險矩陣",
+  "term_normalized": "Risk Matrix",
+  "sentence": "風險矩陣是一種常見的風險評估工具，用來量化和可視化風險，通過將風險的「發生可能性」與「影響嚴重程度」兩個維度構建一個矩陣，將風險分級為高、中、低等不同風險等級，便於識別和管理。",
+  "context": "風險矩陣是一種常見的風險評估工具，用來量化和可視化風險，通過將風險的「發生可能性」與「影響嚴重程度」兩個維度構建一個矩陣，將風險分級為高、中、低等不同風險等級，便於識別和管理。 • 發生可能性（Likelihood）：某風險事件發生的概率，通常分為高、中、低等級。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "風險矩陣是一種常見的風險評估工具，用來量化和可視化風險，通過將風險的「發生可能性」與「影響嚴重程度」兩個維度構建一個矩陣，將風險分級為高、中、低等不同風險等級，便於識別和管理。",
+  "origin": "seed",
+  "source": {
+   "url": "https://vocus.cc/article/68aa27fcfd897800015e40b9",
+   "title": "風險矩陣（Risk Matrix）",
+   "published": "2025-08-24"
+  }
+ },
+ {
+  "term_raw": "SLA",
+  "term_normalized": "SLA",
+  "sentence": "服務水準協議（英語：service-level agreement，縮寫SLA）也稱服務級別協定、服務等級協定、服務水平協定，是服務提供商與客戶之間定義的正式承諾。",
+  "context": "服務水準協議（英語：service-level agreement，縮寫SLA）也稱服務級別協定、服務等級協定、服務水平協定，是服務提供商與客戶之間定義的正式承諾。 服務提供商與受服務用戶之間具體達成了承諾的服務指標——品質、可用性，責任。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "服務水準協議（英語：service-level agreement，縮寫SLA）也稱服務級別協定、服務等級協定、服務水平協定，是服務提供商與客戶之間定義的正式承諾。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.astralweb.com.tw/service-level-agreement/",
+   "title": "服務水準協議 (SLA) - Astral Web 歐斯瑞有限公司",
+   "published": "2020-06-02"
+  }
+ },
+ {
+  "term_raw": "SaaS",
+  "term_normalized": "SaaS",
+  "sentence": "軟體即服務 (SaaS) 是一種透過網際網路傳遞軟體的方式。",
+  "context": "SaaS 的簡單定義是什麼？ 軟體即服務 (SaaS) 是一種透過網際網路傳遞軟體的方式。 不需要在電腦上安裝和維護軟體，而是會透過與雲端服務提供者的訂閱在線上存取軟體。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "軟體即服務 (SaaS) 是一種透過網際網路傳遞軟體的方式。",
+  "origin": "seed",
+  "source": {
+   "url": "https://azure.microsoft.com/zh-tw/resources/cloud-computing-dictionary/what-is-saas",
+   "title": "什麼是軟體即服務 (SaaS)？ | Microsoft Azure",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Cron",
+  "term_normalized": "Scheduled Automation",
+  "sentence": "所謂的 Cron，其實是 Linux 系統下的一個定時任務管理服務，但是因為 Cron 的表達式實在是太萬用了，所以目前也很廣泛用在 GitHub Actions、Spring Boot 的 @Scheduled…等框架上。",
+  "context": "所謂的 Cron，其實是 Linux 系統下的一個定時任務管理服務，但是因為 Cron 的表達式實在是太萬用了，所以目前也很廣泛用在 GitHub Actions、Spring Boot 的 @Scheduled…等框架上。 舉例來說，只要大家有看過類似的表達式 - cron: \"0 21 * * *\" 或是 @Scheduled(cron = \"0 0 21 * * *\") 的寫法，裡面的一堆莫名其妙的 *，其實就是 Cron 的「定時任務」的寫法！",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "所謂的 Cron，其實是 Linux 系統下的一個定時任務管理服務，但是因為 Cron 的表達式實在是太萬用了，所以目前也很廣泛用在 GitHub Actions、Spring Boot 的 @Scheduled…等框架上。",
+  "origin": "seed",
+  "source": {
+   "url": "https://kucw.io/blog/cron/",
+   "title": "Cron 是什麼？定時任務的語法怎麼寫？",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "語意搜尋",
+  "term_normalized": "Semantic Search",
+  "sentence": "語意搜尋是一種資訊檢索技術，重點在於理解使用者查詢背後的「上下文與意圖」，而不是單純比對字面上的關鍵字。",
+  "context": "這篇文章會用新手角度說明：語意搜尋是什麼、Google 怎麼從「比對關鍵字」一路走到「理解意圖」、它實際上是怎麼運作的、寫內容的人該怎麼配合，有哪些常見迷思。 語意搜尋是一種資訊檢索技術，重點在於理解使用者查詢背後的「上下文與意圖」，而不是單純比對字面上的關鍵字。 Google Cloud 官方文件給的定義是：語意搜尋會去理解一段查詢的「意義」與「脈絡」，而不只是匹配字詞。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "語意搜尋是一種資訊檢索技術，重點在於理解使用者查詢背後的「上下文與意圖」，而不是單純比對字面上的關鍵字。",
+  "origin": "seed",
+  "source": {
+   "url": "https://sec-site.com/wiki-semantic-search/",
+   "title": "語意搜尋（Semantic Search）是什麼？｜SEO・GEO 百科",
+   "published": "2026-07-28"
+  }
+ },
+ {
+  "term_raw": "Agent Skills",
+  "term_normalized": "Skill",
+  "sentence": "Agent Skills are modular capabilities that extend Claude's functionality.",
+  "context": "Agent Skills are modular capabilities that extend Claude's functionality. Each Skill packages instructions, metadata, and optional resources (scripts, templates) that Claude uses automatically when relevant.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Agent Skills are modular capabilities that extend Claude's functionality.",
+  "origin": "seed",
+  "source": {
+   "url": "https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview",
+   "title": "Agent Skills - Claude Platform Docs",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "SDD",
+  "term_normalized": "Spec-driven Development",
+  "sentence": "而 SDD 旨在整合兩者優勢—將開發流程的重心從撰寫程式碼轉移至定義規格，透過 AI 執行具體實作，讓人類工程師能專注在架構設計與品質把關。",
+  "context": "文章指出，傳統開發強調流程與紀律，適合穩定性高、規模龐大的系統；Vibe Coding 則透過自然語言提示快速產生程式碼，速度驚人但品質參差不齊、難以維護。 而 SDD 旨在整合兩者優勢—將開發流程的重心從撰寫程式碼轉移至定義規格，透過 AI 執行具體實作，讓人類工程師能專注在架構設計與品質把關。 SDD 的核心哲學是「意圖即真理（Intent is the Source of Truth）」。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "而 SDD 旨在整合兩者優勢—將開發流程的重心從撰寫程式碼轉移至定義規格，透過 AI 執行具體實作，讓人類工程師能專注在架構設計與品質把關。",
+  "origin": "seed",
+  "source": {
+   "url": "https://aict.nkust.edu.tw/digitrans/?p=10064",
+   "title": "規格驅動開發 (Spec-Driven Development) 與 AI 協作全流程實戰 – 資料治理與數位轉型產學聯盟",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "語音轉文字",
+  "term_normalized": "Speech-to-Text",
+  "sentence": "ASR技術，也稱為語音轉文字技術，是一項將語音內容轉換成可識別文字的技術。",
+  "context": "而隨著人工智慧時代的到來，我們可以期待ASR技術未來將有更廣闊的應用領域和可能性。 ASR技術，也稱為語音轉文字技術，是一項將語音內容轉換成可識別文字的技術。 它的基本原理是基於深度學習的方法，通過大量樣本數據的訓練，讓機器能夠學會理解不同語言的發音規則和語法結構。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "ASR技術，也稱為語音轉文字技術，是一項將語音內容轉換成可識別文字的技術。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.largitdata.com/blog/asr-speech-to-text-applications/",
+   "title": "ASR 是什麼？語音辨識原理與實際應用完整解析（2026 更新） | LargitData Blog",
+   "published": "2025-03-15"
+  }
+ },
+ {
+  "term_raw": "結構化資料",
+  "term_normalized": "Structured Data",
+  "sentence": "結構化資料: 事先定義好每個欄位可以存放什麼資料，這種儲存的資料就是結構化資料。",
+  "context": "結構化資料: 事先定義好每個欄位可以存放什麼資料，這種儲存的資料就是結構化資料。 像是關聯式資料庫中的資料，需要先把table欄位定義好，之後才能儲存資料。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "結構化資料: 事先定義好每個欄位可以存放什麼資料，這種儲存的資料就是結構化資料。",
+  "origin": "seed",
+  "source": {
+   "url": "https://vocus.cc/article/5f7e816afd897800016c0a68",
+   "title": "認識「結構化/半結構化/非結構化」資料",
+   "published": "2020-10-09"
+  }
+ },
+ {
+  "term_raw": "Subagents",
+  "term_normalized": "SubAgent",
+  "sentence": "Subagents are specialized AI assistants that handle specific types of tasks.",
+  "context": "Subagents are specialized AI assistants that handle specific types of tasks. Use one when a side task would flood your main conversation with search results, logs, or file contents you won’t reference again: the subagent does that work in its own context and returns only the summary.",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Subagents are specialized AI assistants that handle specific types of tasks.",
+  "origin": "seed",
+  "source": {
+   "url": "https://code.claude.com/docs/en/sub-agents",
+   "title": "Create custom subagents - Claude Code Docs",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "訂閱制",
+  "term_normalized": "Subscription",
+  "sentence": "訂閱制：按月或年支付金額，使用過程若發覺不符合需求，也較容易停止訂閱，減輕不必要的營運支出。",
+  "context": "成本支出：訂閱制：按月或年支付金額，使用過程若發覺不符合需求，也較容易停止訂閱，減輕不必要的營運支出。買斷制：企業一次性支付高額的初始成本，資本支出將會提高。",
+  "explained": "has_definition",
+  "intent": "selling_point",
+  "domain": "edge",
+  "definition_quote": "訂閱制：按月或年支付金額，使用過程若發覺不符合需求，也較容易停止訂閱，減輕不必要的營運支出。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.metamatch.market/news/detail/METAMatch_SaaS",
+   "title": "淺談 訂閱制 V.S 買斷制，一次搞懂 SaaS 訂閱制與買斷差異",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "監督式學習",
+  "term_normalized": "Supervised Learning",
+  "sentence": "監督式學習是一種 AI 方法，透過提供帶有正確標籤的輸入資料，訓練模型學習預測新資料的標籤",
+  "context": "監督式學習 的重點是 監督式學習是一種 AI 方法，透過提供帶有正確標籤的輸入資料，訓練模型學習預測新資料的標籤 它重要，是因為學習速度、穩定度和泛化能力，會決定模型最後能不能上線。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "監督式學習是一種 AI 方法，透過提供帶有正確標籤的輸入資料，訓練模型學習預測新資料的標籤",
+  "origin": "seed",
+  "source": {
+   "url": "https://aiterms.tw/terms/supervised-learning",
+   "title": "監督式學習（Supervised Learning）是什麼？ - AITerms.tw",
+   "published": "2026-04-04"
+  }
+ },
+ {
+  "term_raw": "合成資料",
+  "term_normalized": "Synthetic Data",
+  "sentence": "以電腦模擬或演算法產生出且含有註釋資訊的合成資料，用來取代真實環境資料。",
+  "context": "什麼是合成資料? 以電腦模擬或演算法產生出且含有註釋資訊的合成資料，用來取代真實環境資料。 也就是說，是在數位環境中建立合成資料，並非在現實環境中收集或測量的資料。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "以電腦模擬或演算法產生出且含有註釋資訊的合成資料，用來取代真實環境資料。",
+  "origin": "seed",
+  "source": {
+   "url": "https://blogs.nvidia.com.tw/blog/what-is-synthetic-data/",
+   "title": "何謂合成資料?",
+   "published": "2021-06-08"
+  }
+ },
+ {
+  "term_raw": "System prompt",
+  "term_normalized": "System Prompt",
+  "sentence": "System prompt 是 AI 應用在使用者輸入之前提供給模型的高優先級指令，用來設定長期角色、規則、語氣、工具使用與安全邊界。",
+  "context": "它比較像產品裡的一份「工作規則」：能影響模型行為，也能讓團隊把規則集中管理;可是它不能取代權限控管、資料隔離、API 審核、測試與 log。 System prompt 是 AI 應用在使用者輸入之前提供給模型的高優先級指令，用來設定長期角色、規則、語氣、工具使用與安全邊界。 簡短版：system prompt 是 AI 產品的底層規則，不是安全邊界的全部。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "System prompt 是 AI 應用在使用者輸入之前提供給模型的高優先級指令，用來設定長期角色、規則、語氣、工具使用與安全邊界。",
+  "origin": "seed",
+  "source": {
+   "url": "https://signals.tw/articles/what-is-system-prompt/",
+   "title": "什麼是 system prompt（系統提示）？AI 產品的底層規則",
+   "published": "2026-04-26"
+  }
+ },
+ {
+  "term_raw": "TCO",
+  "term_normalized": "TCO",
+  "sentence": "就資料儲存而言，TCO 是貴組織在採購、安裝、運行和維護 IT 基礎架構時，對所產生之全部成本進行的評估。",
+  "context": "TCO 意即總體擁有成本 就資料儲存而言，TCO 是貴組織在採購、安裝、運行和維護 IT 基礎架構時，對所產生之全部成本進行的評估。TCO 涵蓋的範圍可能包含軟硬體、管理和人工、儲存容量和運算資源，以及停機期間任何可能花費的成本。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "就資料儲存而言，TCO 是貴組織在採購、安裝、運行和維護 IT 基礎架構時，對所產生之全部成本進行的評估。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.everpuredata.com/tw/knowledge/what-is-total-cost-of-ownership.html",
+   "title": "什麼是總體擁有成本 | Everpure",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "技術債",
+  "term_normalized": "Technical Debt",
+  "sentence": "技術負債（英語：Technical debt），又譯技術債，也稱為設計負債（design debt）、程式碼負債（code debt），是編程及軟體工程中的一個比喻。",
+  "context": "為了方便非圈內人了解，一開始先來說明一下，何謂技術債，根據維基百科的定義：技術負債（英語：Technical debt），又譯技術債，也稱為設計負債（design debt）、程式碼負債（code debt），是編程及軟體工程中的一個比喻。指開發人員為了加速軟體開發，在應該採用最佳方案時進行了妥協，改用了短期內能加速軟體開發的方案，從而在未來給自己帶來的額外開發負擔。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "edge",
+  "definition_quote": "技術負債（英語：Technical debt），又譯技術債，也稱為設計負債（design debt）、程式碼負債（code debt），是編程及軟體工程中的一個比喻。指開發人員為了加速軟體開發，在應該採用最佳方案時進行了妥協，改用了短期內能加速軟體開發的方案，從而在未來給自己帶來的額外開發負擔。",
+  "origin": "seed",
+  "source": {
+   "url": "https://newsleopard.com/blog/what-is-technical-debt/",
+   "title": "程式設計師的無形債務：技術債 | 電子豹部落格",
+   "published": "2018-11-16"
+  }
+ },
+ {
+  "term_raw": "Temperature",
+  "term_normalized": "Temperature",
+  "sentence": "在自然語言處理中，Temperature 就像一個控制語言模型創造力的旋鈕。",
+  "context": "Temperature (溫度) 在自然語言處理中，Temperature 就像一個控制語言模型創造力的旋鈕。它調整模型選擇低機率詞彙的傾向，進而影響生成文本的多樣性。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "在自然語言處理中，Temperature 就像一個控制語言模型創造力的旋鈕。它調整模型選擇低機率詞彙的傾向，進而影響生成文本的多樣性。",
+  "origin": "seed",
+  "source": {
+   "url": "https://blog.miniasp.com/post/2024/05/21/LLM-Temperature-Top-P-Nucleus-Sampling-Top-K",
+   "title": "淺談 LLM 大型語言模型的 Temperature、Top-P 和 Top-K 參數 | The Will Will Web",
+   "published": "2024-05-21"
+  }
+ },
+ {
+  "term_raw": "TTS",
+  "term_normalized": "Text-to-Speech",
+  "sentence": "TTS (Text to Speech)就是「文字轉語音」，即輸入一段文字，透過TTS轉換後念出文字。",
+  "context": "什麼是TTSTTS (Text to Speech)就是「文字轉語音」，即輸入一段文字，透過TTS轉換後念出文字。過去製作TTS相當耗時費工，並且讀出的字句很機械感，不帶感情。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "TTS (Text to Speech)就是「文字轉語音」，即輸入一段文字，透過TTS轉換後念出文字。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.ecapsule.com.tw/AI-Application-Services/AI-TTS",
+   "title": "AI-TTS - 文字轉語音系統",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Token",
+  "term_normalized": "Token",
+  "sentence": "Token 是大型語言模型（LLM）處理文字的基本單位，就像是 AI 世界的「 跳表計費 」，無論你是輸入指令還是讓 AI 產出內容，收費高低全看 Token 用了多少。",
+  "context": "AI Token 是什麼？一次搞懂 Token 計算、收費邏輯與省錢技巧！ Token 是大型語言模型（LLM）處理文字的基本單位，就像是 AI 世界的「 跳表計費 」，無論你是輸入指令還是讓 AI 產出內容，收費高低全看 Token 用了多少。 對只是想用 AI 聊聊天的人來說，Token 可能不太重要，通常免費或基本月費制供應的用量就已經足夠。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Token 是大型語言模型（LLM）處理文字的基本單位，就像是 AI 世界的「 跳表計費 」，無論你是輸入指令還是讓 AI 產出內容，收費高低全看 Token 用了多少。",
+  "origin": "seed",
+  "source": {
+   "url": "https://frankknow.com/ai-token/",
+   "title": "AI Token 是什麼？一次搞懂 Token 計算、收費邏輯與省錢技巧！",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "預訓練",
+  "term_normalized": "Training",
+  "sentence": "預訓練是LLM訓練中最基礎、也最耗費資源的階段。",
+  "context": "1. 預訓練：建立通用語言能力預訓練是LLM訓練中最基礎、也最耗費資源的階段。模型會學習大量未標註的文本資料，例如百科全書、新聞、書籍與公開網站內容，資料量通常以兆個詞元計算。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "預訓練是LLM訓練中最基礎、也最耗費資源的階段。模型會學習大量未標註的文本資料，例如百科全書、新聞、書籍與公開網站內容，資料量通常以兆個詞元計算。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.recruit.com.hk/Resources/ArticleDetail.aspx?articleId=45355",
+   "title": "大型語言模型是如何調教？深入了解LLM訓練三部曲",
+   "published": "2026-02-12"
+  }
+ },
+ {
+  "term_raw": "Transformer",
+  "term_normalized": "Transformer",
+  "sentence": "Transformer 模型是一種神經網路，藉由追蹤序列資料中的關係，學習上下文之間的脈絡及意義，就如同句子中的每一個字。",
+  "context": "那麼，什麼是 Transformer 模型呢？ Transformer 模型是一種神經網路，藉由追蹤序列資料中的關係，學習上下文之間的脈絡及意義，就如同句子中的每一個字。 Transformer 模型是使用一套不斷發展，稱為注意力（attention）或自我注意力（self-attention）的數學技術，它可偵測一個系列中以微妙方式相互影響和相互依賴的資料元素，甚至是模糊的資料元素。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Transformer 模型是一種神經網路，藉由追蹤序列資料中的關係，學習上下文之間的脈絡及意義，就如同句子中的每一個字。",
+  "origin": "seed",
+  "source": {
+   "url": "https://blogs.nvidia.com.tw/blog/what-is-a-transformer-model/",
+   "title": "何謂 Transformer 模型？",
+   "published": "2022-06-21"
+  }
+ },
+ {
+  "term_raw": "非監督式學習",
+  "term_normalized": "Unsupervised Learning",
+  "sentence": "非監督式學習是機器學習方法，讓模型在沒有標籤的輸入資料中，自行探索隱藏的結構與模式",
+  "context": "TL;DR： 非監督式學習是機器學習方法，讓模型在沒有標籤的輸入資料中，自行探索隱藏的結構與模式 實用情境： 適合用在 iPAS 複習、面試快查與閱讀 AI 文章時快速校正概念邊界。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "非監督式學習是機器學習方法，讓模型在沒有標籤的輸入資料中，自行探索隱藏的結構與模式",
+  "origin": "seed",
+  "source": {
+   "url": "https://aiterms.tw/terms/unsupervised-learning",
+   "title": "非監督式學習（Unsupervised Learning）是什麼？ - AITerms.tw",
+   "published": "2026-04-04"
+  }
+ },
+ {
+  "term_raw": "用量制",
+  "term_normalized": "Usage-based Pricing",
+  "sentence": "用量制，通常是你透過 API 呼叫模型，系統再依照你實際消耗的 input tokens、output tokens、快取輸入、工具呼叫或多模態處理量來計費。",
+  "context": "[company] 的 ChatGPT Pricing 頁明確寫出 Free、Plus、Pro、Business 等方案，Plus 是 [amount] / 月，Business 是每位使用者每月計費；[company] 的 Help Center 也明確寫出 Claude Pro 是 [amount] / 月；[company] AI Pro / Ultra 則是 [company] AI 訂閱方案的一部分。用量制，通常是你透過 API 呼叫模型，系統再依照你實際消耗的 input tokens、output tokens、快取輸入、工具呼叫或多模態處理量來計費。[company] API Pricing、[company] Pricing、Gemini Developer API pricing 都是這個邏輯。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "用量制，通常是你透過 API 呼叫模型，系統再依照你實際消耗的 input tokens、output tokens、快取輸入、工具呼叫或多模態處理量來計費。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.aitoken.com.tw/post/monthly-vs-usage-based-ai-token-pricing",
+   "title": "AI Token 月費制和用量制差在哪？哪種比較適合你",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "向量資料庫",
+  "term_normalized": "Vector Database",
+  "sentence": "向量資料庫（Vector Database，簡稱 Vector DB）是一種用向量來存儲資訊的資料庫。",
+  "context": "什麼是向量資料庫？ 向量資料庫（Vector Database，簡稱 Vector DB）是一種用向量來存儲資訊的資料庫。 「向量」其實就是數據對象的數字表示，也叫「向量嵌入（Vector Embedding）」。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "向量資料庫（Vector Database，簡稱 Vector DB）是一種用向量來存儲資訊的資料庫。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.omniwaresoft.com.tw/product-news/vector-database-usecase/what-is-vector-database/",
+   "title": "什麼是向量資料庫？向量資料庫運作、應用、趨勢懶人包！",
+   "published": "2025-03-04"
+  }
+ },
+ {
+  "term_raw": "Vendor lock-in",
+  "term_normalized": "Vendor Lock-in",
+  "sentence": "Vendor lock-in occurs when various restrictions prevent a customer from choosing a new vendor, product, or service.",
+  "context": "What is vendor lock-in? Vendor lock-in occurs when various restrictions prevent a customer from choosing a new vendor, product, or service. Vendor lock-in normally happens when customers can’t transition to a new product or service without incurring substantial costs.",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "edge",
+  "definition_quote": "Vendor lock-in occurs when various restrictions prevent a customer from choosing a new vendor, product, or service.",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.mendix.com/blog/vendor-lock-in-6-tips-to-avoid-getting-trapped/",
+   "title": "What is Vendor Lock-In? 6 Tips to Avoid Getting Trapped | Mendix",
+   "published": ""
+  }
+ },
+ {
+  "term_raw": "Vibe Coding",
+  "term_normalized": "Vibe coding",
+  "sentence": "Vibe Coding是一種全新的程式設計方式，開發者透過自然語言向AI描述需求，由AI自動生成程式碼。",
+  "context": "影片｜Vibe Coding是什麼？3款好用AI工具＋6步驟教學，程式小白上手必懂！ Vibe Coding是一種全新的程式設計方式，開發者透過自然語言向AI描述需求，由AI自動生成程式碼。然而，具體上該怎麼操作？",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Vibe Coding是一種全新的程式設計方式，開發者透過自然語言向AI描述需求，由AI自動生成程式碼。",
+  "origin": "seed",
+  "source": {
+   "url": "https://www.bnext.com.tw/article/82704/how-to-vibe-coding-2025",
+   "title": "影片｜Vibe Coding是什麼？3款好用AI工具＋6步驟教學，程式小白上手必懂！",
+   "published": "2025-12-25"
+  }
+ },
+ {
+  "term_raw": "AI 浮水印（AI Watermarking）",
+  "term_normalized": "Watermarking",
+  "sentence": "AI 浮水印（AI Watermarking）是一種將隱藏資訊嵌入 AI 模型或其生成內容中的技術，用於驗證來源、追蹤使用情況、或防止未經授權的複製。",
+  "context": "不過這個方法有爭議，因為浮水印可能被簡單的改寫（paraphrasing）破解，而且 [company] 擔心對非英語使用者不公平，一度擱置了公開部署。 算法與應用 定義 AI 浮水印（AI Watermarking）是一種將隱藏資訊嵌入 AI 模型或其生成內容中的技術，用於驗證來源、追蹤使用情況、或防止未經授權的複製。 兩大類型",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "AI 浮水印（AI Watermarking）是一種將隱藏資訊嵌入 AI 模型或其生成內容中的技術，用於驗證來源、追蹤使用情況、或防止未經授權的複製。",
+  "origin": "seed",
+  "source": {
+   "url": "https://aiterms.tw/terms/ai-watermarking/",
+   "title": "AI浮水印（AI Watermarking）是什麼？ - AITerms.tw",
+   "published": "2026-04-05"
+  }
+ },
+ {
+  "term_raw": "個資法",
+  "term_normalized": "個資法",
+  "sentence": "這條說明了《個資法》為什麼存在——它的核心目的是保護我們的個人資料不被濫用，同時也考慮企業、政府等在合理情況下的使用需求。",
+  "context": "為規範個人資料之蒐集、處理及利用，以避免人格權受侵害，並促進個人資料之合理利用，特制定本法。這條說明了《個資法》為什麼存在——它的核心目的是保護我們的個人資料不被濫用，同時也考慮企業、政府等在合理情況下的使用需求。[person]在網路上購物後接到陌生保險推銷電話，發現個資被未經同意轉售。",
+  "explained": "has_definition",
+  "intent": "risk_or_limit",
+  "domain": "edge",
+  "definition_quote": "這條說明了《個資法》為什麼存在——它的核心目的是保護我們的個人資料不被濫用，同時也考慮企業、政府等在合理情況下的使用需求。",
+  "origin": "seed",
+  "source": {
+   "url": "https://vocus.cc/article/6837bae1fd89780001439dd4",
+   "title": "「資料」不是誰都能碰！搞懂《個資法》第一章，保護自己也保護客戶",
+   "published": "2025-05-31"
+  }
+ }
+]
