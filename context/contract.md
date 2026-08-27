@@ -105,7 +105,7 @@ What the server keeps after a finding passes the locks. Public read surfaces onl
 | `submitter` | anonymous browser id (client-held; a limit, not a security feature) |
 | `contract_version` | integer, see §7 |
 
-Derived, never stored: `first_seen` = min `submitted_at`; `doc_count` = distinct `source.hash`; `quiet_days` = today − last `submitted_at` whose `definition_quote` is non-empty. Signal block hidden when `doc_count < 3`.
+Public via `lookupTerm`／`trending` (§5), never stored: `first_seen` = min `submitted_at`; `doc_count` = distinct `source.hash`; `quiet_days` = today − last `submitted_at` whose `definition_quote` is non-empty. Signal block hidden when `doc_count < 3`.
 
 ## 5. Tools
 
@@ -137,6 +137,32 @@ The page gives the agent an article by **URL** and the user's list of terms to p
 ```
 
 `status`: `mock` (page only, nothing written) · `stored` · `pending_review` (server batch check not yet run).
+
+### `lookupTerm` (read-only; input `{term: string}`)
+
+The read side of the loop: another agent asks the dictionary what a term currently looks like on the web. **Evidence only — the dictionary never rules which definition is right.** The page renders the same object as a term card for humans.
+
+```json
+{"contract_version":1,
+ "term":"MCP","zh":"外接工具","known":true,
+ "editorial_line":"<the hand-written one-liner; origin editorial, not a signal>",
+ "sightings":2,"sources":2,"first_seen":"2026-05-26","last_seen":"2026-08-20","quiet_days":7,
+ "definitions":[{"quote":"…","source":{"url":"","title":"","published":""},"explained":"has_definition","intent":"technical"}],
+ "conflicting":true,
+ "verdicts":{"domain":["core","core"],"intent":["technical","technical"]},
+ "note":"Evidence only. The dictionary does not rule which definition is right; cite the quote with its source."}
+```
+
+`conflicting` = more than one distinct `definition_quote`. Unknown term → `known:false`, empty arrays, nulls. Server (Matt) computes from stored sightings; the page mock computes from what this page collected.
+
+### `trending` (read-only, no input)
+
+```json
+{"contract_version":1,"window_days":30,"contributors":1,
+ "terms":[{"term":"RAG","sightings_30d":7,"new_term":false}]}
+```
+
+Top 10 by sightings in the last 30 days. `contributors` = distinct `submitter` in the window and is always exposed: with one feeder the ranking is that person's feeding order, and the reader must be able to see that.
 
 ## 6. No seeding
 

@@ -90,6 +90,14 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
   <div id="life"></div>
 </div>
 
+
+<div class="box">
+  <h2><span data-i="s5">5 · 查一個詞</span> <span class="dim" data-i="s5Note">（另一個 AI 也能用 lookupTerm／trending 問同樣的問題）</span></h2>
+  <input id="q" type="url" data-i="qPh" data-attr="placeholder">
+  <div><button id="look" data-i="look">查</button><button id="trend" class="ghost" data-i="trend">近 30 天熱門</button></div>
+  <div id="card"></div>
+</div>
+
 <div class="box"><strong data-i="logLabel">紀錄</strong><div id="log"></div></div>
 
 <script>
@@ -104,6 +112,8 @@ const I18N={
   lexLabel:'字典',toolsLabel:'工具',s1:'1 · 文章',urlPh:'文章連結 https://…',termsPh:'想撈出來的詞，一行一個（可留空，讓 agent 自己找）',pasteFallback:'沒有 agent？貼全文，頁面自己比對已知詞',ph:'貼一篇提案、報價、新聞、白皮書…',match:'本地比對已知詞',clear:'清空',
   s2:'2 · 已知詞命中',s3:'3 · 目擊紀錄',mockNote:'（mock：只在畫面上，尚未寫入伺服器）',
   agentHint:'填好連結與詞之後對 agent 說：「呼叫 <code>feedDocument</code>，去讀那篇，照規則找詞，再用 <code>submitFindings</code> 送回」。沒有 agent 也可以',
+  s5:'5 · 查一個詞',s5Note:'（另一個 AI 也能用 lookupTerm／trending 問同樣的問題）',qPh:'要查的詞，例如 MCP',look:'查',trend:'近 30 天熱門',
+  editorialLine:'字典白話（editorial，不進信號）：',noDefs:'沒有任何來源給過定義句',sightings:n=>n+' 次目擊',windowT:d=>'近 '+d+' 天',contributors:n=>n+' 位貢獻者',oneFeeder:'（只有一個人在餵時，排名＝他的餵食順序）',qEmpty:'要查的詞是空的',
   reqBadge:'你指定',addBadge:'agent 加的',notAi:'agent 判定：不是 AI 詞',notFound:list=>'你指定但文章裡找不到：'+list.join('、'),
   demo:'載入範例目擊（廠商文，14 筆）',logLabel:'紀錄',
   s4:'4 · 字典裡的目擊',s4Note:'（mock：只有本頁收到的；接上伺服器後會加進歷來所有目擊）',s4Hint:'收到目擊後，這裡列出每個詞的生命史與所有定義句；兩句講法不同就標「用法矛盾」。',
@@ -123,6 +133,8 @@ const I18N={
   lexLabel:'lexicon',toolsLabel:'tools',s1:'1 · Article',urlPh:'Article link https://…',termsPh:'Terms to pull out, one per line (leave empty to let the agent choose)',pasteFallback:'No agent? Paste the text and the page matches known terms itself',ph:'Paste a proposal, quote, news article, white paper…',match:'Match known terms locally',clear:'Clear',
   s2:'2 · Known terms found',s3:'3 · Sightings',mockNote:'(mock: on screen only, not written to the server)',
   agentHint:'With the link and terms filled in, tell the agent: “call <code>feedDocument</code>, read the article, find the terms following the rules, then send them back with <code>submitFindings</code>”. Without an agent you can',
+  s5:'5 · Look up a term',s5Note:'(another AI can ask the same via lookupTerm / trending)',qPh:'term to look up, e.g. MCP',look:'Look up',trend:'Trending, last 30 days',
+  editorialLine:'hand-written line (editorial, not a signal): ',noDefs:'no source has ever defined it',sightings:n=>n+' sightings',windowT:d=>'last '+d+' days',contributors:n=>n+' contributors',oneFeeder:'(with a single feeder the ranking is that person\'s feeding order)',qEmpty:'nothing to look up',
   reqBadge:'you asked',addBadge:'agent added',notAi:'agent verdict: not an AI term',notFound:list=>'asked for but not found in the article: '+list.join(', '),
   demo:'load sample sightings (vendor article, 14)',logLabel:'Log',
   s4:'4 · Sightings in the dictionary',s4Note:'(mock: only what this page collected; with the server, all past sightings join)',s4Hint:'After a submission, each term shows its life history and every definition quote; two quotes that differ are flagged “conflicting usage”.',
@@ -298,6 +310,39 @@ $('demo').onclick=async()=>{
   catch(e){log(T('demoFail')(e.message),'no')}
 };
 
+
+/* ---------- read side: lookupTerm / trending (mock: computed from this page; server will compute from storage) ---------- */
+const NOTE='Evidence only. The dictionary does not rule which definition is right; cite the quote with its source.';
+function lookupTerm(term){
+  const e=lookup(term);const k=e?e.slug:String(term||'').trim().toLowerCase();
+  const rows=FINDINGS.filter(f=>keyOf(f)===k);
+  const defs=rows.filter(f=>f.definition_quote).map(f=>({quote:f.definition_quote,source:f.source||null,explained:f.explained,intent:f.intent}));
+  const dates=rows.map(f=>f.source&&f.source.published).filter(Boolean).sort();
+  return {contract_version:CONTRACT_VERSION,term:e?e.term:String(term||'').trim(),zh:e?e.zh:'',known:!!e,editorial_line:e?e.line:'',
+    sightings:rows.length,sources:new Set(rows.map(f=>f.source&&f.source.url).filter(Boolean)).size,first_seen:dates[0]||null,last_seen:dates[dates.length-1]||null,
+    quiet_days:dates.length?Math.round((Date.now()-new Date(dates[dates.length-1]))/864e5):null,
+    definitions:defs,conflicting:new Set(defs.map(d=>d.quote)).size>1,
+    verdicts:{domain:rows.map(f=>f.domain),intent:rows.map(f=>f.intent)},note:NOTE};
+}
+function trending(){
+  const n={};FINDINGS.forEach(f=>{const k=keyOf(f);n[k]=(n[k]||0)+1});
+  return {contract_version:CONTRACT_VERSION,window_days:30,contributors:FINDINGS.length?1:0,
+    terms:Object.entries(n).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,c])=>{const e=LEX.find(x=>x.slug===k);return {term:e?e.term:k,sightings_30d:c,new_term:!e}})};
+}
+function renderCard(r){
+  $('card').innerHTML='<div class="life"><div class="hd"><b>'+esc(r.term)+'</b>'+(r.zh&&r.zh!==r.term?'<span class="meta">'+esc(r.zh)+'</span>':'')+(r.conflicting?'<span class="conflict">'+T('conflict')+'</span>':'')+(!r.known?'<span class="new">'+T('newTerm')+'</span>':'')+
+    '<span class="meta">'+[r.first_seen?T('firstSeen')(r.first_seen):null,T('docs')(r.sources),T('sightings')(r.sightings),r.quiet_days!=null?T('quiet')(r.quiet_days):null].filter(Boolean).join(' · ')+'</span></div>'+
+    (r.editorial_line?'<p class="dim" style="margin:6px 0 0">'+T('editorialLine')+esc(r.editorial_line)+'</p>':'')+
+    (r.definitions.length?r.definitions.map(d=>'<q>'+esc(d.quote)+(d.source&&d.source.url?' <a href="'+esc(d.source.url)+'" target="_blank" rel="noopener">'+esc(d.source.title||d.source.url)+'</a>':'')+' <span class="dim">'+esc(d.source&&d.source.published||'')+'</span></q>').join(''):'<p class="dim">'+T('noDefs')+'</p>')+
+    '<p class="dim" style="margin:8px 0 0">'+esc(r.note)+'</p></div>';
+}
+function renderTrend(r){
+  $('card').innerHTML='<div class="life"><div class="hd"><b>'+T('windowT')(r.window_days)+'</b><span class="meta">'+T('contributors')(r.contributors)+' '+T('oneFeeder')+'</span></div>'+
+    (r.terms.length?r.terms.map((t,i)=>'<div style="display:flex;gap:12px;padding:3px 0"><span class="dim" style="width:2em">'+(i+1)+'</span><b style="min-width:10em">'+esc(t.term)+'</b>'+(t.new_term?'<span class="new">'+T('newTerm')+'</span>':'')+'<span class="meta">'+T('sightings')(t.sightings_30d)+'</span></div>').join(''):'<p class="dim">'+T('noFindings')+'</p>')+'</div>';
+}
+$('look').onclick=()=>{const q=$('q').value.trim();if(!q){log(T('qEmpty'),'no');return}renderCard(lookupTerm(q));log('lookupTerm("'+q+'")')};
+$('trend').onclick=()=>{renderTrend(trending());log('trending()')};
+
 /* ---------- WebMCP tools ---------- */
 function pick(){return (typeof document.modelContext?.registerTool==='function')?document.modelContext:(navigator.modelContext&&typeof navigator.modelContext.registerTool==='function')?navigator.modelContext:null}
 let tries=0;
@@ -320,7 +365,13 @@ function setup(mc){
      }},
     {name:'submitFindings',description:'Send the AI-term sightings found in the article back to the dictionary. findings: items per finding_schema (requested=true for the user\'s terms, false for ones you added). not_found: requested terms you could not locate in the article. The server applies the locks and may reject some items; rejected items carry reason codes.',
      inputSchema:{type:'object',properties:{findings:{type:'array',items:FINDING_SCHEMA},not_found:{type:'array',items:{type:'string'}}},required:['findings','not_found'],additionalProperties:false},
-     async execute(input){ return submit(input&&input.findings,'submitFindings',input&&input.not_found); }}
+     async execute(input){ return submit(input&&input.findings,'submitFindings',input&&input.not_found); }},
+    {name:'lookupTerm',description:'Ask the dictionary what a term currently looks like on the web: every definition quote with its source, first seen, number of sources, quiet days, and whether the quotes conflict. Evidence only; the dictionary does not rule which definition is right. Read-only.',
+     inputSchema:{type:'object',properties:{term:{type:'string'}},required:['term'],additionalProperties:false},annotations:{readOnlyHint:true},
+     async execute(input){const r=lookupTerm(input&&input.term);renderCard(r);log('lookupTerm("'+(input&&input.term)+'")','ok');return r;}},
+    {name:'trending',description:'Top terms by sightings in the last 30 days, with the number of distinct contributors (with one feeder the ranking is that person\'s feeding order). Read-only.',
+     inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
+     async execute(){const r=trending();renderTrend(r);log('trending()','ok');return r;}}
   ];
   try{tools.forEach(t=>{const r=mc.registerTool(t);if(r&&r.then)r.catch(e=>log('registerTool '+t.name+': '+e.message,'no'))});$('tools').textContent=tools.map(t=>t.name).join(' · ');log(T('registered')(tools.length),'ok');}
   catch(e){$('tools').innerHTML='<span class="no">'+T('regFail')+'</span>';log(T('regFail')+': '+e.message,'no');}

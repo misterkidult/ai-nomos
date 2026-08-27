@@ -1,0 +1,60 @@
+- generic [active] [ref=f5e1]:
+  - generic [ref=f5e2]:
+    - generic [ref=f5e3]:
+      - heading "ai-nomos · 讀一篇文件" [level=1] [ref=f5e4]
+      - paragraph [ref=f5e5]:
+        - text: 丟一篇文章的連結進來，寫下你想撈出來的詞。瀏覽器裡的 agent 會自己去讀那篇（
+        - strong [ref=f5e6]: 文章不經過我們的伺服器
+        - text: ）：找你指定的詞、判斷它是不是 AI 詞、再補上它看到而你沒列的，一起送回字典當目擊紀錄。
+    - button "EN" [ref=f5e7] [cursor=pointer]
+  - generic [ref=f5e9]:
+    - generic [ref=f5e10]:
+      - text: 字典：
+      - generic [ref=f5e11]: 133 則（2026-08-27）
+    - generic [ref=f5e12]: agent：偵測中…
+    - generic [ref=f5e13]: 工具：—
+  - generic [ref=f5e14]:
+    - heading "1 · 文章" [level=2] [ref=f5e15]
+    - textbox "文章連結 https://…" [ref=f5e16]
+    - textbox "想撈出來的詞，一行一個（可留空，讓 agent 自己找）" [ref=f5e17]
+    - group [ref=f5e18]:
+      - generic "沒有 agent？貼全文，頁面自己比對已知詞" [ref=f5e19]
+  - generic [ref=f5e20]:
+    - heading "2 · 已知詞命中" [level=2] [ref=f5e21]
+    - generic [ref=f5e22]: 尚未比對
+  - generic [ref=f5e24]:
+    - heading "3 · 目擊紀錄 （mock：只在畫面上，尚未寫入伺服器）" [level=2] [ref=f5e25]
+    - paragraph [ref=f5e26]:
+      - generic [ref=f5e27]:
+        - text: 填好連結與詞之後對 agent 說：「呼叫
+        - code [ref=f5e28]: feedDocument
+        - text: ，去讀那篇，照規則找詞，再用
+        - code [ref=f5e29]: submitFindings
+        - text: 送回」。沒有 agent 也可以
+      - button "載入範例目擊（廠商文，14 筆）" [ref=f5e30] [cursor=pointer]
+    - paragraph [ref=f5e32]: 尚無目擊
+  - generic [ref=f5e33]:
+    - heading "4 · 字典裡的目擊 （mock：只有本頁收到的；接上伺服器後會加進歷來所有目擊）" [level=2] [ref=f5e34]
+    - paragraph [ref=f5e35]: 收到目擊後，這裡列出每個詞的生命史與所有定義句；兩句講法不同就標「用法矛盾」。
+    - paragraph [ref=f5e37]: 收到目擊後才會出現
+  - generic [ref=f5e38]:
+    - heading "假畫面專用 · 模擬 agent（正式頁沒有這一區）" [level=2] [ref=f5e39]
+    - paragraph [ref=f5e40]: 劇本寫死，只看動線。選一個情境會自動填連結與詞，再按「模擬 agent 執行」。
+    - button "情境 A：廠商 MCP 文（指定 MCP、AI Agent、草莓蛋糕、量子運算）" [ref=f5e41] [cursor=pointer]
+    - button "情境 B：WebMCP 介紹文（不指定任何詞，讓 agent 自己找）" [ref=f5e42] [cursor=pointer]
+    - button "模擬 agent 執行" [ref=f5e44] [cursor=pointer]
+  - generic [ref=f5e45]:
+    - heading "假畫面專用 · 讀取面：另一個 AI 來查字典" [level=2] [ref=f5e46]
+    - paragraph [ref=f5e47]:
+      - text: 情境 C。先跑過 A、B 讓字典有資料，再模擬第二個 agent 呼叫唯讀工具
+      - code [ref=f5e48]: lookupTerm
+      - text: 與
+      - code [ref=f5e49]: trending
+      - text: "。回傳同時渲染成人看的詞條卡（正式版會是 /term/{slug} 頁）。"
+    - textbox "要查的詞，例如 MCP、WebMCP、草莓蛋糕" [ref=f5e50]: MCP
+    - generic [ref=f5e51]:
+      - button "模擬 lookupTerm" [ref=f5e52] [cursor=pointer]
+      - button "模擬 trending（近 30 天）" [ref=f5e53] [cursor=pointer]
+  - generic [ref=f5e54]:
+    - strong [ref=f5e55]: 紀錄
+    - generic [ref=f5e56]: 下午3:28:23 字典載入 133 則、587 個比對鍵
