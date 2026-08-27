@@ -15,7 +15,7 @@ ENUMS = {
     "intent": ["selling_point", "technical", "risk_or_limit"],
     "domain": ["core", "edge", "not"],
 }
-REQUIRED = ["term_raw", "term_normalized", "sentence", "context", "explained", "intent", "domain", "definition_quote"]
+REQUIRED = ["term_raw", "term_normalized", "sentence", "context", "explained", "intent", "domain", "definition_quote", "requested"]
 STOPLIST = "導入 自架 本地 整合 平台 系統 流程 資料 知識庫 工具 應用 服務 方案 自動化 數位轉型 雲端 上線 部署 優化".split()
 
 
@@ -38,6 +38,8 @@ def check(f: dict) -> list[str]:
         why.append("EDGE_WITHOUT_QUOTE")
     if t.strip() in STOPLIST:
         why.append("STOPLISTED")
+    if f.get("domain") == "not" and f.get("requested") is not True:
+        why.append("NOT_AI_TERM")
     return sorted(set(why))
 
 

@@ -11,7 +11,11 @@ h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 8px}
 code{background:#fff;border:1px solid #000;padding:1px 6px;font-size:13px}
 .box{background:#fff;border:1px solid #000;padding:16px;margin:16px 0}
 .ok{color:#0a7d2c}.no{color:#b00020}.dim{color:#777}
-textarea{width:100%;min-height:220px;border:1px solid #000;padding:10px;font:inherit;font-size:14px;resize:vertical;box-sizing:border-box}
+textarea,input[type=url]{width:100%;min-height:220px;border:1px solid #000;padding:10px;font:inherit;font-size:14px;resize:vertical;box-sizing:border-box}
+input[type=url]{min-height:0}
+.f .req{background:#000;color:#C5FF4A;border:1px solid #000;padding:0 6px;font-size:12px;margin-left:6px}
+.f .notai{color:#b00020;font-weight:700}
+#nf{margin:8px 0 0;font-size:14px;color:#b00020}
 button{border:1px solid #000;background:#C5FF4A;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer;margin:8px 8px 0 0}
 button.ghost{background:#fff;font-weight:400}
 button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:#fff;white-space:nowrap}
@@ -54,13 +58,18 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
 </div>
 
 <div class="box">
-  <h2 data-i="s1">1 · 文件</h2>
-  <textarea id="doc" data-i="ph" data-attr="placeholder"></textarea>
-  <div>
-    <button id="match" data-i="match">本地比對已知詞</button>
-    <button id="clear" class="ghost" data-i="clear">清空</button>
-    <span class="dim" id="doclen"></span>
-  </div>
+  <h2 data-i="s1">1 · 文章</h2>
+  <input id="url" type="url" data-i="urlPh" data-attr="placeholder">
+  <textarea id="terms" rows="3" style="min-height:0;margin-top:8px" data-i="termsPh" data-attr="placeholder"></textarea>
+  <details id="fallback" style="margin-top:12px">
+    <summary class="dim" data-i="pasteFallback">沒有 agent？貼全文，頁面自己比對已知詞</summary>
+    <textarea id="doc" style="margin-top:8px" data-i="ph" data-attr="placeholder"></textarea>
+    <div>
+      <button id="match" data-i="match">本地比對已知詞</button>
+      <button id="clear" class="ghost" data-i="clear">清空</button>
+      <span class="dim" id="doclen"></span>
+    </div>
+  </details>
 </div>
 
 <div class="box">
@@ -72,10 +81,11 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
   <h2><span data-i="s3">3 · 目擊紀錄</span> <span class="dim" data-i="mockNote">（mock：只在畫面上，尚未寫入伺服器）</span></h2>
   <p class="dim"><span data-i="agentHint" data-html="1"></span> <button id="demo" class="ghost" data-i="demo">載入範例目擊（廠商文，14 筆）</button></p>
   <div id="findings"></div>
+  <div id="nf"></div>
 </div>
 
 <div class="box">
-  <h2><span data-i="s4">4 · 字典裡的目擊</span> <span class="dim" data-i="s4Note">（seed 127 則＋本頁新收的；來源可點）</span></h2>
+  <h2><span data-i="s4">4 · 字典裡的目擊</span> <span class="dim" data-i="s4Note"></span></h2>
   <p class="dim" data-i="s4Hint">比對或收到目擊後，這裡列出每個詞的生命史與所有定義句；兩句講法不同就標「用法矛盾」。</p>
   <div id="life"></div>
 </div>
@@ -90,39 +100,41 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
 const I18N={
  zh:{
   title:'ai-nomos · 讀一篇文件',h1:'ai-nomos · 讀一篇文件',
-  sub:'把文件貼進來（<strong>不上傳</strong>，全文留在你的瀏覽器）。頁面先比對已知詞；若瀏覽器裡有 agent，它會找出文中的 AI 名詞與它們被怎麼用，送回字典當目擊紀錄。',
-  lexLabel:'字典',toolsLabel:'工具',s1:'1 · 文件',ph:'貼一篇提案、報價、新聞、白皮書…',match:'本地比對已知詞',clear:'清空',
+  sub:'丟一篇文章的連結進來，寫下你想撈出來的詞。瀏覽器裡的 agent 會自己去讀那篇（<strong>文章不經過我們的伺服器</strong>）：找你指定的詞、判斷它是不是 AI 詞、再補上它看到而你沒列的，一起送回字典當目擊紀錄。',
+  lexLabel:'字典',toolsLabel:'工具',s1:'1 · 文章',urlPh:'文章連結 https://…',termsPh:'想撈出來的詞，一行一個（可留空，讓 agent 自己找）',pasteFallback:'沒有 agent？貼全文，頁面自己比對已知詞',ph:'貼一篇提案、報價、新聞、白皮書…',match:'本地比對已知詞',clear:'清空',
   s2:'2 · 已知詞命中',s3:'3 · 目擊紀錄',mockNote:'（mock：只在畫面上，尚未寫入伺服器）',
-  agentHint:'有 agent 時對它說：「呼叫 <code>feedDocument</code>，照規則找出文中的 AI 名詞，再用 <code>submitFindings</code> 送回」。沒有 agent 也可以',
+  agentHint:'填好連結與詞之後對 agent 說：「呼叫 <code>feedDocument</code>，去讀那篇，照規則找詞，再用 <code>submitFindings</code> 送回」。沒有 agent 也可以',
+  reqBadge:'你指定',addBadge:'agent 加的',notAi:'agent 判定：不是 AI 詞',notFound:list=>'你指定但文章裡找不到：'+list.join('、'),
   demo:'載入範例目擊（廠商文，14 筆）',logLabel:'紀錄',
-  s4:'4 · 字典裡的目擊',s4Note:'（seed 127 則＋本頁新收的；來源可點）',s4Hint:'比對或收到目擊後，這裡列出每個詞的生命史與所有定義句；兩句講法不同就標「用法矛盾」。',
-  lifeEmpty:'比對或收到目擊後才會出現',firstSeen:d=>'首次出現 '+d,docs:n=>n+' 份來源',quiet:n=>'安靜 '+n+' 天',conflict:'用法矛盾',thisPage:'本頁',seedLoaded:n=>'seed 目擊載入 '+n+' 則',seedFail:e=>'seed 載入失敗：'+e,noQuote:'（無定義句）',
+  s4:'4 · 字典裡的目擊',s4Note:'（mock：只有本頁收到的；接上伺服器後會加進歷來所有目擊）',s4Hint:'收到目擊後，這裡列出每個詞的生命史與所有定義句；兩句講法不同就標「用法矛盾」。',
+  lifeEmpty:'收到目擊後才會出現',firstSeen:d=>'首次出現 '+d,docs:n=>n+' 份來源',quiet:n=>'安靜 '+n+' 天',conflict:'用法矛盾',thisPage:'本頁',noQuote:'（無定義句）',
   loading:'載入中…',detecting:'偵測中…',entries:n=>n+' 則',lexFail:'載入失敗',lexLoaded:(n,k)=>'字典載入 '+n+' 則、'+k+' 個比對鍵',
   lexErr:e=>'lexicon.json 載入失敗：'+e,notMatched:'尚未比對',noHits:'沒有命中已知詞',hitn:n=>'（'+n+' 則）',
   empty:'文件是空的',matched:n=>'本地比對命中 '+n+' 則',chars:n=>n+' 字',noFindings:'尚無目擊',known:'已知',newTerm:'新詞',
   submitLog:(from,a,r)=>from+'：收 '+a+' 筆、擋 '+r+' 筆',demoFrom:'範例目擊',demoFail:e=>'範例載入失敗：'+e,
-  noAgent:'無（退化模式：只做本地比對）',noAgentLog:'無 modelContext，退化模式',fed:(n,h)=>'feedDocument 被呼叫（文件 '+n+' 字、命中 '+h+' 則）',
+  noAgent:'無（退化模式：只做本地比對）',noAgentLog:'無 modelContext，退化模式',fed:(u,r)=>'feedDocument 被呼叫（'+u+'，指定 '+r+' 個詞）',
   registered:n=>'已註冊 '+n+' 個工具',regFail:'registerTool 失敗',
   enums:{has_definition:'有定義句',mentioned:'順帶提到',assumed:'假設你懂',selling_point:'賣點',technical:'技術描述',risk_or_limit:'風險或限制',core:'AI 詞',edge:'邊緣',not:'非 AI 詞'},
-  codes:{MISSING_FIELD:'缺欄位',ENUM_INVALID:'選項不在 enum 內',SENTENCE_LACKS_TERM:'sentence 不含 term_raw',SENTENCE_TOO_LONG:'sentence 超過 120 字',QUOTE_NOT_IN_CONTEXT:'definition_quote 不在 context 裡',EDGE_WITHOUT_QUOTE:'domain=edge 且無定義句',STOPLISTED:'停用清單'}
+  codes:{MISSING_FIELD:'缺欄位',ENUM_INVALID:'選項不在 enum 內',SENTENCE_LACKS_TERM:'sentence 不含 term_raw',SENTENCE_TOO_LONG:'sentence 超過 120 字',QUOTE_NOT_IN_CONTEXT:'definition_quote 不在 context 裡',EDGE_WITHOUT_QUOTE:'domain=edge 且無定義句',STOPLISTED:'停用清單',NOT_AI_TERM:'agent 自己加的非 AI 詞'}
  },
  en:{
   title:'ai-nomos · Read a document',h1:'ai-nomos · Read a document',
-  sub:'Paste a document (<strong>nothing is uploaded</strong>; the text stays in your browser). The page first matches known terms; if an agent is present in the browser, it finds the AI terms in the text and how they are used, and sends them back to the dictionary as sightings.',
-  lexLabel:'lexicon',toolsLabel:'tools',s1:'1 · Document',ph:'Paste a proposal, quote, news article, white paper…',match:'Match known terms locally',clear:'Clear',
+  sub:'Drop the link to an article and list the terms you want pulled out. The agent in your browser reads the article itself (<strong>it never passes through our server</strong>): it finds your terms, judges whether each is really an AI term, adds AI terms you did not list, and sends them all back to the dictionary as sightings.',
+  lexLabel:'lexicon',toolsLabel:'tools',s1:'1 · Article',urlPh:'Article link https://…',termsPh:'Terms to pull out, one per line (leave empty to let the agent choose)',pasteFallback:'No agent? Paste the text and the page matches known terms itself',ph:'Paste a proposal, quote, news article, white paper…',match:'Match known terms locally',clear:'Clear',
   s2:'2 · Known terms found',s3:'3 · Sightings',mockNote:'(mock: on screen only, not written to the server)',
-  agentHint:'With an agent, say: “call <code>feedDocument</code>, find the AI terms following the rules, then send them back with <code>submitFindings</code>”. Without an agent you can',
+  agentHint:'With the link and terms filled in, tell the agent: “call <code>feedDocument</code>, read the article, find the terms following the rules, then send them back with <code>submitFindings</code>”. Without an agent you can',
+  reqBadge:'you asked',addBadge:'agent added',notAi:'agent verdict: not an AI term',notFound:list=>'asked for but not found in the article: '+list.join(', '),
   demo:'load sample sightings (vendor article, 14)',logLabel:'Log',
-  s4:'4 · Sightings in the dictionary',s4Note:'(127 seed sightings + whatever this page collected; sources are links)',s4Hint:'After a match or a submission, each term shows its life history and every definition quote; two quotes that differ are flagged “conflicting usage”.',
-  lifeEmpty:'appears after a match or a submission',firstSeen:d=>'first seen '+d,docs:n=>n+' sources',quiet:n=>'quiet '+n+' days',conflict:'conflicting usage',thisPage:'this page',seedLoaded:n=>'seed sightings loaded: '+n,seedFail:e=>'seed failed: '+e,noQuote:'(no definition quote)',
+  s4:'4 · Sightings in the dictionary',s4Note:'(mock: only what this page collected; with the server, all past sightings join)',s4Hint:'After a submission, each term shows its life history and every definition quote; two quotes that differ are flagged “conflicting usage”.',
+  lifeEmpty:'appears after a submission',firstSeen:d=>'first seen '+d,docs:n=>n+' sources',quiet:n=>'quiet '+n+' days',conflict:'conflicting usage',thisPage:'this page',noQuote:'(no definition quote)',
   loading:'loading…',detecting:'detecting…',entries:n=>n+' entries',lexFail:'failed to load',lexLoaded:(n,k)=>'lexicon loaded: '+n+' entries, '+k+' match keys',
   lexErr:e=>'lexicon.json failed: '+e,notMatched:'not matched yet',noHits:'no known terms found',hitn:n=>'('+n+')',
   empty:'document is empty',matched:n=>'local match: '+n+' known terms',chars:n=>n+' chars',noFindings:'no sightings yet',known:'known',newTerm:'new',
   submitLog:(from,a,r)=>from+': accepted '+a+', rejected '+r,demoFrom:'sample',demoFail:e=>'sample failed: '+e,
-  noAgent:'none (fallback: local match only)',noAgentLog:'no modelContext, fallback mode',fed:(n,h)=>'feedDocument called ('+n+' chars, '+h+' known hits)',
+  noAgent:'none (fallback: local match only)',noAgentLog:'no modelContext, fallback mode',fed:(u,r)=>'feedDocument called ('+u+', '+r+' requested terms)',
   registered:n=>'registered '+n+' tools',regFail:'registerTool failed',
   enums:{has_definition:'has definition',mentioned:'mentioned',assumed:'assumed known',selling_point:'selling point',technical:'technical',risk_or_limit:'risk / limit',core:'AI term',edge:'edge',not:'not AI'},
-  codes:{MISSING_FIELD:'missing field',ENUM_INVALID:'value not in enum',SENTENCE_LACKS_TERM:'sentence lacks term_raw',SENTENCE_TOO_LONG:'sentence over 120 chars',QUOTE_NOT_IN_CONTEXT:'definition_quote not in context',EDGE_WITHOUT_QUOTE:'domain=edge without quote',STOPLISTED:'stoplisted'}
+  codes:{MISSING_FIELD:'missing field',ENUM_INVALID:'value not in enum',SENTENCE_LACKS_TERM:'sentence lacks term_raw',SENTENCE_TOO_LONG:'sentence over 120 chars',QUOTE_NOT_IN_CONTEXT:'definition_quote not in context',EDGE_WITHOUT_QUOTE:'domain=edge without quote',STOPLISTED:'stoplisted',NOT_AI_TERM:'non-AI term volunteered by the agent'}
  }
 };
 let LANG=(new URLSearchParams(location.search).get('lang')||localStorage.getItem('lang')||'zh');
@@ -184,7 +196,7 @@ $('doc').addEventListener('input',()=>{$('doclen').textContent=T('chars')($('doc
    ================================================================== */
 const CONTRACT_VERSION=1;
 const STOPLIST=['導入','自架','本地','整合','平台','系統','流程','資料','知識庫','工具','應用','服務','方案','自動化','數位轉型','雲端','上線','部署','優化'];
-const RULES=`You are helping the user read this document. Find the AI terms in it and report them with submitFindings, following these rules.
+const RULES=`You are helping the user read one article. feedDocument gives you its url (fetch and read it yourself; the page never uploads it) and the terms the user wants pulled out (requested_terms). Do not take the user's list at face value: find each requested term in the article and judge it; add AI terms you notice that the user did not list; report everything with submitFindings, following these rules.
 1. Copy, don't explain. term_raw = exactly as written. sentence = the one sentence it appears in (max 120 chars). context = that sentence plus one sentence before and after.
    definition_quote only when the document itself explains the term, and it must be a verbatim substring of context. If the document does not explain it, leave it "" — never fill from your own knowledge.
 2. For each term answer three single-choice fields: explained (has_definition / mentioned / assumed), intent (selling_point / technical / risk_or_limit), domain (core / edge / not).
@@ -192,10 +204,11 @@ const RULES=`You are helping the user read this document. Find the AI terms in i
 4. The known-term list is in lexicon. Report known terms too (so the dictionary sees them again) and set term_normalized to the lexicon term; otherwise term_normalized = "".
 5. De-identify sentence and context: replace company names, person names, amounts, phone numbers and emails with [company], [person], [amount], [phone], [email].
 6. If a term appears several times, report it once — the occurrence that has a definition.
-7. Optional: if you know the URL of the page the document came from, fill source.url (and title/published if known). Leave source out otherwise.
+7. requested = true for terms from requested_terms, false for terms you added. A requested term that is not an AI term still gets a finding, with domain = not — that is your verdict, the page shows it to the user. A requested term you cannot find in the article goes to not_found, not to findings.
+8. source: fill url from feedDocument, plus title and published (YYYY-MM-DD) if the article shows them.
 Stoplist: ${STOPLIST.join(', ')}`;
 const FINDING_SCHEMA={type:'object',additionalProperties:false,
- required:['term_raw','term_normalized','sentence','context','explained','intent','domain','definition_quote'],
+ required:['term_raw','term_normalized','sentence','context','explained','intent','domain','definition_quote','requested'],
  properties:{
   term_raw:{type:'string',description:'exactly as written in the document'},
   term_normalized:{type:'string',description:'the lexicon term this maps to; "" if not a known term'},
@@ -205,7 +218,8 @@ const FINDING_SCHEMA={type:'object',additionalProperties:false,
   intent:{type:'string',enum:['selling_point','technical','risk_or_limit']},
   domain:{type:'string',enum:['core','edge','not']},
   definition_quote:{type:'string',description:'verbatim substring of context; "" if the document does not define the term'},
-  source:{type:'object',additionalProperties:false,description:'optional; where the document came from, if known',
+  requested:{type:'boolean',description:'true if the user listed this term in requested_terms; false if you added it'},
+  source:{type:'object',additionalProperties:false,description:'where the article came from; url from feedDocument',
     properties:{url:{type:'string'},title:{type:'string'},published:{type:'string',description:'YYYY-MM-DD or ""'}},required:['url']}
  }};
 
@@ -222,6 +236,7 @@ function check(f){
   if(q&&!(f.context||s).includes(q)) why.add('QUOTE_NOT_IN_CONTEXT');
   if(f.domain==='edge'&&!q) why.add('EDGE_WITHOUT_QUOTE');
   if(STOPLIST.includes(t.trim())) why.add('STOPLISTED');
+  if(f.domain==='not'&&f.requested!==true) why.add('NOT_AI_TERM');
   return [...why].sort();
 }
 
@@ -234,24 +249,24 @@ function renderFindings(){
   $('findings').innerHTML=FINDINGS.map(f=>{
     const e=lookup(f.term_normalized)||lookup(f.term_raw);
     return '<div class="f"><span class="t">'+esc(f.term_raw)+'</span>'+(e?'<span class="known">'+T('known')+' · '+esc(e.term)+'</span>':'<span class="new">'+T('newTerm')+'</span>')+
-      ' <span class="tags">'+esc(lbl(f.explained))+' · '+esc(lbl(f.intent))+' · '+esc(lbl(f.domain))+'</span>'+srcLink(f.source)+
+      (f.requested?'<span class="req">'+T('reqBadge')+'</span>':'<span class="known">'+T('addBadge')+'</span>')+
+      ' <span class="tags">'+esc(lbl(f.explained))+' · '+esc(lbl(f.intent))+' · '+(f.domain==='not'?'<span class="notai">'+T('notAi')+'</span>':esc(lbl(f.domain)))+'</span>'+srcLink(f.source)+
       (f.definition_quote?'<q>'+esc(f.definition_quote)+'</q>':'')+'</div>';
   }).join('');
   renderLife();
 }
 const srcLink=s=>s&&s.url?' <a class="src" href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.title||s.url.replace(/^https?:\/\//,'').slice(0,40))+'</a>':'';
 
-/* ---------- life history + conflicts (mock: seed fixture + this page) ---------- */
-let SEED=[];
-fetch('fixtures/seed-133.json').then(r=>r.json()).then(d=>{SEED=d;log(T('seedLoaded')(d.length),'ok');renderLife()}).catch(e=>log(T('seedFail')(e.message),'no'));
+/* ---------- life history + conflicts (mock: this page only; server will supply all past sightings) ---------- */
+let SEED=[];   // placeholder for sightings fetched from api/* once it exists
 const keyOf=f=>{const e=lookup(f.term_normalized)||lookup(f.term_raw);return e?e.slug:String(f.term_raw||'').trim().toLowerCase()};
 function renderLife(){
   const box=$('life');
-  const keys=new Set([...HITS.map(h=>h.slug),...FINDINGS.map(keyOf)]);
+  const keys=new Set(FINDINGS.map(keyOf));
   if(!keys.size){box.innerHTML='<p class="dim">'+T('lifeEmpty')+'</p>';return}
   const today=new Date();
   box.innerHTML=[...keys].map(k=>{
-    const rows=[...SEED.filter(f=>keyOf(f)===k).map(f=>({...f,_from:'seed'})),...FINDINGS.filter(f=>keyOf(f)===k).map(f=>({...f,_from:'page'}))];
+    const rows=[...SEED.filter(f=>keyOf(f)===k).map(f=>({...f,_from:'server'})),...FINDINGS.filter(f=>keyOf(f)===k).map(f=>({...f,_from:'page'}))];
     if(!rows.length) return '';
     const e=lookup(k)||{term:rows[0].term_normalized||rows[0].term_raw};
     const dates=rows.map(f=>f.source&&f.source.published).filter(Boolean).sort();
@@ -263,19 +278,23 @@ function renderLife(){
       rows.map(f=>'<q>'+(f.definition_quote?esc(f.definition_quote):'<span class="dim">'+T('noQuote')+'</span>')+(f.source&&f.source.url?' <a href="'+esc(f.source.url)+'" target="_blank" rel="noopener">'+esc(f.source.title||f.source.url)+'</a>':' <a>'+T('thisPage')+'</a>')+'</q>').join('')+'</div>';
   }).join('');
 }
-function submit(findings,from){
+function submit(findings,from,notFound){
   const acc=[],rej=[];
   (findings||[]).forEach((f,i)=>{const why=check(f);if(why.length)rej.push({index:i,term_raw:f.term_raw,reasons:why});else acc.push(f)});
   FINDINGS=FINDINGS.concat(acc);renderFindings();
+  const nf=Array.isArray(notFound)?notFound.filter(Boolean):[];
+  $('nf').textContent=nf.length?T('notFound')(nf):'';
   const C=T('codes');
   log(T('submitLog')(from,acc.length,rej.length)+(rej.length?'（'+rej.map(r=>r.term_raw+'：'+r.reasons.map(c=>C[c]||c).join('／')).join('；')+'）':''),rej.length?'no':'ok');
-  return {contract_version:CONTRACT_VERSION,accepted:acc.length,rejected:rej,status:'mock'};
+  return {contract_version:CONTRACT_VERSION,accepted:acc.length,not_found:nf,rejected:rej,status:'mock'};
 }
+const requestedTerms=()=>$('terms').value.split('\n').map(s=>s.trim()).filter(Boolean);
 /* sample: fixtures/out_A.json is the raw 2026-08-26 experiment (zh enum values); mapped here to contract v1 */
 const LEGACY={'有定義句':'has_definition','順帶提到':'mentioned','假設你懂':'assumed','賣點':'selling_point','技術描述':'technical','風險或限制':'risk_or_limit','是':'core','邊緣':'edge','不是':'not'};
 $('demo').onclick=async()=>{
   try{const d=await (await fetch('fixtures/out_A.json')).json();
-    submit(d.map(x=>({term_raw:x.term,term_normalized:x.known?x.term:'',sentence:x.sentence,context:x.sentence,explained:LEGACY[x.explained]||x.explained,intent:LEGACY[x.intent]||x.intent,domain:LEGACY[x.domain]||x.domain,definition_quote:x.definition_quote||''})),T('demoFrom'));}
+    const req=new Set(requestedTerms().map(s=>s.toLowerCase()));
+    submit(d.map(x=>({term_raw:x.term,term_normalized:x.known?x.term:'',sentence:x.sentence,context:x.sentence,explained:LEGACY[x.explained]||x.explained,intent:LEGACY[x.intent]||x.intent,domain:LEGACY[x.domain]||x.domain,definition_quote:x.definition_quote||'',requested:req.has(String(x.term).toLowerCase())})),T('demoFrom'),[]);}
   catch(e){log(T('demoFail')(e.message),'no')}
 };
 
@@ -290,18 +309,18 @@ function setup(mc){
   const which=mc===document.modelContext?'document.modelContext':'navigator.modelContext';
   $('env').innerHTML='<span class="ok">'+which+'</span>';
   const tools=[
-    {name:'feedDocument',description:'Returns the document the user pasted on this page, the known AI terms matched in it, a thin lexicon index, and the extraction rules plus finding schema. Read-only. After extracting, report with submitFindings.',
+    {name:'feedDocument',description:'Returns the article URL the user entered (fetch and read it yourself), the terms the user wants pulled out, a thin lexicon index, the extraction rules and the finding schema. If the user pasted text instead of a URL, document holds it. Read-only. After reading, report with submitFindings.',
      inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
      async execute(){
-       const text=$('doc').value.trim();
-       const hits=text?matchKnown(text):[];$('hitn').dataset.ran='1';renderHits(hits);
-       log(T('fed')(text.length,hits.length),'ok');
-       return {contract_version:CONTRACT_VERSION,document:text,known_hits:hits.map(h=>({term:h.term,zh:h.zh,slug:h.slug,matched:h.matched})),
+       const url=$('url').value.trim(), text=$('doc').value.trim(), req=requestedTerms();
+       const hits=text?matchKnown(text):[];if(text){$('hitn').dataset.ran='1';renderHits(hits);}
+       log(T('fed')(url||(text.length+' chars'),req.length),'ok');
+       return {contract_version:CONTRACT_VERSION,url,requested_terms:req,document:text,known_hits:hits.map(h=>({term:h.term,zh:h.zh,slug:h.slug,matched:h.matched})),
          lexicon:LEX.map(e=>({term:e.term,aka:e.aka,zh:e.zh})),rules:RULES,finding_schema:FINDING_SCHEMA};
      }},
-    {name:'submitFindings',description:'Send the AI-term sightings extracted from the document back to the dictionary. Each item follows finding_schema from feedDocument. The server applies the locks and may reject some items; rejected items carry reason codes.',
-     inputSchema:{type:'object',properties:{findings:{type:'array',items:FINDING_SCHEMA}},required:['findings'],additionalProperties:false},
-     async execute(input){ return submit(input&&input.findings,'submitFindings'); }}
+    {name:'submitFindings',description:'Send the AI-term sightings found in the article back to the dictionary. findings: items per finding_schema (requested=true for the user\'s terms, false for ones you added). not_found: requested terms you could not locate in the article. The server applies the locks and may reject some items; rejected items carry reason codes.',
+     inputSchema:{type:'object',properties:{findings:{type:'array',items:FINDING_SCHEMA},not_found:{type:'array',items:{type:'string'}}},required:['findings','not_found'],additionalProperties:false},
+     async execute(input){ return submit(input&&input.findings,'submitFindings',input&&input.not_found); }}
   ];
   try{tools.forEach(t=>{const r=mc.registerTool(t);if(r&&r.then)r.catch(e=>log('registerTool '+t.name+': '+e.message,'no'))});$('tools').textContent=tools.map(t=>t.name).join(' · ');log(T('registered')(tools.length),'ok');}
   catch(e){$('tools').innerHTML='<span class="no">'+T('regFail')+'</span>';log(T('regFail')+': '+e.message,'no');}

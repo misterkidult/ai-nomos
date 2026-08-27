@@ -1,0 +1,144 @@
+# 餵食清單：133 則詞條各一篇文章（2026-08-27）
+
+沒有 seed。字典唯一的寫入路徑是拿一篇文章到 `/read` 讓 agent 找詞送回 —— 既有 133 則也一樣，由 Kidult 每天 30 分鐘在 ChatGPT 桌面版親自餵。這份只是找好的文章連結，餵完一篇勾一篇。
+
+找得到定義句：127 篇｜找不到（果核自造詞，外面沒人定義）：6 則
+
+## 待餵
+
+- ☐ **Adoption**｜https://larridin.com/blog/what-is-ai-adoption｜What is AI Adoption?
+- ☐ **Agent**｜https://www.gvm.com.tw/article/113965｜AI Agent來了，但它是什麼？AI代理定義、應用、挑戰全解讀
+- ☐ **Agent Loop**｜https://www.mindstudio.ai/blog/what-is-an-agentic-loop-autonomous-ai-agents｜What Is an Agentic Loop? The Core Pattern Behind Autonomous AI Agents
+- ☐ **AI Governance**｜https://ai-coding.wiselychen.com/ai-governance-not-it-problem/｜AI 治理是什麼？企業在 AI 時代必須回答的 3 個責任問題
+- ☐ **AI in Design Tools**｜https://hundredtabs.com/blog/figma-ai-vs-canva-ai-vs-adobe-firefly｜Figma AI vs Canva AI vs Adobe Firefly: Which AI Design Tool Should You Use? (2026) | HundredTabs
+- ☐ **AI Music Generation**｜https://rar.design/posts/suno-ai-music-generator-guide｜Suno AI 完整介紹：用文字做一首歌的 AI 音樂生成平台，功能、價格與創作者應用
+- ☐ **AI Video Generation**｜https://www.econtrol.com.tw/blogs/life/sora-ai-%E5%BD%B1%E7%89%87%E7%94%9F%E6%88%90-%E6%95%99%E5%AD%B8｜SORA 懶人包：OpenAI AI 影片生成器，如何用文字秒拍出「好萊塢級」超逼真影像？
+- ☐ **AI Voice Generation**｜https://aiterms.tw/terms/speech-synthesis｜語音合成技術（Speech Synthesis）是什麼？ - AITerms.tw
+- ☐ **AIaaS**｜https://stli.iii.org.tw/article-detail.aspx?no=67&tp=5&d=8269｜人工智慧即服務（AI as a Service, AIaaS）
+- ☐ **Alignment**｜https://aiterms.tw/terms/alignment｜對齊校準（Alignment）是什麼？ - AITerms.tw
+- ☐ **Anomaly Detection**｜https://docs.oracle.com/zh-tw/solutions/learn-anomaly-detection/index.html｜瞭解偵測異常值以預測失敗
+- ☐ **API**｜https://www.dottedsign.com/zh-tw/blog/product/api｜API是什麼？快速搞懂API串接意思＆5大應用環境實例！
+- ☐ **API Key**｜https://www.bnext.com.tw/article/84941/ai-api-key-security-guide｜API Key是什麼？為什麼Vibe Coding也可能噴掉上萬元？該怎麼做才不會外洩？
+- ☐ **Automation Platform**｜https://welly.tw/blog/what-is-zapier｜Zapier是什麼？怎麼設定？5步驟學會超實用自動化工具！
+- ☐ **Benchmark**｜https://aiterms.tw/terms/benchmark/｜基準測試（Benchmark）是什麼？AI 術語完整說明 - AITerms.tw
+- ☐ **Black Box**｜https://www.yucc.org.tw/info/6733｜不只是黑盒子：AI 代表的混沌
+- ☐ **Blind Spot**｜https://www.managertoday.com.tw/english/vocabulary/view/649｜盲點|blind spot|經理人
+- ☐ **Build vs Buy**｜https://howmarketingtechnology.works/define/build-vs-buy/｜What is Build vs Buy?
+- ☐ **Chain of Thought**｜https://realnewbie.com/posts/complete-beginner-tutorial-what-is-chain-of-thought-%E8%A9%A2%E5%95%8F-chatgpt｜初學者完整教學：什麼是 Chain-of-Thought 思維鏈？
+- ☐ **ChatGPT**｜https://reading.udn.com/read/story/122749/8016247｜你認識AI和ChatGPT的差異嗎？人工智慧造成哪些改變又有何限制？
+- ☐ **Citation**｜https://www.yext.com/knowledge-center/ai-citations｜What Are AI Citations?
+- ☐ **Citizen Developer**｜https://www.pmi.org.tw/%E3%80%90pmi-insight-%E7%BF%BB%E8%AD%AF%E7%B2%BE%E9%81%B8%E3%80%91%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%EF%BC%9A%E5%B8%82%E6%B0%91%E9%96%8B%E7%99%BC%E8%80%85/｜【PMI Insight 翻譯精選】需要了解：市民開發者
+- ☐ **Claude**｜https://frankchiu.io/ai-claude-intro/｜Claude 是什麼？Claude 怎麼用？Claude 中文使用技巧懶人包
+- ☐ **Claude Code**｜https://frankchiu.io/ai-claude-code/｜Claude Code 是什麼？中文教學：安裝、用法與避坑
+- ☐ **CLAUDE.md**｜https://www.builder.io/blog/claude-md-guide｜How to Write a Good CLAUDE.md File
+- ☐ **Clustering**｜https://hackmd.io/@joanne8826/H1wm1antu｜分群 Clustering - HackMD
+- ☐ **Context**｜https://hackmd.io/@TommyHuang/SkiIsT_qbe｜第二篇：模型的記憶與視野 — Context 與 Context Window
+- ☐ **Context Engineering**｜https://ihower.tw/blog/12817-context-engineering｜什麼是 Context Engineering 上下文工程?
+- ☐ **Context Window**｜https://hackmd.io/@TommyHuang/SkiIsT_qbe｜第二篇：模型的記憶與視野 — Context 與 Context Window
+- ☐ **Copilot**｜https://www.microsoft.com/zh-tw/microsoft-copilot/copilot-101/what-is-copilot｜Copilot 是什麼以及它如何運作？ | Microsoft Copilot
+- ☐ **Copyright**｜https://puripr.pu.edu.tw/p/16-1132-60703.php?Lang=zh-tw｜2025-04-01 AI所生成的作品是否受著作權法所保護
+- ☐ **Cursor**｜https://adbest.com.tw/blog/what-is-cursor/｜Cursor是什麼？4步驟安裝＋基本3設定，入門到實戰指南！
+- ☐ **Data Cleaning**｜https://tw.alphacamp.co/blog/data-cleaning｜Data Cleaning：資料清洗的方法與重要性
+- ☐ **Data Drift**｜https://www.tredence.com/blog/what-is-data-drift｜What is Data Drift? - (Types, vs ml model drift)
+- ☐ **Data Labeling**｜https://www.equityx.ai/ai-article-2023714-data-labeling/｜【AI 教室】甚麼是數據標記 (Data Labeling)?
+- ☐ **Data Retention**｜https://www.onetrust.com/glossary/data-retention-policy/｜What is a data retention policy? | OneTrust Glossary
+- ☐ **Decision Tree**｜https://blog.tibame.com/?p=17923｜【AI60問】Q23什麼是決策樹演算法？
+- ☐ **Deep Learning**｜https://case.ntu.edu.tw/blog/?p=26340｜機器學習與人工神經網路(二)：深度學習(Deep Learning)
+- ☐ **Deepfake**｜https://blog.trendmicro.com.tw/?p=63452｜讓阿湯哥真假難辨的 Deepfake 技術,是什麼?如何捍衛隱私?
+- ☐ **Definition of Done**｜https://www.atlassian.com/agile/project-management/definition-of-done｜What is the Definition of Done (DoD) in Agile? | Atlassian
+- ☐ **Design Token**｜https://www.webguide.nat.gov.tw/article/384/show｜跨越設計與程式的鴻溝–Design Tokens(一)
+- ☐ **Differential Privacy**｜https://blog.cloudflare.com/zh-tw/have-your-data-and-hide-it-too-an-introduction-to-differential-privacy/｜擁有資料的同時隱藏資料：差分隱私介紹
+- ☐ **Diffusion**｜https://www.jyes.com.tw/news.php?act=view&id=15240｜【AI專知】擴散模型（Diffusion Model）是什麼？AI 生圖的原理、應用一次看
+- ☐ **Discriminative AI**｜https://www.ctee.com.tw/news/20231028700002-431001｜判別式 AI 和生成式 AI 存在哪些差異？
+- ☐ **Embedding**｜https://signals.tw/articles/what-is-embedding/｜embedding 是什麼？把文字變成向量、讓電腦判斷相似度的技術
+- ☐ **Expert System**｜https://ai.iias.sinica.edu.tw/glossary/expert-system/｜Expert System - 臺灣人工智慧行動網 Taiwan AI Wise Agent Network
+- ☐ **Explainable AI**｜https://www.bnc-technology.com/article-11.html｜為什麼可解釋人工智慧（Explainable AI， XAI）是人工智慧的未來
+- ☐ **Few-shot**｜https://learnprompting.org/zh-tw/docs/basics/few_shot｜多範例提示
+- ☐ **Fine-tuning**｜https://www.explainthis.io/zh-hant/ai/fine-tuning-gpt｜什麼是微調 (fine-tuning)? 如何微調 GPT-3.5 模型?
+- ☐ **GAN**｜https://iaic.nccu.edu.tw/column-articles/30｜生成對抗網路原理
+- ☐ **Gemini**｜https://gemini.google/overview/｜Gemini 是什麼？如何運作？
+- ☐ **Generative AI**｜https://www.microsoft.com/zh-tw/ai/ai-101/generative-ai-vs-other-types-of-ai｜生成式 AI 與其他類型的 AI | Microsoft AI
+- ☐ **Graph Engineering**｜https://www.analyticsvidhya.com/blog/2026/07/graph-engineering/｜Graph Engineering for AI Agents: Beyond the Single-Agent Loop
+- ☐ **Grill me**｜https://azukiazusa.dev/en/blog/before-implementation-interview-design-requirements-grill-me/｜The `/grill-me` Skill for Thoroughly Interviewing a Design and Clarifying Requirements Before Implementation
+- ☐ **Grounding**｜https://frankchiu.io/ai-grounding-intro/｜Grounding 介紹：被 Google AI 引用的祕密，就在 Grounding 中
+- ☐ **Guardrail**｜https://www.sharecrm.com/zh/glossary/ai-guardrails｜AI Guardrails（AI 防護機制）定義 | ShareCRM 術語表
+- ☐ **Hallucination**｜https://frankknow.com/ai-hallucination/｜別被 AI 騙了！1 次看懂「 AI 幻覺 」是什麼？搞懂原因、風險與解法
+- ☐ **Harness**｜https://www.databricks.com/blog/ai-harness｜What is an AI Agent Harness?
+- ☐ **Harness Engineering**｜https://www.louisbouchard.ai/harness-engineering/｜Harness Engineering: The Missing Layer Behind AI Agents
+- ☐ **Human in the Loop**｜https://aiterms.tw/terms/human-in-the-loop｜人機迴路（Human-in-the-Loop）是什麼？ - AITerms.tw
+- ☐ **Inference**｜https://aiterms.tw/terms/inference｜推論（Inference）是什麼？ - AITerms.tw
+- ☐ **Iteration**｜https://yylab.dev/how-to-do-iteration/｜迭代開發的核心：如何規劃、展示與回顧
+- ☐ **Jailbreak**｜https://learnprompting.org/zh-tw/docs/prompt_hacking/jailbreaking｜越獄 | Learn Prompting
+- ☐ **Knowledge Cutoff**｜https://llmpulse.ai/blog/glossary/knowledge-cutoff-in-ai/｜Knowledge Cutoff in AI: what it is and how models handle it
+- ☐ **License Terms**｜https://www.fineart-tech.com/index.php/ch/news/612-fineartsecurity-licensemgmt｜軟體授權傻傻分不清楚? 盤點授權好困擾
+- ☐ **LLM**｜https://solwen.ai/posts/what-is-large-language-model｜LLM 是什麼？LLM 快速入門：大型語言模型的定義與應用指南
+- ☐ **Local Inference**｜https://www.infoai.com.tw/blog/what-is-on-device-ai｜洞察觀點｜什麼是裝置端AI？蘋果為什麼選擇裝置端AI？
+- ☐ **Loop Engineering**｜https://www.mindstudio.ai/blog/what-is-loop-engineering-ai-coding-agents｜What Is Loop Engineering? The New Meta for AI Coding Agents
+- ☐ **Machine Learning**｜https://www.cake.me/resources/machine-learning-job｜什麼是機器學習？解析機器學習 4 大模型、常見產業應用和職缺 | Cake
+- ☐ **Maintainability**｜https://devindeving.blogspot.com/2019/12/code-maintainability.html｜淺談程式碼的可維護性 | 軟工現場觀察
+- ☐ **MCP**｜https://zh.wikipedia.org/zh-tw/%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%94%E8%AD%B0｜模型上下文協定 - 維基百科，自由的百科全書
+- ☐ **Memory**｜https://www.bnext.com.tw/article/91400/chatgpt-memory-tutorial｜ChatGPT記憶功能怎麼用？3步驟設定教學、免費付費差異、隱私管理一次看｜數位時代 BusinessNext
+- ☐ **Midjourney**｜https://steam.oxxostudio.tw/category/aigc/mj/about-midjourney.html｜認識 Midjourney - Midjourney 教學 ( AI 繪圖教學 ) | STEAM 教育學習網
+- ☐ **Model**｜https://research.sinica.edu.tw/llm-transformer-misinformation-mitigation-lun-wei-ku/｜大型語言模型 LLM 究竟是什麼？如何用 LLM 對付假新聞？ - 研之有物
+- ☐ **Model Collapse**｜https://www.bnext.com.tw/article/79978/ai-model-collapse｜白話科技｜模型崩潰Model collapse是什麼？為什麼AI「近親繁殖」對模型訓練有毒？｜數位時代
+- ☐ **Multimodal**｜https://egenthub.com/egenthub-perspect/2026-03-06-what-is-multimodal-ai｜多模態 AI（Multimodal AI）完整解析：從單一文字到多重感官的智能進化｜EgentHub
+- ☐ **No-code / Low-code**｜https://www.anywhere.today/low-code-no-code-platform/｜不寫程式也可以開發軟體！一文搞懂 Low-Code／No-Code 開發是什麼？ - Anywhere
+- ☐ **NotebookLM**｜https://www.microfusion.cloud/news/what-is-notebooklm-01/｜什麼是 NotebookLM？你的 AI 筆記好幫手(上) - Microfusion 宏庭科技
+- ☐ **OCR**｜https://pdf-reader.kdandoc.com/zh-tw/blog/product/pdf-ocr｜OCR光學字元辨識技術是什麼？5大優勢、6大應用實例一次看！
+- ☐ **On-premise**｜https://ai.com.tw/cloud-ai-on-premises-ai/｜雲端 AI 與地端 AI 差別解析 2025｜AI.com.tw 台灣AI第一站
+- ☐ **Open Source Model**｜https://hoonting.blogspot.com/2025/01/blog-post_31.html｜雲程的雙魚鏡 HoonTing's View: 約略理解：開源模型、專有模型
+- ☐ **Outlier**｜https://ithelp.ithome.com.tw/articles/10236317｜Day14 - Feature Engineering -- 5. 異常值 (Outlier)(1) - iT 邦幫忙
+- ☐ **Output Style**｜https://moksaweb.com/claude-code-output-styles/｜Claude Code Output Styles 完整教學：3 種內建風格 + 客製化 5 步驟
+- ☐ **Overfitting**｜https://www.bnext.com.tw/article/84686/ai-model-overfitting｜白話科技｜過擬合overfitting是什麼？解密AI犯錯原理，過擬合怎麼解決？｜數位時代
+- ☐ **Parameters**｜https://kidsmedia.com.tw/2026/07/09/what-do-7b-and-70b-mean-how-ai-models-use-parameters-and-mixture-of-experts/｜AI模型的7B、70B是什麼意思？現在開源模型跟ChatGPT、Claude、Gemini差距多少？ – KidsMedia
+- ☐ **Perplexity**｜https://frankchiu.io/ai-perplexity-intro/｜Perplexity AI 怎麼用？中文教學：功能、價格與使用技巧 | 白話文商學院
+- ☐ **Persona**｜https://ithelp.ithome.com.tw/articles/10380133｜Prompt 的三大要素：角色、任務、格式 - iT 邦幫忙
+- ☐ **Plan mode**｜https://essevin.com/blog/claude-code-plan-mode-hant｜Claude Code 的 Plan Mode：先審計劃再動手，少走冤枉路 · Essevin
+- ☐ **POC**｜https://www.startupterrace.com/post/startup-basics-%E5%90%8D%E8%A9%9E%E8%A7%A3%E9%87%8B%EF%BC%9A%E6%A6%82%E5%BF%B5%E9%A9%97%E8%AD%89-poc-proof-of-concept｜概念驗證 (POC, Proof of Concept) ：運用時機、執行方式為何？
+- ☐ **Prompt**｜https://frankchiu.io/ai-prompt-intro/｜Prompt 是什麼？AI 提示詞入門：寫法、範例與錯誤
+- ☐ **Prompt Engineering**｜https://tw.alphacamp.co/blog/prompt-engineering｜Prompt Engineering 提示工程是什麼？新手必學指南 - ALPHA Camp
+- ☐ **Prompt Injection**｜https://www.ahha.tw/blog/what-is-prompt-injection-ai-security｜什麼是提示詞（Prompt Injection）注入？當你請 AI 幫你查資料，網頁可能正在操縱它
+- ☐ **Prompt Template**｜https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/prompts/prompt-templates?hl=zh-tw｜使用提示範本 | Gemini Enterprise Agent Platform | Google Cloud Documentation
+- ☐ **Quantization**｜https://vocus.cc/article/6803b975fd8978000153e4ad｜什麼是模型量化（Quantization）？解析FP32、FP16、BF16、int8、int4與GGUF的關聯
+- ☐ **RAG**｜https://www.webcomm.com.tw/blog/tw/rag/｜什麼是RAG檢索增強生成 - 偉康科技洞察室
+- ☐ **Reasoning Model**｜https://signals.tw/articles/what-is-reasoning-model/｜reasoning model 是什麼？推理模型讓 AI 先想再答｜矽基前沿 [Si]gnals
+- ☐ **Reinforcement Learning**｜https://iaic.nccu.edu.tw/column-articles/17｜何謂強化學習（Reinforcement Leaning） - 國立政治大學人工智慧跨域研究中心
+- ☐ **Risk Matrix**｜https://vocus.cc/article/68aa27fcfd897800015e40b9｜風險矩陣（Risk Matrix）
+- ☐ **RLHF**｜https://aiterms.tw/terms/rlhf/｜人類回饋強化學習（RLHF）是什麼？ - AITerms.tw
+- ☐ **ROI**｜https://welly.tw/blog/roi-return-on-investment｜ROI 是什麼？投資報酬率怎麼算？ROI 意思、公式、算法一次看 - Welly
+- ☐ **SaaS**｜https://azure.microsoft.com/zh-tw/resources/cloud-computing-dictionary/what-is-saas｜什麼是軟體即服務 (SaaS)？ | Microsoft Azure
+- ☐ **Scheduled Automation**｜https://kucw.io/blog/cron/｜Cron 是什麼？定時任務的語法怎麼寫？
+- ☐ **Semantic Search**｜https://sec-site.com/wiki-semantic-search/｜語意搜尋（Semantic Search）是什麼？｜SEO・GEO 百科
+- ☐ **Skill**｜https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview｜Agent Skills - Claude Platform Docs
+- ☐ **SLA**｜https://www.astralweb.com.tw/service-level-agreement/｜服務水準協議 (SLA) - Astral Web 歐斯瑞有限公司
+- ☐ **Spec-driven Development**｜https://aict.nkust.edu.tw/digitrans/?p=10064｜規格驅動開發 (Spec-Driven Development) 與 AI 協作全流程實戰 – 資料治理與數位轉型產學聯盟
+- ☐ **Speech-to-Text**｜https://www.largitdata.com/blog/asr-speech-to-text-applications/｜ASR 是什麼？語音辨識原理與實際應用完整解析（2026 更新） | LargitData Blog
+- ☐ **Structured Data**｜https://vocus.cc/article/5f7e816afd897800016c0a68｜認識「結構化/半結構化/非結構化」資料
+- ☐ **SubAgent**｜https://code.claude.com/docs/en/sub-agents｜Create custom subagents - Claude Code Docs
+- ☐ **Subscription**｜https://www.metamatch.market/news/detail/METAMatch_SaaS｜淺談 訂閱制 V.S 買斷制，一次搞懂 SaaS 訂閱制與買斷差異
+- ☐ **Supervised Learning**｜https://aiterms.tw/terms/supervised-learning｜監督式學習（Supervised Learning）是什麼？ - AITerms.tw
+- ☐ **Synthetic Data**｜https://blogs.nvidia.com.tw/blog/what-is-synthetic-data/｜何謂合成資料?
+- ☐ **System Prompt**｜https://signals.tw/articles/what-is-system-prompt/｜什麼是 system prompt（系統提示）？AI 產品的底層規則
+- ☐ **TCO**｜https://www.everpuredata.com/tw/knowledge/what-is-total-cost-of-ownership.html｜什麼是總體擁有成本 | Everpure
+- ☐ **Technical Debt**｜https://newsleopard.com/blog/what-is-technical-debt/｜程式設計師的無形債務：技術債 | 電子豹部落格
+- ☐ **Temperature**｜https://blog.miniasp.com/post/2024/05/21/LLM-Temperature-Top-P-Nucleus-Sampling-Top-K｜淺談 LLM 大型語言模型的 Temperature、Top-P 和 Top-K 參數 | The Will Will Web
+- ☐ **Text-to-Speech**｜https://www.ecapsule.com.tw/AI-Application-Services/AI-TTS｜AI-TTS - 文字轉語音系統
+- ☐ **Token**｜https://frankknow.com/ai-token/｜AI Token 是什麼？一次搞懂 Token 計算、收費邏輯與省錢技巧！
+- ☐ **Training**｜https://www.recruit.com.hk/Resources/ArticleDetail.aspx?articleId=45355｜大型語言模型是如何調教？深入了解LLM訓練三部曲
+- ☐ **Transformer**｜https://blogs.nvidia.com.tw/blog/what-is-a-transformer-model/｜何謂 Transformer 模型？
+- ☐ **Unsupervised Learning**｜https://aiterms.tw/terms/unsupervised-learning｜非監督式學習（Unsupervised Learning）是什麼？ - AITerms.tw
+- ☐ **Usage-based Pricing**｜https://www.aitoken.com.tw/post/monthly-vs-usage-based-ai-token-pricing｜AI Token 月費制和用量制差在哪？哪種比較適合你
+- ☐ **Vector Database**｜https://www.omniwaresoft.com.tw/product-news/vector-database-usecase/what-is-vector-database/｜什麼是向量資料庫？向量資料庫運作、應用、趨勢懶人包！
+- ☐ **Vendor Lock-in**｜https://www.mendix.com/blog/vendor-lock-in-6-tips-to-avoid-getting-trapped/｜What is Vendor Lock-In? 6 Tips to Avoid Getting Trapped | Mendix
+- ☐ **Vibe coding**｜https://www.bnext.com.tw/article/82704/how-to-vibe-coding-2025｜影片｜Vibe Coding是什麼？3款好用AI工具＋6步驟教學，程式小白上手必懂！
+- ☐ **Watermarking**｜https://aiterms.tw/terms/ai-watermarking/｜AI浮水印（AI Watermarking）是什麼？ - AITerms.tw
+- ☐ **個資法**｜https://vocus.cc/article/6837bae1fd89780001439dd4｜「資料」不是誰都能碰！搞懂《個資法》第一章，保護自己也保護客戶
+
+## 找不到文章（餵不了，等外面有人寫）
+
+- Division of Labor
+- Domain Skill
+- Independent Review
+- Liability
+- Source of Truth
+- 多版本挑選

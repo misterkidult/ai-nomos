@@ -1,0 +1,42 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e2]:
+    - generic [ref=f3e3]:
+      - heading "ai-nomos · 讀一篇文件" [level=1] [ref=f3e4]
+      - paragraph [ref=f3e5]:
+        - text: 丟一篇文章的連結進來，寫下你想撈出來的詞。瀏覽器裡的 agent 會自己去讀那篇（
+        - strong [ref=f3e6]: 文章不經過我們的伺服器
+        - text: ）：找你指定的詞、判斷它是不是 AI 詞、再補上它看到而你沒列的，一起送回字典當目擊紀錄。
+    - button "EN" [ref=f3e7] [cursor=pointer]
+  - generic [ref=f3e9]:
+    - generic [ref=f3e10]:
+      - text: 字典：
+      - generic [ref=f3e11]: 133 則（2026-08-27）
+    - generic [ref=f3e12]: agent：偵測中…
+    - generic [ref=f3e13]: 工具：—
+  - generic [ref=f3e14]:
+    - heading "1 · 文章" [level=2] [ref=f3e15]
+    - textbox "文章連結 https://…" [ref=f3e16]
+    - textbox "想撈出來的詞，一行一個（可留空，讓 agent 自己找）" [ref=f3e17]
+    - group [ref=f3e18]:
+      - generic "沒有 agent？貼全文，頁面自己比對已知詞" [ref=f3e19]
+  - generic [ref=f3e20]:
+    - heading "2 · 已知詞命中" [level=2] [ref=f3e21]
+    - generic [ref=f3e22]: 尚未比對
+  - generic [ref=f3e24]:
+    - heading "3 · 目擊紀錄 （mock：只在畫面上，尚未寫入伺服器）" [level=2] [ref=f3e25]
+    - paragraph [ref=f3e26]:
+      - generic [ref=f3e27]:
+        - text: 填好連結與詞之後對 agent 說：「呼叫
+        - code [ref=f3e28]: feedDocument
+        - text: ，去讀那篇，照規則找詞，再用
+        - code [ref=f3e29]: submitFindings
+        - text: 送回」。沒有 agent 也可以
+      - button "載入範例目擊（廠商文，14 筆）" [ref=f3e30] [cursor=pointer]
+    - paragraph [ref=f3e32]: 尚無目擊
+  - generic [ref=f3e33]:
+    - heading "4 · 字典裡的目擊 （mock：只有本頁收到的；接上伺服器後會加進歷來所有目擊）" [level=2] [ref=f3e34]
+    - paragraph [ref=f3e35]: 收到目擊後，這裡列出每個詞的生命史與所有定義句；兩句講法不同就標「用法矛盾」。
+    - paragraph [ref=f3e37]: 收到目擊後才會出現
+  - generic [ref=f3e38]:
+    - strong [ref=f3e39]: 紀錄
+    - generic [ref=f3e40]: 下午2:56:29 字典載入 133 則、587 個比對鍵

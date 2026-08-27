@@ -1,8 +1,8 @@
 # ai-nomos data contract · v1 (2026-08-27)
 
-Single source of truth for everything that crosses a boundary: page ↔ agent (WebMCP tools), page ↔ server (`api/*`), seed batch → server. **Change it here, not in chat.** The contract is English only; the agent never translates. UI copy is a separate concern (`public/read.html` carries zh-Hant and en string tables).
+Single source of truth for everything that crosses a boundary: page ↔ agent (WebMCP tools), page ↔ server (`api/*`). **Change it here, not in chat.** The contract is English only; the agent never translates. UI copy is a separate concern (`public/read.html` carries zh-Hant and en string tables).
 
-Owners: page (`public/`) = Claude · `api/*` + storage = Matt · seed noise review = Addy · verdicts = Kidult.
+Owners: page (`public/`) = Claude · `api/*` + storage = Matt · noise review = Addy · verdicts = Kidult.
 
 ---
 
@@ -20,6 +20,7 @@ One finding = one term as it was used in one document.
 | `intent` | enum | ✔ | `selling_point` · `technical` · `risk_or_limit` |
 | `domain` | enum | ✔ | `core` · `edge` · `not` |
 | `definition_quote` | string | ✔ (may be `""`) | verbatim from the document, only when the document itself defines the term; must be a substring of `context` |
+| `requested` | boolean | ✔ | `true` when the user listed this term in `requested_terms`; `false` when the agent added it on its own |
 
 Enum meanings:
 
@@ -31,7 +32,7 @@ JSON Schema (also returned by `feedDocument` as `finding_schema`):
 
 ```json
 {"type":"object","additionalProperties":false,
- "required":["term_raw","term_normalized","sentence","context","explained","intent","domain","definition_quote"],
+ "required":["term_raw","term_normalized","sentence","context","explained","intent","domain","definition_quote","requested"],
  "properties":{
   "term_raw":{"type":"string"},
   "term_normalized":{"type":"string"},
@@ -40,10 +41,11 @@ JSON Schema (also returned by `feedDocument` as `finding_schema`):
   "explained":{"type":"string","enum":["has_definition","mentioned","assumed"]},
   "intent":{"type":"string","enum":["selling_point","technical","risk_or_limit"]},
   "domain":{"type":"string","enum":["core","edge","not"]},
-  "definition_quote":{"type":"string"}}}
+  "definition_quote":{"type":"string"},
+  "requested":{"type":"boolean"}}}
 ```
 
-Optional in a Finding (agent may fill it when it can read the page URL of the document; never required): `source` — see §4. The page passes it through unchanged.
+`source` in a Finding (see §4). Required when the article came from a URL; absent only for a pasted document.
 
 ```json
 {"source":{"url":"https://…","title":"","published":""}}
@@ -52,7 +54,7 @@ Optional in a Finding (agent may fill it when it can read the page URL of the do
 ## 2. Extraction rules (returned by `feedDocument` as `rules`, English, verbatim)
 
 ```
-You are helping the user read this document. Find the AI terms in it and report them with submitFindings, following these rules.
+You are helping the user read one article. feedDocument gives you its url (fetch and read it yourself; the page never uploads it) and the terms the user wants pulled out (requested_terms). Do not take the user's list at face value: find each requested term in the article and judge it; add AI terms you notice that the user did not list; report everything with submitFindings, following these rules.
 1. Copy, don't explain. term_raw = exactly as written. sentence = the one sentence it appears in (max 120 chars). context = that sentence plus one sentence before and after.
    definition_quote only when the document itself explains the term, and it must be a verbatim substring of context. If the document does not explain it, leave it "" — never fill from your own knowledge.
 2. For each term answer three single-choice fields: explained (has_definition / mentioned / assumed), intent (selling_point / technical / risk_or_limit), domain (core / edge / not).
@@ -60,6 +62,8 @@ You are helping the user read this document. Find the AI terms in it and report 
 4. The known-term list is in lexicon. Report known terms too (so the dictionary sees them again) and set term_normalized to the lexicon term; otherwise term_normalized = "".
 5. De-identify sentence and context: replace company names, person names, amounts, phone numbers and emails with [company], [person], [amount], [phone], [email].
 6. If a term appears several times, report it once — the occurrence that has a definition.
+7. requested = true for terms from requested_terms, false for terms you added. A requested term that is not an AI term still gets a finding, with domain = not — that is your verdict, the page shows it to the user. A requested term you cannot find in the article goes to not_found, not to findings.
+8. source: fill url from feedDocument, plus title and published (YYYY-MM-DD) if the article shows them.
 Stoplist: <STOPLIST joined by ", ">
 ```
 
@@ -79,9 +83,10 @@ Applied per finding. Any hit → the finding is rejected with the code(s). Codes
 | `QUOTE_NOT_IN_CONTEXT` | `definition_quote` non-empty and not a substring of `context` (fallback: `sentence`) |
 | `EDGE_WITHOUT_QUOTE` | `domain = edge` and `definition_quote = ""` — dropped as noise (plan v2 §2) |
 | `STOPLISTED` | `term_raw` (trimmed) is in the stoplist |
+| `NOT_AI_TERM` | `domain = not` and `requested = false` |
 | `PII_DETECTED` | **server only**: regex hit for email / phone / 統編 / amount / URL in `sentence`, `context` or `definition_quote` |
 
-Open (Matt decides 8/29, write the answer here): should `domain = not` be stored or rejected? The page mock currently stores it.
+`domain = not` **is stored** when `requested = true` (it is the agent's verdict on the user's term, and the user should see it); rejected with `NOT_AI_TERM` when `requested = false` (the agent has no reason to volunteer a non-AI term). Decided 2026-08-27.
 
 ## 4. Sighting record (server storage, Matt)
 
@@ -93,9 +98,9 @@ What the server keeps after a finding passes the locks. Public read surfaces onl
 | ★ `term_key` | lexicon `slug` when `term_normalized` is known; otherwise lowercased, trimmed `term_raw` |
 | ★ `term_raw`, ★ `term_normalized`, ★ `explained`, ★ `intent`, ★ `domain`, ★ `definition_quote` | from the finding |
 | `sentence`, `context` | **never public** (plan v2 §2) |
-| ★ `origin` | `agent` (via `submitFindings`) · `seed` (`fixtures/seed-133.json`) · `editorial` (the 133 hand-written entries; not in the signal system) |
+| ★ `origin` | `agent` (via `submitFindings` — the only write path, including the existing 133 entries, which Kidult feeds through `/read` himself) · `editorial` (the 133 hand-written definitions; not in the signal system) |
 | `source.hash` | salted hash of the document text, computed client-side; dedup key and the "N documents" counter |
-| ★ `source.url`, ★ `source.title`, ★ `source.published` | **always public when present.** A sighting without a source is just a quote; the link is what lets a reader check it. Present for `seed` (public article). For `agent` origin the document is pasted, not uploaded, so `source.url` is `""` unless the agent can read the page URL — open for Matt: accept an optional `source.url` from `submitFindings`? |
+| ★ `source.url`, ★ `source.title`, ★ `source.published` | **always public when present.** A sighting without a source is just a quote; the link is what lets a reader check it. The agent reads the article at `url` and copies it into `source.url`; only a pasted document (fallback mode) has no URL. |
 | ★ `submitted_at` | server time, ISO 8601 |
 | `submitter` | anonymous browser id (client-held; a limit, not a security feature) |
 | `contract_version` | integer, see §7 |
@@ -106,29 +111,36 @@ Derived, never stored: `first_seen` = min `submitted_at`; `doc_count` = distinct
 
 ### `feedDocument` (read-only, no input)
 
+The page gives the agent an article by **URL** and the user's list of terms to pull out. The agent fetches the article itself; the page never uploads it. `document` is filled only in fallback mode (user pasted text instead of a URL).
+
 ```json
 {"contract_version":1,
- "document":"<full text as pasted>",
+ "url":"https://…",
+ "requested_terms":["MCP","Multi-Agent"],
+ "document":"",
  "known_hits":[{"term":"","zh":"","slug":"","matched":""}],
  "lexicon":[{"term":"","aka":[""],"zh":""}],
  "rules":"<§2>",
  "finding_schema":{"…§1"}}
 ```
 
-### `submitFindings` (input `{findings: Finding[]}`)
+### `submitFindings` (input `{findings: Finding[], not_found: string[]}`)
+
+`not_found`: requested terms the agent could not locate in the article (verbatim as the user wrote them). Empty array when all were found.
 
 ```json
 {"contract_version":1,
  "accepted":3,
+ "not_found":["Multi-Agent"],
  "rejected":[{"index":1,"term_raw":"","reasons":["EDGE_WITHOUT_QUOTE"]}],
  "status":"mock"}
 ```
 
 `status`: `mock` (page only, nothing written) · `stored` · `pending_review` (server batch check not yet run).
 
-## 6. Seed batch (`fixtures/seed-133.json`)
+## 6. No seeding
 
-For each of the 133 lexicon terms: one public article containing a sentence that defines the term. Same Finding shape, plus `origin: "seed"` and `source: {url, title, published}`. Constraints: publicly reachable article; prefer zh-Hant, en acceptable; `definition_quote` verbatim from the article; `term_normalized` = the lexicon term; `term_raw` = how that article writes it. Findings that fail the locks, and terms with no findable definition sentence, go to `fixtures/seed-133-review.md` for Kidult to tick. No finding may be hand-edited to pass a lock.
+There is no seed origin. The existing 133 entries enter the signal system the same way as anything else: Kidult pastes an article into `/read` and the agent submits findings. `fixtures/feed-list-133.md` is his queue of articles, not data. Fixtures under `fixtures/` are lock regression inputs only and are never loaded into storage.
 
 ## 7. Versioning
 
