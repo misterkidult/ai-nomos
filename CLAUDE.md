@@ -1,6 +1,6 @@
 # ai-nomos
 
-WebMCP 參賽作品。計畫與審查在 `context/`，產品原則見 README。
+WebMCP 參賽作品。計畫與審查在 `context/`，產品原則見 README。**資料契約 `context/contract.md`（英文，v1）是頁面、`api/*`、seed 三方的唯一依據；改契約走 commit 訊息 `contract:` 開頭，不在聊天裡改。**
 
 ## 部署
 
@@ -11,7 +11,8 @@ WebMCP 參賽作品。計畫與審查在 `context/`，產品原則見 README。
 
 ## 規則
 
-- 繁體中文、全形標點
+- 繁體中文、全形標點；**agent 契約（規則、enum、拒絕碼）只用英文**，UI 字串 zh／en 兩套在 `read.html` 的 `I18N`
+- 三條鎖的參考實作是 `scripts/check-findings.py`，`api/*` 的判定必須與它對 `fixtures/*.json` 完全一致
 - 目擊紀錄不回寫 `ai-dictionary` 的 `terms/`
 - `public/lexicon.json` 是 vendor 進來的產出，勿手改：字典 repo 是 private 且無線上站，瀏覽器抓不到，部署前跑 `scripts/sync-lexicon.sh`（＝字典 `build.py --index` ＋複製）
 - `public/fixtures/` 是給 `/read` 退化模式「載入範例目擊」用的；來源是根目錄 `fixtures/`

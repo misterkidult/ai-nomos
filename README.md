@@ -12,10 +12,10 @@
 
 ```
 public/      靜態頁（read.html、探針 probe.html、vendor 的 lexicon.json）
-scripts/     sync-lexicon.sh：從字典 repo 產薄索引複製進 public/
+scripts/     sync-lexicon.sh：從字典 repo 產薄索引複製進 public/；check-findings.py：三條鎖參考實作
 api/         Vercel Functions（目擊寫入、lexicon 代理）
 fixtures/    抓詞實驗的 48 筆與規則草稿，兼回歸測試
-context/     計畫 v2、產品簡報、Matt／Addy 審查
+context/     contract.md（資料契約 v1，英文）、計畫 v2、產品簡報、Matt／Addy 審查
 ```
 
 ## 原則

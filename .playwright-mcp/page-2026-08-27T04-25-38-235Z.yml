@@ -1,0 +1,38 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - heading "ai-nomos · 讀一篇文件" [level=1] [ref=e4]
+      - paragraph [ref=e5]:
+        - text: 把文件貼進來（
+        - strong [ref=e6]: 不上傳
+        - text: ，全文留在你的瀏覽器）。頁面先比對已知詞；若瀏覽器裡有 agent，它會找出文中的 AI 名詞與它們被怎麼用，送回字典當目擊紀錄。
+    - button "EN" [ref=e7] [cursor=pointer]
+  - generic [ref=e9]:
+    - generic [ref=e10]:
+      - text: 字典：
+      - generic [ref=e11]: 133 則（2026-08-27）
+    - generic [ref=e12]: agent：偵測中…
+    - generic [ref=e13]: 工具：—
+  - generic [ref=e14]:
+    - heading "1 · 文件" [level=2] [ref=e15]
+    - textbox "貼一篇提案、報價、新聞、白皮書…" [ref=e16]
+    - generic [ref=e17]:
+      - button "本地比對已知詞" [ref=e18] [cursor=pointer]
+      - button "清空" [ref=e19] [cursor=pointer]
+  - generic [ref=e20]:
+    - heading "2 · 已知詞命中" [level=2] [ref=e21]
+    - generic [ref=e22]: 尚未比對
+  - generic [ref=e24]:
+    - heading "3 · 目擊紀錄 （mock：只在畫面上，尚未寫入伺服器）" [level=2] [ref=e25]
+    - paragraph [ref=e26]:
+      - generic [ref=e27]:
+        - text: 有 agent 時對它說：「呼叫
+        - code [ref=e28]: feedDocument
+        - text: ，照規則找出文中的 AI 名詞，再用
+        - code [ref=e29]: submitFindings
+        - text: 送回」。沒有 agent 也可以
+      - button "載入範例目擊（廠商文，14 筆）" [ref=e30] [cursor=pointer]
+    - paragraph [ref=e32]: 尚無目擊
+  - generic [ref=e33]:
+    - strong [ref=e34]: 紀錄
+    - generic [ref=e35]: 下午12:25:38 字典載入 133 則、587 個比對鍵
