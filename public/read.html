@@ -26,6 +26,14 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
 .f q::before,.f q::after{content:""}
 #log div{padding:4px 0;border-top:1px solid #ddd;font-size:13px}
 .stat{display:flex;gap:24px;flex-wrap:wrap;font-size:14px}
+.life{border-top:1px solid #ddd;padding:12px 0}.life:first-child{border-top:0}
+.life .hd{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.life .hd b{font-size:16px}.life .meta{font-size:13px;color:#555}
+.life .conflict{background:#000;color:#C5FF4A;padding:0 8px;font-size:12px;font-weight:700}
+.life q{display:block;margin:6px 0 0;padding-left:10px;border-left:3px solid #000;font-size:14px}
+.life q::before,.life q::after{content:""}
+.life q a{font-size:12px;color:#555;margin-left:6px}
+.f a.src{font-size:12px;color:#555;margin-left:6px}
 </style>
 </head>
 <body>
@@ -66,6 +74,12 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
   <div id="findings"></div>
 </div>
 
+<div class="box">
+  <h2><span data-i="s4">4 · 字典裡的目擊</span> <span class="dim" data-i="s4Note">（seed 127 則＋本頁新收的；來源可點）</span></h2>
+  <p class="dim" data-i="s4Hint">比對或收到目擊後，這裡列出每個詞的生命史與所有定義句；兩句講法不同就標「用法矛盾」。</p>
+  <div id="life"></div>
+</div>
+
 <div class="box"><strong data-i="logLabel">紀錄</strong><div id="log"></div></div>
 
 <script>
@@ -81,6 +95,8 @@ const I18N={
   s2:'2 · 已知詞命中',s3:'3 · 目擊紀錄',mockNote:'（mock：只在畫面上，尚未寫入伺服器）',
   agentHint:'有 agent 時對它說：「呼叫 <code>feedDocument</code>，照規則找出文中的 AI 名詞，再用 <code>submitFindings</code> 送回」。沒有 agent 也可以',
   demo:'載入範例目擊（廠商文，14 筆）',logLabel:'紀錄',
+  s4:'4 · 字典裡的目擊',s4Note:'（seed 127 則＋本頁新收的；來源可點）',s4Hint:'比對或收到目擊後，這裡列出每個詞的生命史與所有定義句；兩句講法不同就標「用法矛盾」。',
+  lifeEmpty:'比對或收到目擊後才會出現',firstSeen:d=>'首次出現 '+d,docs:n=>n+' 份來源',quiet:n=>'安靜 '+n+' 天',conflict:'用法矛盾',thisPage:'本頁',seedLoaded:n=>'seed 目擊載入 '+n+' 則',seedFail:e=>'seed 載入失敗：'+e,noQuote:'（無定義句）',
   loading:'載入中…',detecting:'偵測中…',entries:n=>n+' 則',lexFail:'載入失敗',lexLoaded:(n,k)=>'字典載入 '+n+' 則、'+k+' 個比對鍵',
   lexErr:e=>'lexicon.json 載入失敗：'+e,notMatched:'尚未比對',noHits:'沒有命中已知詞',hitn:n=>'（'+n+' 則）',
   empty:'文件是空的',matched:n=>'本地比對命中 '+n+' 則',chars:n=>n+' 字',noFindings:'尚無目擊',known:'已知',newTerm:'新詞',
@@ -97,6 +113,8 @@ const I18N={
   s2:'2 · Known terms found',s3:'3 · Sightings',mockNote:'(mock: on screen only, not written to the server)',
   agentHint:'With an agent, say: “call <code>feedDocument</code>, find the AI terms following the rules, then send them back with <code>submitFindings</code>”. Without an agent you can',
   demo:'load sample sightings (vendor article, 14)',logLabel:'Log',
+  s4:'4 · Sightings in the dictionary',s4Note:'(127 seed sightings + whatever this page collected; sources are links)',s4Hint:'After a match or a submission, each term shows its life history and every definition quote; two quotes that differ are flagged “conflicting usage”.',
+  lifeEmpty:'appears after a match or a submission',firstSeen:d=>'first seen '+d,docs:n=>n+' sources',quiet:n=>'quiet '+n+' days',conflict:'conflicting usage',thisPage:'this page',seedLoaded:n=>'seed sightings loaded: '+n,seedFail:e=>'seed failed: '+e,noQuote:'(no definition quote)',
   loading:'loading…',detecting:'detecting…',entries:n=>n+' entries',lexFail:'failed to load',lexLoaded:(n,k)=>'lexicon loaded: '+n+' entries, '+k+' match keys',
   lexErr:e=>'lexicon.json failed: '+e,notMatched:'not matched yet',noHits:'no known terms found',hitn:n=>'('+n+')',
   empty:'document is empty',matched:n=>'local match: '+n+' known terms',chars:n=>n+' chars',noFindings:'no sightings yet',known:'known',newTerm:'new',
@@ -121,6 +139,7 @@ function applyLang(){
   localStorage.setItem('lang',LANG);
   renderHits(HITS);renderFindings();
 }
+
 $('lang').onclick=()=>{LANG=LANG==='zh'?'en':'zh';applyLang()};
 
 /* ---------- lexicon (thin index) ---------- */
@@ -153,6 +172,7 @@ function renderHits(hits){
   HITS=hits||[];
   const none=!$('hitn').dataset.ran;
   $('hitn').textContent=none?'':T('hitn')(HITS.length);
+  if(typeof renderLife==='function'&&$('life'))renderLife();
   $('hits').innerHTML=HITS.length?HITS.map(h=>'<span title="'+esc(h.line)+'">'+esc(h.term)+(h.zh&&h.zh!==h.term?' <small>'+esc(h.zh)+'</small>':'')+'</span>').join(''):'<span class="dim" style="border:0;background:none;padding:0">'+(none?T('notMatched'):T('noHits'))+'</span>';
 }
 $('match').onclick=()=>{const t=$('doc').value.trim();if(!t){log(T('empty'),'no');return}$('hitn').dataset.ran='1';const h=matchKnown(t);renderHits(h);log(T('matched')(h.length));};
@@ -172,6 +192,7 @@ const RULES=`You are helping the user read this document. Find the AI terms in i
 4. The known-term list is in lexicon. Report known terms too (so the dictionary sees them again) and set term_normalized to the lexicon term; otherwise term_normalized = "".
 5. De-identify sentence and context: replace company names, person names, amounts, phone numbers and emails with [company], [person], [amount], [phone], [email].
 6. If a term appears several times, report it once — the occurrence that has a definition.
+7. Optional: if you know the URL of the page the document came from, fill source.url (and title/published if known). Leave source out otherwise.
 Stoplist: ${STOPLIST.join(', ')}`;
 const FINDING_SCHEMA={type:'object',additionalProperties:false,
  required:['term_raw','term_normalized','sentence','context','explained','intent','domain','definition_quote'],
@@ -183,7 +204,9 @@ const FINDING_SCHEMA={type:'object',additionalProperties:false,
   explained:{type:'string',enum:['has_definition','mentioned','assumed']},
   intent:{type:'string',enum:['selling_point','technical','risk_or_limit']},
   domain:{type:'string',enum:['core','edge','not']},
-  definition_quote:{type:'string',description:'verbatim substring of context; "" if the document does not define the term'}
+  definition_quote:{type:'string',description:'verbatim substring of context; "" if the document does not define the term'},
+  source:{type:'object',additionalProperties:false,description:'optional; where the document came from, if known',
+    properties:{url:{type:'string'},title:{type:'string'},published:{type:'string',description:'YYYY-MM-DD or ""'}},required:['url']}
  }};
 
 /* ---------- locks (mock of the server; codes per contract §3) ---------- */
@@ -204,15 +227,40 @@ function check(f){
 
 /* ---------- findings ---------- */
 let FINDINGS=[];
-function lookup(term){ if(!term) return null; const k=String(term).toLowerCase(); const a=ALIAS.find(x=>x.key===k); if(a) return a.entry; const m=matchKnown(String(term)); return m.length?m[0]:null; }
+function lookup(term){ if(!term) return null; const k=String(term).toLowerCase().trim(); const a=ALIAS.find(x=>x.key===k); if(a) return a.entry; const m=matchKnown(String(term)); if(!m.length) return null; return m.find(e=>k.startsWith(e.matched))||m[0]; }
 const lbl=v=>T('enums')[v]||v;
 function renderFindings(){
   if(!FINDINGS.length){$('findings').innerHTML='<p class="dim">'+T('noFindings')+'</p>';return}
   $('findings').innerHTML=FINDINGS.map(f=>{
     const e=lookup(f.term_normalized)||lookup(f.term_raw);
     return '<div class="f"><span class="t">'+esc(f.term_raw)+'</span>'+(e?'<span class="known">'+T('known')+' · '+esc(e.term)+'</span>':'<span class="new">'+T('newTerm')+'</span>')+
-      ' <span class="tags">'+esc(lbl(f.explained))+' · '+esc(lbl(f.intent))+' · '+esc(lbl(f.domain))+'</span>'+
+      ' <span class="tags">'+esc(lbl(f.explained))+' · '+esc(lbl(f.intent))+' · '+esc(lbl(f.domain))+'</span>'+srcLink(f.source)+
       (f.definition_quote?'<q>'+esc(f.definition_quote)+'</q>':'')+'</div>';
+  }).join('');
+  renderLife();
+}
+const srcLink=s=>s&&s.url?' <a class="src" href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.title||s.url.replace(/^https?:\/\//,'').slice(0,40))+'</a>':'';
+
+/* ---------- life history + conflicts (mock: seed fixture + this page) ---------- */
+let SEED=[];
+fetch('fixtures/seed-133.json').then(r=>r.json()).then(d=>{SEED=d;log(T('seedLoaded')(d.length),'ok');renderLife()}).catch(e=>log(T('seedFail')(e.message),'no'));
+const keyOf=f=>{const e=lookup(f.term_normalized)||lookup(f.term_raw);return e?e.slug:String(f.term_raw||'').trim().toLowerCase()};
+function renderLife(){
+  const box=$('life');
+  const keys=new Set([...HITS.map(h=>h.slug),...FINDINGS.map(keyOf)]);
+  if(!keys.size){box.innerHTML='<p class="dim">'+T('lifeEmpty')+'</p>';return}
+  const today=new Date();
+  box.innerHTML=[...keys].map(k=>{
+    const rows=[...SEED.filter(f=>keyOf(f)===k).map(f=>({...f,_from:'seed'})),...FINDINGS.filter(f=>keyOf(f)===k).map(f=>({...f,_from:'page'}))];
+    if(!rows.length) return '';
+    const e=lookup(k)||{term:rows[0].term_normalized||rows[0].term_raw};
+    const dates=rows.map(f=>f.source&&f.source.published).filter(Boolean).sort();
+    const srcs=new Set(rows.map(f=>f.source&&f.source.url||('page:'+f.sentence)));
+    const quotes=[...new Set(rows.map(f=>f.definition_quote).filter(Boolean))];
+    const lastQ=dates.length?Math.round((today-new Date(dates[dates.length-1]))/864e5):null;
+    return '<div class="life"><div class="hd"><b>'+esc(e.term)+'</b>'+(quotes.length>1?'<span class="conflict">'+T('conflict')+'</span>':'')+
+      '<span class="meta">'+[dates.length?T('firstSeen')(dates[0]):null,T('docs')(srcs.size),lastQ!=null?T('quiet')(lastQ):null].filter(Boolean).join(' · ')+'</span></div>'+
+      rows.map(f=>'<q>'+(f.definition_quote?esc(f.definition_quote):'<span class="dim">'+T('noQuote')+'</span>')+(f.source&&f.source.url?' <a href="'+esc(f.source.url)+'" target="_blank" rel="noopener">'+esc(f.source.title||f.source.url)+'</a>':' <a>'+T('thisPage')+'</a>')+'</q>').join('')+'</div>';
   }).join('');
 }
 function submit(findings,from){

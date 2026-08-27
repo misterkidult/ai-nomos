@@ -43,7 +43,7 @@ JSON Schema (also returned by `feedDocument` as `finding_schema`):
   "definition_quote":{"type":"string"}}}
 ```
 
-Optional, page ↔ server only (not required from the agent): `source.url` — see §4.
+Optional in a Finding (agent may fill it when it can read the page URL of the document; never required): `source` — see §4. The page passes it through unchanged.
 
 ```json
 {"source":{"url":"https://…","title":"","published":""}}
