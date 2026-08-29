@@ -28,16 +28,13 @@
     </ol>
   </div>
 
-  <!-- ═══ 動線：原本在 /read，2026-08-30 合併進首頁 ═══
-       原本要「首頁看懂 → 點進 /read → 才發現需要 agent」，中間那一跳把人濾掉了。 -->
+  <!-- ═══ 動線（2026-08-30）═══
+       頁面沒有任何輸入欄位：連結是 agent 帶來的，使用者是在跟他的 AI 講話。
+       這裡只告訴他該說什麼。 -->
   <div class="bring" id="bring">
     <h2><span data-i="stepBring"></span></h2>
     <p class="dim" data-i="stepBringNote"></p>
-    <input id="url" type="url" data-i="urlPh" data-attr="placeholder">
-    <textarea id="terms" rows="2" data-i="termsPh" data-attr="placeholder"></textarea>
-    <input id="nick" type="text" maxlength="24" autocomplete="nickname" data-i="nickPh" data-attr="placeholder">
     <div class="say">
-      <span class="dim" data-i="sayThis"></span>
       <code id="sayline"></code>
       <button id="copy" class="ghost"></button>
     </div>
@@ -192,7 +189,7 @@ const SUBMITTER = (() => { const k='nomos-submitter';
   let v=null; try{v=localStorage.getItem(k)}catch(e){}
   if(!v){ v='anon-'+Math.random().toString(36).slice(2,10); try{localStorage.setItem(k,v)}catch(e){} }
   return v; })();
-const nick = () => ($('nick') ? $('nick').value.trim().slice(0,24) : '');
+const nick = () => '';   /* 署名先不做：頁面沒有輸入欄位，之後若要就由 agent 帶進來 */
 
 let STEPS = [];        /* [{key, title, note}] 依序長出來 */
 let LOOKUPS = 0, LOOKUP_KNOWN = 0;
@@ -244,13 +241,14 @@ async function confirmPending(){
   }
 }
 
-const requestedTerms = () => $('terms').value.split('\n').map(x=>x.trim()).filter(Boolean);
 
 const TOOLS = [
-  {name:'feedDocument',description:'Start here. Returns the article URL the user entered (fetch and read it yourself), the terms they want pulled out, a thin lexicon index, the extraction rules and the finding schema. Read-only. THEN DO THIS, IN ORDER: (1) open the article; (2) call reportDocument once with its title, byline, date, rough length and a one-sentence gist — the person is staring at a blank screen while you read, and this is the only thing that tells them you got there; (3) extract the terms and send them with submitFindings.',
-   inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
-   async execute(){
-     const url=$('url').value.trim(), req=requestedTerms();
+  {name:'feedDocument',description:'Start here. Pass the article the user gave you: url, plus requested_terms if they named any words to look up (omit it if they did not — then judge for yourself what is worth reporting). Returns the extraction rules, the finding schema and a thin lexicon index. Read-only; the page never fetches the article, you do. THEN DO THIS, IN ORDER: (1) open the article; (2) call reportDocument once with its title, byline, date, rough length and a one-sentence gist — the person is staring at a blank screen while you read, and this is the only thing that tells them you got there; (3) extract the terms and send them with submitFindings.',
+   inputSchema:{type:'object',properties:{url:{type:'string'},requested_terms:{type:'array',items:{type:'string'}}},required:['url'],additionalProperties:false},
+   annotations:{readOnlyHint:true},
+   async execute(input){
+     const url=String((input&&input.url)||'').trim();
+     const req=((input&&input.requested_terms)||[]).map(String).filter(Boolean);
      STEPS=[]; LOOKUPS=0; LOOKUP_KNOWN=0;
      pushStep('fed', T('stFed'), url);
      return {contract_version:CONTRACT_VERSION,

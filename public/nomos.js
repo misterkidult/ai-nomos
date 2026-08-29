@@ -24,9 +24,9 @@ window.NOMOS = (() => {
       justNow: '剛剛', hoursAgo: n => n + ' 小時前', yesterday: '昨天', daysAgo: n => n + ' 天前',
       /* term page (08-29): senses / spellings / sell-vs-worry / jargon density */
       /* 合併後的首頁動線（08-30）：一段一段講現在發生什麼事 */
-      stepBring:'把一篇文章給你的 AI', stepBringNote:'貼連結。看不懂的詞可以列出來，不列也行 —— 它會自己判斷。',
+      stepBring:'跟你的 AI 說一句話', stepBringNote:'不用在這裡填東西。把連結給你的 AI，它會自己來叫這個字典的工具。想查哪幾個詞順口說就好，不說它也會自己判斷。',
       urlPh:'文章連結', termsPh:'想查的詞（一行一個，可留空）', nickPh:'署名（可留空）',
-      sayThis:'然後跟你的 AI 說這句：', sayThisLine:'呼叫 feedDocument，照它給的規則做。',
+      sayThisLine:'讀這篇 <貼上連結>，用 ai-nomos 的 feedDocument 找出裡面的 AI 術語。',
       copied:'已複製',
       docWords:n=>n.toLocaleString()+' 字',
       confirmTitle:'這篇要進字典嗎？',
@@ -97,9 +97,9 @@ window.NOMOS = (() => {
       justNow: 'just now', hoursAgo: n => n + ' h ago', yesterday: 'yesterday', daysAgo: n => n + ' days ago',
       /* term page (08-29) */
       /* merged home flow (08-30) */
-      stepBring:'Give an article to your AI', stepBringNote:'Paste a link. List the words you could not follow, or leave it empty — it will judge for itself.',
+      stepBring:'Say one thing to your AI', stepBringNote:'Nothing to fill in here. Give your AI the link and it will call this dictionary\u2019s tools itself. Name the words you want looked up if you like — it will judge for itself if you do not.',
       urlPh:'Article link', termsPh:'Terms to look for (one per line, optional)', nickPh:'Sign it (optional)',
-      sayThis:'Then say this to your AI:', sayThisLine:'Call feedDocument and follow the rules it gives you.',
+      sayThisLine:'Read <paste link> and use ai-nomos\u2019s feedDocument to find the AI jargon in it.',
       copied:'copied',
       docWords:n=>n.toLocaleString()+' words',
       confirmTitle:'Should this article go into the dictionary?',

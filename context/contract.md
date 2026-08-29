@@ -128,9 +128,16 @@ Public via `lookupTerm`／`trending` (§5), never stored: `first_seen` = min `su
 
 ## 5. Tools
 
-### `feedDocument` (read-only, no input)
+### `feedDocument` (input `{url, requested_terms?}`)
 
-The page gives the agent an article by **URL** and the user's list of terms to pull out. The agent fetches the article itself; the page never uploads it. `document` is filled only in fallback mode (user pasted text instead of a URL).
+**The agent brings the article; the page does not ask for it.** The user is talking to their agent, not filling in a form — they say "read this and tell me the AI words in it", and the agent passes the link here. The page has no input fields at all.
+
+| field | rule |
+|---|---|
+| `url` | the article the user gave their agent. Required |
+| `requested_terms` | words the user said they wanted looked up, if any. Omit or `[]` when they did not name any — then the agent decides what is worth reporting, which in the 2026-08-30 live run produced five findings from a user who named nothing |
+
+The agent fetches the article itself; the page never sees its text. `document` in the response is empty and exists only for the no-agent fallback, where a person pastes text into `/read`.
 
 `next_step` restates the order of work in the response body. It duplicates §2 rule 0 on purpose: an agent that skimmed the long rules blob still sees it here, and it was skipped in a live run on 2026-08-30 when it existed only in the rules.
 
@@ -140,11 +147,13 @@ The page gives the agent an article by **URL** and the user's list of terms to p
  "url":"https://…",
  "requested_terms":["MCP","Multi-Agent"],
  "document":"",
- "known_hits":[{"term":"","zh":"","slug":"","matched":""}],
+ "known_hits":[],
  "lexicon":[{"term":"","aka":[""],"zh":""}],
  "rules":"<§2>",
  "finding_schema":{"…§1"}}
 ```
+
+Changed 2026-08-30: this call used to take no input and read the URL out of a form on the page. The form was a leftover from a flow where the person set the page up first and the agent arrived second — but the person never types here, they speak to their agent. `contract_version` stays 1: the response shape is unchanged, and an agent that calls it with no arguments gets the same empty-state answer it would have got before.
 
 ### `reportDocument` (input `{title, byline, published, words, gist}`)
 
