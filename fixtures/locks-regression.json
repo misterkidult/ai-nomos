@@ -1,0 +1,264 @@
+[
+ {
+  "_expect": [],
+  "_note": "core + quote inside context",
+  "term_raw": "MCP",
+  "term_normalized": "MCP",
+  "sentence": "MCP 是讓模型外接工具的通訊協定。",
+  "context": "很多人問 MCP 是什麼。MCP 是讓模型外接工具的通訊協定。它由 Anthropic 提出。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "MCP 是讓模型外接工具的通訊協定",
+  "requested": true
+ },
+ {
+  "_expect": [],
+  "_note": "core, no quote — accepted, quote is optional",
+  "term_raw": "RAG",
+  "term_normalized": "",
+  "sentence": "這套系統用 RAG 來查內部文件。",
+  "context": "這套系統用 RAG 來查內部文件。",
+  "explained": "mentioned",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [],
+  "_note": "edge WITH quote — accepted",
+  "term_raw": "向量資料庫",
+  "term_normalized": "",
+  "sentence": "向量資料庫負責存放嵌入後的片段。",
+  "context": "向量資料庫負責存放嵌入後的片段。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "向量資料庫負責存放嵌入後的片段",
+  "requested": true
+ },
+ {
+  "_expect": [],
+  "_note": "domain=not + requested=true is STORED (contract §3)",
+  "term_raw": "報表",
+  "term_normalized": "",
+  "sentence": "報表產生器不算 AI 詞。",
+  "context": "報表產生器不算 AI 詞。",
+  "explained": "mentioned",
+  "intent": "technical",
+  "domain": "not",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [],
+  "_note": "context empty -> quote falls back to sentence",
+  "term_raw": "Agent",
+  "term_normalized": "",
+  "sentence": "Agent 指會自己決定下一步的程式。",
+  "context": "",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "Agent 指會自己決定下一步的程式",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "MISSING_FIELD"
+  ],
+  "_note": "context key absent",
+  "term_raw": "MCP",
+  "term_normalized": "",
+  "sentence": "MCP 是一種協定。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "ENUM_INVALID"
+  ],
+  "_note": "hyphen instead of underscore",
+  "term_raw": "MCP",
+  "term_normalized": "",
+  "sentence": "MCP 是一種協定。",
+  "context": "MCP 是一種協定。",
+  "explained": "has-definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "SENTENCE_LACKS_TERM"
+  ],
+  "_note": "term absent from sentence",
+  "term_raw": "Fine-tuning",
+  "term_normalized": "",
+  "sentence": "這篇完全沒有提到那個詞。",
+  "context": "這篇完全沒有提到那個詞。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "SENTENCE_TOO_LONG"
+  ],
+  "_note": "134 chars, ascii",
+  "term_raw": "RAG",
+  "term_normalized": "",
+  "sentence": "RAG xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "context": "RAG xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "SENTENCE_TOO_LONG"
+  ],
+  "_note": "134 chars, CJK — must count the same as ascii",
+  "term_raw": "RAG",
+  "term_normalized": "",
+  "sentence": "RAG 字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字",
+  "context": "RAG 字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字字",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "QUOTE_NOT_IN_CONTEXT"
+  ],
+  "_note": "quote is not verbatim from context — the self-referential lock",
+  "term_raw": "MCP",
+  "term_normalized": "",
+  "sentence": "MCP 是一種協定。",
+  "context": "MCP 是一種協定。它很新。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "MCP 是模型上下文協定",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "EDGE_WITHOUT_QUOTE"
+  ],
+  "_note": "edge with no quote is dropped as noise",
+  "term_raw": "LangChain",
+  "term_normalized": "",
+  "sentence": "LangChain 被拿來串流程。",
+  "context": "LangChain 被拿來串流程。",
+  "explained": "mentioned",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "SENTENCE_LACKS_TERM",
+   "STOPLISTED"
+  ],
+  "_note": "stoplist match is on the TRIMMED term; untrimmed term breaks the sentence check",
+  "term_raw": "  導入  ",
+  "term_normalized": "",
+  "sentence": "導入這套系統要三個月。",
+  "context": "導入這套系統要三個月。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "STOPLISTED"
+  ],
+  "_note": "stoplist, clean",
+  "term_raw": "導入",
+  "term_normalized": "",
+  "sentence": "導入這套系統要三個月。",
+  "context": "導入這套系統要三個月。",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "NOT_AI_TERM"
+  ],
+  "_note": "agent volunteered a non-AI term",
+  "term_raw": "報表",
+  "term_normalized": "",
+  "sentence": "報表產生器不算 AI 詞。",
+  "context": "報表產生器不算 AI 詞。",
+  "explained": "mentioned",
+  "intent": "technical",
+  "domain": "not",
+  "definition_quote": "",
+  "requested": false
+ },
+ {
+  "_expect": [
+   "EDGE_WITHOUT_QUOTE",
+   "SENTENCE_LACKS_TERM",
+   "STOPLISTED"
+  ],
+  "_note": "three locks at once; codes are returned sorted",
+  "term_raw": "平台",
+  "term_normalized": "",
+  "sentence": "這段句子裡沒有那個詞。",
+  "context": "這段句子裡沒有那個詞。",
+  "explained": "mentioned",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [
+   "EDGE_WITHOUT_QUOTE",
+   "ENUM_INVALID",
+   "SENTENCE_TOO_LONG"
+  ],
+  "_note": "enum + length + edge",
+  "term_raw": "MCP",
+  "term_normalized": "",
+  "sentence": "MCP xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "context": "MCP 是一種協定。",
+  "explained": "whatever",
+  "intent": "technical",
+  "domain": "edge",
+  "definition_quote": "",
+  "requested": true
+ },
+ {
+  "_expect": [],
+  "_note": "63 code points but 123 UTF-16 units — Python len() and JS .length must agree",
+  "term_raw": "AI",
+  "term_normalized": "",
+  "sentence": "AI 😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+  "context": "AI 😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+  "explained": "has_definition",
+  "intent": "technical",
+  "domain": "core",
+  "definition_quote": "",
+  "requested": true
+ }
+]

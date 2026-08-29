@@ -243,7 +243,7 @@ function check(f){
   for(const k in ENUMS) if(!ENUMS[k].includes(f[k])) why.add('ENUM_INVALID');
   const s=String(f.sentence||''),t=String(f.term_raw||'');
   if(t&&s&&!s.toLowerCase().includes(t.toLowerCase())) why.add('SENTENCE_LACKS_TERM');
-  if(s.length>120) why.add('SENTENCE_TOO_LONG');
+  if([...s].length>120) why.add('SENTENCE_TOO_LONG');  // code points, like the reference impl — not UTF-16 units
   const q=f.definition_quote||'';
   if(q&&!(f.context||s).includes(q)) why.add('QUOTE_NOT_IN_CONTEXT');
   if(f.domain==='edge'&&!q) why.add('EDGE_WITHOUT_QUOTE');
