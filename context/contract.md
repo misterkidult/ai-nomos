@@ -132,8 +132,11 @@ Public via `lookupTerm`／`trending` (§5), never stored: `first_seen` = min `su
 
 The page gives the agent an article by **URL** and the user's list of terms to pull out. The agent fetches the article itself; the page never uploads it. `document` is filled only in fallback mode (user pasted text instead of a URL).
 
+`next_step` restates the order of work in the response body. It duplicates §2 rule 0 on purpose: an agent that skimmed the long rules blob still sees it here, and it was skipped in a live run on 2026-08-30 when it existed only in the rules.
+
 ```json
 {"contract_version":1,
+ "next_step":"call reportDocument with what you see of the article, then submitFindings",
  "url":"https://…",
  "requested_terms":["MCP","Multi-Agent"],
  "document":"",

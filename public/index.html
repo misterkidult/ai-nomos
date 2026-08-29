@@ -15,11 +15,10 @@
   <h1>ai-nomos</h1>
   <p class="tag" data-i="heroTag"></p>
 
-  <!-- WebMCP 訊號：進站三秒內判定。只答「這個瀏覽器看得到 API 嗎」，
-       「agent 真的會叫工具嗎」要到 /read 才知道 —— 兩者會斷在不同地方。 -->
+  <!-- WebMCP 訊號 -->
   <div class="mcp" id="mcp" hidden></div>
 
-  <!-- 三步機制：放在數字上面。先講完怎麼運作，底下那些數字才是「這個機制跑過 341 篇」的證據 -->
+  <!-- 三步機制 -->
   <div class="how" id="how">
     <h2 data-i="howTitle"></h2>
     <ol>
@@ -28,6 +27,25 @@
       <li><b data-i="how3t"></b><span data-i="how3b"></span></li>
     </ol>
   </div>
+
+  <!-- ═══ 動線：原本在 /read，2026-08-30 合併進首頁 ═══
+       原本要「首頁看懂 → 點進 /read → 才發現需要 agent」，中間那一跳把人濾掉了。 -->
+  <div class="bring" id="bring">
+    <h2><span data-i="stepBring"></span></h2>
+    <p class="dim" data-i="stepBringNote"></p>
+    <input id="url" type="url" data-i="urlPh" data-attr="placeholder">
+    <textarea id="terms" rows="2" data-i="termsPh" data-attr="placeholder"></textarea>
+    <input id="nick" type="text" maxlength="24" autocomplete="nickname" data-i="nickPh" data-attr="placeholder">
+    <div class="say">
+      <span class="dim" data-i="sayThis"></span>
+      <code id="sayline"></code>
+      <button id="copy" class="ghost"></button>
+    </div>
+  </div>
+
+  <!-- 逐段敘事：把工具呼叫翻成人話。不印 lookupTerm("Bias") ×11 -->
+  <div class="steps" id="steps" hidden></div>
+  <div class="confirm" id="confirm" hidden></div>
 
   <div class="nums">
     <div><b id="n-terms">—</b><span data-i="nTerms"></span></div>
@@ -40,6 +58,7 @@
 <div id="page"></div>
 
 <script src="/nomos.js"></script>
+<script src="/contract.js"></script>
 <script>
 const N = NOMOS, $ = id => document.getElementById(id), esc = N.esc, T = N.T;
 $('lang').onclick = () => { N.toggleLang(); N.loadTranslations().then(() => { draw(); if (HAS_MCP !== null) renderMcp(HAS_MCP); }); };
@@ -152,7 +171,7 @@ function draw() {
   const find = '<div class="find"><input id="filter" data-i="filterPh" data-attr="placeholder">'
     + '<a href="/terms">' + T('allLink')(N.lex().length) + '</a></div><div class="hits" id="hits" hidden></div>';
   const foot = '<div class="foot"><span>' + T('contribute') + '</span>'
-    + '<a class="btn" href="/read">' + T('bring') + '</a>'
+    + '<a class="btn" href="#bring">' + T('bring') + '</a>'
     + '<span class="dim">' + T('onlyEdit') + '</span></div>';
 
   $('page').innerHTML =
@@ -163,8 +182,131 @@ function draw() {
 
   N.applyLang();
   $('filter').oninput = e => renderHits(e.target.value);
+  wireSay(); renderSteps(); renderConfirm();
   N.reveal();
 }
+
+/* ═══ 動線：WebMCP 工具 ＋ 逐段敘事（2026-08-30 從 /read 合併過來）═══
+   畫面上不印工具名。每一次呼叫翻成一句人話，一段一段長出來。 */
+const SUBMITTER = (() => { const k='nomos-submitter';
+  let v=null; try{v=localStorage.getItem(k)}catch(e){}
+  if(!v){ v='anon-'+Math.random().toString(36).slice(2,10); try{localStorage.setItem(k,v)}catch(e){} }
+  return v; })();
+const nick = () => ($('nick') ? $('nick').value.trim().slice(0,24) : '');
+
+let STEPS = [];        /* [{key, title, note}] 依序長出來 */
+let LOOKUPS = 0, LOOKUP_KNOWN = 0;
+let PENDING = null;
+
+function pushStep(key, title, note){
+  const i = STEPS.findIndex(s => s.key === key);
+  if (i >= 0) STEPS[i] = {key, title, note}; else STEPS.push({key, title, note});
+  renderSteps();
+}
+function renderSteps(){
+  const box = $('steps'); if(!box) return;
+  if(!STEPS.length){ box.hidden = true; box.innerHTML=''; return; }
+  box.hidden = false;
+  box.innerHTML = STEPS.map((s,i) =>
+    '<div class="st' + (i === STEPS.length-1 ? ' now' : '') + '">'
+    + '<b>' + esc(s.title) + '</b>'
+    + (s.note ? '<span>' + esc(s.note) + '</span>' : '') + '</div>').join('');
+}
+function renderConfirm(){
+  const box = $('confirm'); if(!box) return;
+  if(!PENDING){ box.hidden = true; box.innerHTML=''; return; }
+  box.hidden = false;
+  box.innerHTML = '<h3>' + esc(T('confirmTitle')) + '</h3><p class="dim">' + esc(T('confirmNote')) + '</p>'
+    + '<div class="act"><button class="btn" id="do-confirm">' + esc(T('confirmBtn')(PENDING.list.length)) + '</button>'
+    + '<button id="do-discard">' + esc(T('discardBtn')) + '</button></div>';
+  $('do-confirm').onclick = confirmPending;
+  $('do-discard').onclick = () => { PENDING=null; renderConfirm();
+    pushStep('done', T('discarded'), ''); };
+}
+async function confirmPending(){
+  if(!PENDING) return;
+  const b=$('do-confirm'); if(b){b.disabled=true;b.textContent=T('confirming')}
+  try{
+    const r = await fetch('/api/findings',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({findings:PENDING.list,not_found:PENDING.notFound,submitter:SUBMITTER,submitter_name:nick()})});
+    const d = await r.json().catch(()=>null);
+    if(r.ok && d && d.status === 'stored'){
+      pushStep('done', T('stored') + '：' + d.accepted, '');
+      PENDING=null; renderConfirm();
+      N.loadSightings('?days=365').then(x => { SIGHT=x; draw(); });   /* 字典當場長大 */
+    } else {
+      pushStep('done', T('storeFail')((d&&d.error)||('HTTP '+r.status)), '');
+      if(b){b.disabled=false;b.textContent=T('confirmBtn')(PENDING.list.length)}
+    }
+  }catch(e){
+    pushStep('done', T('storeOff')(e.message), '');
+    if(b){b.disabled=false;b.textContent=T('confirmBtn')(PENDING.list.length)}
+  }
+}
+
+const requestedTerms = () => $('terms').value.split('\n').map(x=>x.trim()).filter(Boolean);
+
+const TOOLS = [
+  {name:'feedDocument',description:'Start here. Returns the article URL the user entered (fetch and read it yourself), the terms they want pulled out, a thin lexicon index, the extraction rules and the finding schema. Read-only. THEN DO THIS, IN ORDER: (1) open the article; (2) call reportDocument once with its title, byline, date, rough length and a one-sentence gist — the person is staring at a blank screen while you read, and this is the only thing that tells them you got there; (3) extract the terms and send them with submitFindings.',
+   inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
+   async execute(){
+     const url=$('url').value.trim(), req=requestedTerms();
+     STEPS=[]; LOOKUPS=0; LOOKUP_KNOWN=0;
+     pushStep('fed', T('stFed'), url);
+     return {contract_version:CONTRACT_VERSION,
+       next_step:'call reportDocument with what you see of the article, then submitFindings',
+       url, requested_terms:req, document:'',
+       known_hits:[], lexicon:N.lex().map(e=>({term:e.term,aka:e.aka,zh:e.zh})),
+       rules:RULES, finding_schema:FINDING_SCHEMA};
+   }},
+  {name:'reportDocument',description:'Call this once, right after you open the article and before you start extracting terms. Report what you can see of the document: title (verbatim, required), byline, published (YYYY-MM-DD, only if the page states one), words (rough length), gist (one sentence, max 100 chars, on what the article is about). The person is watching a blank screen while you read; this is what tells them you reached the page. Nothing here is stored.',
+   inputSchema:{type:'object',properties:{title:{type:'string'},byline:{type:'string'},published:{type:'string'},words:{type:'number'},gist:{type:'string'}},required:['title'],additionalProperties:false},
+   annotations:{readOnlyHint:true},
+   async execute(input){
+     const d=input||{};
+     const meta=[d.byline,d.published,d.words?T('docWords')(Number(d.words)):''].filter(Boolean).join(' · ');
+     pushStep('opened', T('stOpened'), String(d.title||''));
+     if(meta||d.gist) pushStep('gist', String(d.gist||meta), meta&&d.gist?meta:'');
+     return {contract_version:CONTRACT_VERSION, ok:true};
+   }},
+  {name:'submitFindings',description:'Send the AI-term sightings found in the article back to the dictionary. This does NOT write to the dictionary: it returns status pending_review and the findings wait on the page until the person confirms them. That is the final answer to this call — do not resubmit or poll.',
+   inputSchema:{type:'object',properties:{findings:{type:'array',items:FINDING_SCHEMA},not_found:{type:'array',items:{type:'string'}}},required:['findings','not_found'],additionalProperties:false},
+   async execute(input){
+     const list=(input&&input.findings)||[], nf=((input&&input.not_found)||[]).filter(Boolean).map(String);
+     const acc=[], rej=[];
+     list.forEach((f,i)=>{const why=check(f||{});
+       if(why.length) rej.push({index:i,term_raw:(f&&f.term_raw)||'',reasons:why}); else acc.push(f)});
+     if(acc.length){ PENDING={list:acc,notFound:nf}; renderConfirm();
+       pushStep('reported', T('stReporting'), T('stReportingN')(acc.length)); }
+     else pushStep('reported', T('stReporting'), T('notStored'));
+     return {contract_version:CONTRACT_VERSION,accepted:acc.length,not_found:nf,rejected:rej,
+       status:acc.length?'pending_review':'mock'};
+   }},
+  {name:'lookupTerm',description:'Ask the dictionary what a term currently looks like on the web: every definition quote with its source. Evidence only; the dictionary does not rule which definition is right. Read-only.',
+   inputSchema:{type:'object',properties:{term:{type:'string'}},required:['term'],additionalProperties:false},
+   annotations:{readOnlyHint:true},
+   async execute(input){
+     const t=String((input&&input.term)||'').trim();
+     const e=N.lex().find(x=>[x.term,x.zh,...(x.aka||[])].some(k=>k&&k.toLowerCase()===t.toLowerCase()));
+     LOOKUPS++; if(e) LOOKUP_KNOWN++;
+     pushStep('checking', T('stChecking'), T('stCheckingN')(LOOKUPS, LOOKUP_KNOWN));
+     const rows=SIGHT.sightings.filter(s=>N.termKey(s)===(e?e.slug:t.toLowerCase()));
+     return {contract_version:CONTRACT_VERSION, term:t, known:!!e,
+       editorial_line:e?e.line:'', sightings:rows.length,
+       definitions:rows.filter(r=>r.definition_quote).map(r=>({quote:r.definition_quote,source:r.source})),
+       note:'Evidence only. The dictionary does not rule which definition is right.'};
+   }},
+  {name:'trending',description:'Top terms by sightings in the last 30 days. Read-only.',
+   inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
+   async execute(){
+     const now=Date.now(), d30=now-30*864e5, m=new Map();
+     SIGHT.sightings.forEach(s=>{const t=+new Date(s.submitted_at||0);
+       if(t>=d30){const k=N.termKey(s); m.set(k,(m.get(k)||0)+1)}});
+     return {contract_version:CONTRACT_VERSION, window_days:30, contributors:SIGHT.contributors||0,
+       terms:[...m].sort((a,b)=>b[1]-a[1]).slice(0,10)
+         .map(([k,n])=>({term:k, sightings_30d:n, new_term:!N.bySlug(k)}))};
+   }},
+];
 
 /* 訊號與資料無關，先跑不等 API */
 function renderMcp(has){
@@ -172,12 +314,28 @@ function renderMcp(has){
   box.hidden = false;
   box.className = 'mcp ' + (has ? 'on' : 'off');
   box.innerHTML = has
-    ? '<b>' + esc(T('mcpOn')) + '</b> <a class="btn" href="/read">' + esc(T('tryIt')) + '</a>'
+    ? '<b>' + esc(T('mcpOn')) + '</b> <a class="btn" href="#bring">' + esc(T('tryIt')) + '</a>'
     : '<b>' + esc(T('mcpOff')) + '</b><p>' + esc(T('mcpOffHow')) + '</p>'
-      + '<a class="btn" href="/read">' + esc(T('tryIt')) + '</a>';
+      + '<a class="btn" href="#bring">' + esc(T('tryIt')) + '</a>';
 }
 let HAS_MCP = null;
-N.onMcp(m => { HAS_MCP = !!m; renderMcp(HAS_MCP); });
+N.onMcp(m => {
+  HAS_MCP = !!m; renderMcp(HAS_MCP);
+  if (m) {
+    try { TOOLS.forEach(t => m.registerTool(t)); } catch(e) {}
+    pushStep('ready', T('stWaiting'), T('stWaitingNote'));
+  }
+});
+
+/* 該對 agent 說的那句話，可一鍵複製 */
+function wireSay(){
+  const line=$('sayline'), btn=$('copy'); if(!line||!btn) return;
+  line.textContent=T('sayThisLine');
+  btn.textContent=T('copyBtn')||'copy';
+  btn.onclick=async()=>{ try{ await navigator.clipboard.writeText(T('sayThisLine'));
+    const o=btn.textContent; btn.textContent=T('copied'); setTimeout(()=>btn.textContent=o,1400);
+  }catch(e){} };
+}
 
 Promise.all([N.loadLexicon(), N.loadTranslations(), N.loadSightings('?days=365')])
   .then(([, , s]) => { SIGHT = s; draw(); });

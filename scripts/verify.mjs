@@ -45,13 +45,14 @@ const is = (what, actual, expected) =>
  * ------------------------------------------------------------------ */
 function extractPageContract() {
   const html = read('public', 'read.html');
-  const start = html.indexOf('const STOPLIST=');
-  const tail = html.indexOf('return [...why].sort();', start);
-  if (start < 0 || tail < 0) throw new Error('cannot locate the lock block in public/read.html');
-  const end = html.indexOf('\n}', tail) + 2;
-  const src = html.slice(start, end);
-  const version = /const CONTRACT_VERSION=(\d+)/.exec(html)?.[1];
+  /* 2026-08-30：契約層抽成 public/contract.js，/read 與首頁共載一份。
+     這裡改讀那個檔 —— 它現在是頁面這一側的唯一定義。 */
+  const src = read('public', 'contract.js');
+  const version = /const CONTRACT_VERSION=(\d+)/.exec(src)?.[1];
   const page = new Function(`${src}; return {STOPLIST, RULES, FINDING_SCHEMA, ENUMS, check};`)();
+  for (const f of ['read.html', 'index.html'])
+    if (!read('public', f).includes('src="/contract.js"'))
+      throw new Error(`public/${f} does not load /contract.js`);
   return { ...page, CONTRACT_VERSION: version ? Number(version) : null };
 }
 
