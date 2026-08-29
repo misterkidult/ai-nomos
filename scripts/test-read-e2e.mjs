@@ -78,6 +78,32 @@ ok('server-rejected finding is NOT shown as a sighting', (await page.textContent
 ok('log says written to the dictionary', log.includes('已寫入字典'));
 ok('no page errors', errs.length === 0, errs.join(' | '));
 
+/* the agent's verdict on whether a term is known is the verdict. lookup() fuzzy-matches, which
+   is right for the free-text query box and wrong here: it used to mark 23% of new terms "known"
+   (Claude Cowork → known · Claude) by substring-matching term_raw against the lexicon. */
+await page.route('**/api/findings', async route => {
+  const b = JSON.parse(route.request().postData());
+  await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+    contract_version: 1, accepted: b.findings.length, not_found: [], rejected: [], status: 'stored' }) });
+});
+const asNew = { ...clean, term_raw: 'Claude Cowork', term_normalized: '',
+  sentence: 'Claude Cowork 是新出現的說法。', context: '前句。Claude Cowork 是新出現的說法。後句。',
+  definition_quote: '', source: { ...clean.source, url: 'https://example.com/newterm' } };
+await page.evaluate(async f => {
+  await window.__tools.find(t => t.name === 'submitFindings').execute({ findings: f, not_found: [] });
+}, [asNew]);
+const rows = await page.textContent('#findings');
+ok('term_normalized:"" is honoured as “new”, not guessed into a known term',
+   rows.includes('Claude Cowork') && !/Claude Cowork[\s\S]{0,120}已知/.test(rows));
+ok('a term the agent did normalize still reads as known', /RAG[\s\S]{0,80}已知/.test(rows));
+
+/* contract §4: first_seen counts from when the dictionary received the sighting, never from the
+   article's publication date — clean's source.published is 2026-08-01 */
+const life = await page.textContent('#life');
+const today = new Date().toISOString().slice(0, 10);
+ok('life history dates from submitted_at, not source.published',
+   life.includes(today) && !life.includes('2026-08-01'), life.slice(0, 120).replace(/\s+/g, ' '));
+
 /* the signature: typed once, sent, remembered, and never handed to the agent */
 await page.fill('#nick', '  果核 Kidult  ');
 posted = null;
