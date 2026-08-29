@@ -71,11 +71,32 @@ const ok = (l, c, x = '') => { console.log(`${c ? 'PASS' : 'FAIL'}  ${l}${x ? ' 
 ok('4 WebMCP tools registered', (await page.evaluate(() => window.__tools.map(t => t.name))).join(',') === 'feedDocument,submitFindings,lookupTerm,trending');
 ok('submitFindings actually POSTed to /api/findings', !!posted);
 ok('POST carried findings + not_found + submitter', posted && posted.findings.length === 2 && posted.not_found[0] === 'Multi-Agent' && /^anon-/.test(posted.submitter));
+ok('unsigned submission sends an empty signature', posted.submitter_name === '');
 ok("tool answered status 'stored' (contract §5)", out.status === 'stored', `status=${out.status}`);
 ok('server verdict is the one returned', out.accepted === 1 && out.rejected[0].reasons[0] === 'PII_DETECTED');
 ok('server-rejected finding is NOT shown as a sighting', (await page.textContent('#findings')).includes('RAG') && !(await page.textContent('#findings')).includes('Copilot'));
 ok('log says written to the dictionary', log.includes('已寫入字典'));
 ok('no page errors', errs.length === 0, errs.join(' | '));
+
+/* the signature: typed once, sent, remembered, and never handed to the agent */
+await page.fill('#nick', '  果核 Kidult  ');
+posted = null;
+await page.route('**/api/findings', async route => {
+  posted = JSON.parse(route.request().postData());
+  await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+    contract_version: 1, accepted: 1, not_found: [], rejected: [], status: 'stored' }) });
+});
+await page.evaluate(async f => {
+  const tool = window.__tools.find(t => t.name === 'submitFindings');
+  return await tool.execute({ findings: f, not_found: [] });
+}, [{ ...clean, source: { ...clean.source, url: 'https://example.com/signed' } }]);
+ok('signature sent with the submission', posted && posted.submitter_name === '果核 Kidult', `got ${JSON.stringify(posted && posted.submitter_name)}`);
+ok('signature shown next to the sighting', (await page.textContent('#findings')).includes('果核 Kidult'));
+ok('submitFindings input schema has no field for the signature — the agent cannot set it',
+   !JSON.stringify((await page.evaluate(() => window.__tools.find(t => t.name === 'submitFindings').inputSchema))).includes('submitter'));
+await page.reload();
+await page.waitForFunction(() => window.__tools && window.__tools.length === 4, { timeout: 8000 });
+ok('signature remembered across a reload', (await page.inputValue('#nick')) === '果核 Kidult');
 
 /* sample button must never write */
 posted = null;

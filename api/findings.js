@@ -68,8 +68,18 @@ export default async function handler(req, res) {
   const notFound = (Array.isArray(body.not_found) ? body.not_found : [])
     .filter(s => typeof s === 'string' && s.trim()).slice(0, MAX_FINDINGS);
 
-  /* Anonymous browser id, held client-side. Contract §4: a limit, not a security feature. */
+  /* Anonymous browser id, held client-side. Contract §4: a limit, not a security feature.
+     It is never public — api/sightings.js drops it before answering. */
   const submitter = String(body.submitter || '').trim().slice(0, 64) || 'anonymous';
+
+  /* The nickname the submitter signed with (contract §4). Self-asserted and unverified: we
+     strip control and zero-width characters so it cannot forge layout or hide inside another
+     name, cap it, and otherwise take it as given. Nothing is ever derived from it — it is not
+     an identity, and the counters keep using `submitter`. */
+  const submitterName = [...String(body.submitter_name || '')
+    .replace(/[\p{Cc}\p{Cf}]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim()].slice(0, 24).join('');
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
 
   try {
@@ -130,6 +140,7 @@ export default async function handler(req, res) {
         submitted_at: nowIso,
         origin: 'agent',
         submitter,
+        submitter_name: submitterName,
         contract_version: 1,
       };
     });

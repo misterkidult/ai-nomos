@@ -38,11 +38,13 @@ export default async function handler(req, res) {
 
     const [contributors] = await redis([['SCARD', 'contributors']]);
     const blobs = ids.length ? await redis(ids.map(id => ['GET', `sighting:${id}`])) : [];
-    // source_hash is the dedup key, not a public field (contract §4 marks only ★ public)
+    // Only the ★ fields of contract §4 go out. source_hash is the dedup key and submitter is
+    // the anonymous browser id behind the rate limit — neither is anything a reader needs, and
+    // submitter_name (the nickname, ★) is the one identity that is meant to be seen.
     const sightings = blobs
       .filter(Boolean)
       .map(b => (typeof b === 'string' ? JSON.parse(b) : b))
-      .map(({ source_hash, ...pub }) => pub);
+      .map(({ source_hash, submitter, ...pub }) => pub);
 
     // 60s CDN cache: the feed changes only when an agent submits, and stale-while-revalidate
     // keeps the page fast without ever serving something more than a minute behind.

@@ -61,6 +61,8 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
   <h2 data-i="s1">1 · 文章</h2>
   <input id="url" type="url" data-i="urlPh" data-attr="placeholder">
   <textarea id="terms" rows="3" style="min-height:0;margin-top:8px" data-i="termsPh" data-attr="placeholder"></textarea>
+  <input id="nick" type="text" maxlength="24" autocomplete="nickname" style="margin-top:8px" data-i="nickPh" data-attr="placeholder">
+  <div class="dim" style="margin-top:4px;font-size:.85em" data-i="nickNote">署名會跟著你的目擊一起公開，可留空。字典不驗證這個名字，也不用它做任何排名</div>
   <details id="fallback" style="margin-top:12px">
     <summary class="dim" data-i="pasteFallback">沒有 agent？貼全文，頁面自己比對已知詞</summary>
     <textarea id="doc" style="margin-top:8px" data-i="ph" data-attr="placeholder"></textarea>
@@ -123,6 +125,9 @@ const I18N={
   empty:'文件是空的',matched:n=>'本地比對命中 '+n+' 則',chars:n=>n+' 字',noFindings:'尚無目擊',known:'已知',newTerm:'新詞',
   submitLog:(from,a,r)=>from+'：收 '+a+' 筆、擋 '+r+' 筆',demoFrom:'範例目擊',demoFail:e=>'範例載入失敗：'+e,
   stored:'已寫入字典',notStored:'未寫入（只在畫面上）',
+  nickPh:'署名（選填，最多 24 字）',
+  nickNote:'署名會跟著你的目擊一起公開，可留空。字典不驗證這個名字，也不用它做任何排名',
+  signedBy:n=>'—— '+n,unsigned:'未署名',
   storeFail:e=>'伺服器沒收：'+e+'，這批只留在畫面上',storeOff:e=>'連不到伺服器（'+e+'），這批只留在畫面上',
   noAgent:'無（退化模式：只做本地比對）',noAgentLog:'無 modelContext，退化模式',fed:(u,r)=>'feedDocument 被呼叫（'+u+'，指定 '+r+' 個詞）',
   registered:n=>'已註冊 '+n+' 個工具',regFail:'registerTool 失敗',
@@ -146,6 +151,9 @@ const I18N={
   empty:'document is empty',matched:n=>'local match: '+n+' known terms',chars:n=>n+' chars',noFindings:'no sightings yet',known:'known',newTerm:'new',
   submitLog:(from,a,r)=>from+': accepted '+a+', rejected '+r,demoFrom:'sample',demoFail:e=>'sample failed: '+e,
   stored:'written to the dictionary',notStored:'not written (on screen only)',
+  nickPh:'Sign your sightings (optional, 24 chars)',
+  nickNote:'Your signature is published alongside your sightings and can be left empty. The dictionary does not verify the name, and nothing is ranked by it',
+  signedBy:n=>'— '+n,unsigned:'unsigned',
   storeFail:e=>'server refused: '+e+' — this batch stays on screen only',storeOff:e=>'server unreachable ('+e+') — this batch stays on screen only',
   noAgent:'none (fallback: local match only)',noAgentLog:'no modelContext, fallback mode',fed:(u,r)=>'feedDocument called ('+u+', '+r+' requested terms)',
   registered:n=>'registered '+n+' tools',regFail:'registerTool failed',
@@ -267,7 +275,8 @@ function renderFindings(){
     return '<div class="f"><span class="t">'+esc(f.term_raw)+'</span>'+(e?'<span class="known">'+T('known')+' · '+esc(e.term)+'</span>':'<span class="new">'+T('newTerm')+'</span>')+
       (f.requested?'<span class="req">'+T('reqBadge')+'</span>':'<span class="known">'+T('addBadge')+'</span>')+
       ' <span class="tags">'+esc(lbl(f.explained))+' · '+esc(lbl(f.intent))+' · '+(f.domain==='not'?'<span class="notai">'+T('notAi')+'</span>':esc(lbl(f.domain)))+'</span>'+srcLink(f.source)+
-      (f.definition_quote?'<q>'+esc(f.definition_quote)+'</q>':'')+'</div>';
+      (f.definition_quote?'<q>'+esc(f.definition_quote)+'</q>':'')+
+      (f._signed?'<span class="dim" style="font-size:.85em">'+esc(T('signedBy')(f._signed))+'</span>':'')+'</div>';
   }).join('');
   renderLife();
 }
@@ -299,6 +308,11 @@ const SUBMITTER=(()=>{try{let v=localStorage.getItem('submitter');
   if(!v){v='anon-'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);localStorage.setItem('submitter',v)}
   return v}catch(e){return 'anonymous'}})();
 
+/* The signature is the submitter's to keep: remembered here, sent with the submission, and
+   never touched by the agent — contract §5 gives submitFindings no field for it. */
+const nick=()=>{const v=$('nick').value.trim().slice(0,24);try{localStorage.setItem('nick',v)}catch(e){}return v};
+try{const v=localStorage.getItem('nick');if(v)$('nick').value=v}catch(e){}
+
 /* The page runs the locks for instant feedback, then POSTs to /api/findings, whose verdict is
    the authoritative one (it also applies PII_DETECTED, which is server-only). If the server is
    unreachable the page keeps the local verdict and says the batch was not written — the
@@ -314,7 +328,7 @@ async function submit(findings,from,notFound,store=true){
   if(store&&list.length){
     try{
       const r=await fetch('/api/findings',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({findings:list,not_found:nf,submitter:SUBMITTER})});
+        body:JSON.stringify({findings:list,not_found:nf,submitter:SUBMITTER,submitter_name:nick()})});
       const d=await r.json().catch(()=>null);
       if(r.ok&&d&&d.status==='stored'){
         const blocked=new Set((d.rejected||[]).map(x=>x.index));
@@ -324,7 +338,8 @@ async function submit(findings,from,notFound,store=true){
     }catch(e){ log(T('storeOff')(e.message),'no'); }
   }
 
-  FINDINGS=FINDINGS.concat(shown);renderFindings();
+  const signature=store?nick():'';
+  FINDINGS=FINDINGS.concat(signature?shown.map(f=>({...f,_signed:signature})):shown);renderFindings();
   $('nf').textContent=nf.length?T('notFound')(nf):'';
   const C=T('codes');
   log(T('submitLog')(from,out.accepted,out.rejected.length)+' · '+T(out.status==='stored'?'stored':'notStored')+

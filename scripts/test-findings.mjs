@@ -48,6 +48,10 @@ function res() {
 const post = (body, headers = {}) => handler({ method: 'POST', headers, body }, res());
 
 const fixture = JSON.parse(readFileSync(new URL('../fixtures/locks-v1.json', import.meta.url), 'utf8'));
+/* the first fixture row is a clean finding; give each signature test its own document so the
+   (document, term) key does not make them overwrite one another */
+let nth = 0;
+const clean = () => ({ ...fixture[0], source: { ...fixture[0].source, url: `https://example.com/sig${nth++}` } });
 let fail = 0;
 const ok = (label, cond, extra = '') => { console.log(`${cond ? 'PASS' : 'FAIL'}  ${label}${extra ? '  ' + extra : ''}`); if (!cond) fail++; };
 
@@ -73,24 +77,41 @@ ok('stored: sentence/context NEVER stored (contract §4)',
 ok('stored: submitted_at is ISO 8601', /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(rag.submitted_at));
 ok('stored: docs set + doc:<hash> written', store.set.get('docs')?.size === 4);
 
-/* 3 — GET /api/sightings must not be able to leak source_hash */
-const pub = (({ source_hash, ...rest }) => rest)(rag);
-ok('public view drops source_hash', !('source_hash' in pub) && 'definition_quote' in pub);
+/* 3 — the signature: kept, sanitised, and never confused with the anonymous id */
+r = await post({ findings: [clean()], not_found: [], submitter: 'test-sig', submitter_name: '  Kidult\u200b\n 果核  ' });
+const signed = JSON.parse([...store.str.values()].find(v => v.includes('"submitter_name"') && v.includes('Kidult')));
+ok('signature stored', signed.submitter_name === 'Kidult 果核', `got ${JSON.stringify(signed.submitter_name)}`);
+ok('zero-width and control characters stripped', !/[\u200b\n]/.test(signed.submitter_name));
+r = await post({ findings: [clean()], not_found: [], submitter: 'test-sig2', submitter_name: 'x'.repeat(80) });
+const long = JSON.parse([...store.str.values()].find(v => v.includes('xxxxxxxx')));
+ok('signature capped at 24', [...long.submitter_name].length === 24, `len=${[...long.submitter_name].length}`);
+r = await post({ findings: [clean()], not_found: [], submitter: 'test-nosig' });
+const unsigned = JSON.parse(store.str.get([...store.str.keys()].find(k => k.startsWith('sighting:') && JSON.parse(store.str.get(k)).submitter === 'test-nosig')));
+ok('no signature stores an empty string, not undefined', unsigned.submitter_name === '');
 
-/* 4 — idempotence: same article + same terms again must not double count */
-const before = store.z.get('recent').size;
+/* 4 — what GET /api/sightings publishes. contract §4 marks submitter and source_hash unstarred:
+      the anonymous browser id must never reach a reader, the nickname is the identity that does. */
+const publish = ({ source_hash, submitter, ...pub }) => pub;   // exactly what api/sightings.js does
+const pub = publish(signed);
+ok('public view drops source_hash', !('source_hash' in pub));
+ok('public view drops the anonymous submitter id', !('submitter' in pub));
+ok('public view keeps the signature and the quote', pub.submitter_name === 'Kidult 果核' && 'definition_quote' in pub);
+
+/* 5 — idempotence: same article + same terms again must not double count */
+const before = store.z.get('recent').size, docsBefore = store.set.get('docs').size;
 r = await post({ findings: fixture, not_found: [], submitter: 'test-a' });
 ok('re-feed: accepted again', r.body.accepted === 4);
 ok('re-feed: recent did NOT grow (one sighting per document+term)',
    store.z.get('recent').size === before, `${before} -> ${store.z.get('recent').size}`);
-ok('re-feed: docs did NOT grow', store.set.get('docs').size === 4);
+ok('re-feed: docs did NOT grow',
+   store.set.get('docs').size === docsBefore, `${docsBefore} -> ${store.set.get('docs').size}`);
 
-/* 5 — legacy ids are honoured once docterm is backfilled */
+/* 6 — legacy ids are honoured once docterm is backfilled */
 store.hash.get('docterm').set([...store.hash.get('docterm').keys()].find(k => k.endsWith('|rag')), 'job42-7');
 r = await post({ findings: [fixture[0]], not_found: [], submitter: 'test-a' });
 ok('legacy id reused instead of forking a duplicate', store.str.has('sighting:job42-7'));
 
-/* 6 — guards */
+/* 7 — guards */
 ok('GET refused', (await handler({ method: 'GET', headers: {} }, res())).code === 405);
 ok('non-array findings refused', (await post({ findings: 'nope' })).code === 400);
 ok('over 50 findings refused', (await post({ findings: new Array(51).fill(fixture[0]) })).code === 413);
@@ -99,7 +120,7 @@ let last;
 for (let i = 0; i < 70; i++) last = await post({ findings: [fixture[0]], not_found: [], submitter: 'flooder' });
 ok('hourly limit kicks in', last.code === 429, `code=${last.code}`);
 
-/* 7 — a submission where everything is rejected still answers per contract §5 */
+/* 8 — a submission where everything is rejected still answers per contract §5 */
 r = await post({ findings: [fixture[9]], not_found: [], submitter: 'test-b' });
 ok('all-rejected submission returns 200 with accepted 0',
    r.code === 200 && r.body.accepted === 0 && r.body.rejected[0].reasons.includes('STOPLISTED'));
