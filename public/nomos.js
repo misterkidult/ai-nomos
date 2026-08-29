@@ -35,7 +35,8 @@ window.NOMOS = (() => {
       discarded:'已捨棄，沒有寫進字典', confirming:'寫入中…',
       stored:'已寫入字典', notStored:'沒有可收的（都被鎖擋下了）',
       storeFail:e=>'伺服器沒收：'+e, storeOff:e=>'連不到伺服器（'+e+'）',
-      foundTitle:'它在這篇裡看到的詞',
+      foundTitle:'它在這篇裡看到的詞', startOver:'← 換一篇',
+
       badgeKnown:'字典有', badgeNew:'新詞', badgeYours:'你點名的', badgeAdded:'它自己補的',
       notAiTerm:'它判定這不是 AI 詞', noQuoteHere:'這篇沒有解釋它',
       nfHere:n=>'你點名但這篇裡找不到：'+n.join('、'),
@@ -112,7 +113,8 @@ window.NOMOS = (() => {
       discarded:'discarded — nothing was written', confirming:'writing…',
       stored:'written to the dictionary', notStored:'nothing to add (the locks caught them all)',
       storeFail:e=>'server refused: '+e, storeOff:e=>'server unreachable ('+e+')',
-      foundTitle:'What it saw in this article',
+      foundTitle:'What it saw in this article', startOver:'← Start over',
+
       badgeKnown:'in the dictionary', badgeNew:'new', badgeYours:'you named it', badgeAdded:'it added this',
       notAiTerm:'it ruled this is not an AI term', noQuoteHere:'this article does not explain it',
       nfHere:n=>'You named these but they are not in the article: '+n.join(', '),

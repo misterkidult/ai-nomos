@@ -316,3 +316,8 @@ body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px
 .fs a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
 .fs a:hover{color:var(--brand);border-color:var(--brand)}
 .fnf{margin:14px 0 0;font-size:13px;color:var(--muted);padding-top:12px;border-top:1px solid var(--line)}
+
+/* 工作中：hero 底下的說明讓位給結果 */
+.live{margin:clamp(28px,3.5vw,44px) 0 0}
+.live a{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--muted);text-decoration:none}
+.live a:hover{color:var(--brand)}

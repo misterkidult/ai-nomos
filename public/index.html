@@ -16,6 +16,7 @@
   <p class="tag" data-i="heroTag"></p>
 
   <!-- WebMCP 訊號 -->
+  <div id="idle">
   <div class="mcp" id="mcp" hidden></div>
 
   <!-- 三步機制 -->
@@ -39,8 +40,10 @@
       <button id="copy" class="ghost"></button>
     </div>
   </div>
+  </div><!-- /idle -->
 
   <!-- 逐段敘事：把工具呼叫翻成人話。不印 lookupTerm("Bias") ×11 -->
+  <div class="live" id="live" hidden><a href="#" id="again"></a></div>
   <div class="steps" id="steps" hidden></div>
   <!-- agent 抽到的詞：畫在頁面上，不是只留在 agent 的回話裡 -->
   <div class="found" id="found" hidden></div>
@@ -182,6 +185,7 @@ function draw() {
   N.applyLang();
   $('filter').oninput = e => renderHits(e.target.value);
   wireSay(); renderSteps(); renderFound(); renderConfirm();
+  if($('live') && !$('live').hidden) setLive(true);
   N.reveal();
 }
 
@@ -196,6 +200,18 @@ const nick = () => '';   /* 署名先不做：頁面沒有輸入欄位，之後�
 let STEPS = [];        /* [{key, title, note}] 依序長出來 */
 let LOOKUPS = 0, LOOKUP_KNOWN = 0;
 let PENDING = null;
+
+/* agent 一動作，hero 底下的說明整組讓位給結果 —— 說明只在「還沒開始」時有用。
+   「換一篇」把它換回來。 */
+function setLive(on){
+  const idle=$('idle'), live=$('live');
+  if(idle) idle.hidden = !!on;
+  if(live){ live.hidden = !on;
+    const a=$('again'); if(a){ a.textContent=T('startOver');
+      a.onclick=e=>{ e.preventDefault();
+        STEPS=[]; FOUND=[]; FOUND_NF=[]; PENDING=null; LOOKUPS=0; LOOKUP_KNOWN=0;
+        renderSteps(); renderFound(); renderConfirm(); setLive(false); }; } }
+}
 
 function pushStep(key, title, note){
   const i = STEPS.findIndex(s => s.key === key);
@@ -281,7 +297,7 @@ const TOOLS = [
    async execute(input){
      const url=String((input&&input.url)||'').trim();
      const req=((input&&input.requested_terms)||[]).map(String).filter(Boolean);
-     STEPS=[]; LOOKUPS=0; LOOKUP_KNOWN=0; FOUND=[]; FOUND_NF=[]; renderFound();
+     STEPS=[]; LOOKUPS=0; LOOKUP_KNOWN=0; FOUND=[]; FOUND_NF=[]; renderFound(); setLive(true);
      pushStep('fed', T('stFed'), url);
      return {contract_version:CONTRACT_VERSION,
        next_step:'call reportDocument with what you see of the article, then submitFindings',
