@@ -10,7 +10,7 @@ const MAX = 200;
    later writer adds, and sentence/context are the two that must never leave. `id` is not starred
    in §4 but the pages use it — see context/loop-spec.md, open question for the contract owner. */
 const PUBLIC = ['id', 'term_key', 'term_raw', 'term_normalized', 'explained', 'intent', 'domain',
-  'definition_quote', 'origin', 'submitted_at', 'submitter_name'];
+  'definition_quote', 'origin', 'submitted_at', 'submitter_name', 'lang'];
 
 const publish = s => {
   const out = {};
@@ -38,6 +38,7 @@ export default async function handler(req, res) {
     const q = new URL(req.url, 'http://x').searchParams;
     const termKey = q.get('term_key');
     const days = parseInt(q.get('days') || '', 10);
+    const lang = q.get('lang');   // contract §4: the source document's language, zh|en
 
     let ids;
     if (termKey) {
@@ -59,7 +60,10 @@ export default async function handler(req, res) {
     const sightings = blobs
       .filter(Boolean)
       .map(b => (typeof b === 'string' ? JSON.parse(b) : b))
-      .map(publish);
+      .map(publish)
+      // §5: ?lang= narrows to one language side of a term. Unknown values match nothing rather
+      // than silently returning everything.
+      .filter(s => !lang || s.lang === lang);
 
     // 60s CDN cache: the feed changes only when an agent submits, and stale-while-revalidate
     // keeps the page fast without ever serving something more than a minute behind.

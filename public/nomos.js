@@ -23,6 +23,15 @@ window.NOMOS = (() => {
       sell: '🟢 大家在賣什麼', risk: '🔴 大家在擔心什麼', feed: '動態牆', feedNote: '（最新目擊，每一條都有來源）', feedEmpty: '還沒有目擊。', seenIn: (src, term) => '有人在《' + src + '》看到' + term, allLink: n => '全部 ' + n + ' 則 →', noMatch: '沒有符合的詞。',
       justNow: '剛剛', hoursAgo: n => n + ' 小時前', yesterday: '昨天', daysAgo: n => n + ' 天前',
       /* term page (08-29): senses / spellings / sell-vs-worry / jargon density */
+      /* 雙語詞條（08-29）：同一個 term_key 的兩側 */
+      sideZh: '中文語料', sideEn: '英文語料',
+      sideCount: n => n + ' 篇文章',
+      sideEmpty: l => '這個詞還沒有' + l + '目擊 —— 拿一篇來。',
+      crossLead: '兩邊怎麼談它',
+      crossSame: '兩邊的比重接近。',
+      crossDiff: (a, b) => a + '那邊偏' + b,
+      crossSell: '賣點', crossRisk: '風險', crossTech: '技術描述',
+      langOf: { zh: '中文', en: '英文' },
       /* home (08-29 改版) */
       heroTag: '約定成俗 —— AI 的詞，由大家怎麼用決定。想改字典，拿一篇文章來。',
       hotLead: '詞，和最多人用的那句', hotNoQuote: '還沒有人給它定義句。',
@@ -60,6 +69,15 @@ window.NOMOS = (() => {
       sell: '🟢 What people are selling', risk: '🔴 What people are worried about', feed: 'Activity', feedNote: '(latest sightings, each with its source)', feedEmpty: 'No sightings yet.', seenIn: (src, term) => 'someone saw ' + term + ' in “' + src + '”', allLink: n => 'all ' + n + ' entries →', noMatch: 'No matching term.',
       justNow: 'just now', hoursAgo: n => n + ' h ago', yesterday: 'yesterday', daysAgo: n => n + ' days ago',
       /* term page (08-29) */
+      /* bilingual term page (08-29) */
+      sideZh: 'Chinese sources', sideEn: 'English sources',
+      sideCount: n => n + ' articles',
+      sideEmpty: l => 'No ' + l + ' sightings for this term yet — bring one.',
+      crossLead: 'How the two sides talk about it',
+      crossSame: 'The two sides lean about the same way.',
+      crossDiff: (a, b) => a + ' leans ' + b,
+      crossSell: 'selling', crossRisk: 'worried', crossTech: 'technical',
+      langOf: { zh: 'Chinese', en: 'English' },
       /* home (08-29) */
       heroTag: 'Nomos — AI words mean what people use them to mean. To change the dictionary, bring an article.',
       hotLead: 'the term, and the line most people use', hotNoQuote: 'Nobody has defined it yet.',
@@ -135,7 +153,7 @@ window.NOMOS = (() => {
   /* ⚠ 目標必須是小元素，不能是整段容器：容器比視窗高時它的頂端永遠跨不過
      threshold，整段就停在 opacity:0（2026-08-29 踩過，首頁四個色帶全空白）。
      官網 main.js 的 REVEAL_TARGETS 也是逐個小元件列出來的。 */
-  const reveal = (selector = '.sec h2, .sense, .hotl .h, .fr .f, .fd .i, .sr .row, .vs q, .b-qg .q, .refs div, .forms, .dens, .bar, .verdict, .foot') => {
+  const reveal = (selector = '.sec h2, .sense, .hotl .h, .fr .f, .fd .i, .sr .row, .vs q, .b-qg .q, .refs div, .forms, .dens, .bar, .verdict, .foot, .cx, .sides') => {
     const els = [...document.querySelectorAll(selector)].filter(el => !el.classList.contains('rv'));
     if (!els.length) return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) {

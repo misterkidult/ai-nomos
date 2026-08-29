@@ -206,3 +206,24 @@ body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px
 .hits .e a{font-weight:700;color:#fff;text-decoration:none}
 .hits .e small{color:rgba(255,255,255,.55);margin-left:6px}
 .hits .e .line{font-size:13px;color:rgba(255,255,255,.6);display:block;margin-top:2px}
+
+/* ══ 雙語詞條（2026-08-29）：同一個 term_key 的兩側 ══ */
+.sides{display:flex;gap:0;border-bottom:1px solid var(--line)}
+.sides .s{appearance:none;background:0;border:0;border-bottom:3px solid transparent;margin:0 0 -1px;
+  padding:10px 20px 12px;font:inherit;font-size:15px;font-weight:600;color:var(--muted);cursor:pointer;
+  display:inline-flex;align-items:baseline;gap:8px;transition:color .2s var(--ease-out)}
+.sides .s:hover{color:var(--ink-soft)}
+.sides .s.on{color:var(--ink);border-bottom-color:var(--brand)}
+.sides .s b{font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.06em;color:var(--muted)}
+.sides .s.on b{color:var(--brand)}
+
+.cross{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px)}
+@media(max-width:700px){.cross{grid-template-columns:1fr}}
+.cross .verdict{grid-column:1/-1;margin-top:4px}
+.cx h4{margin:0 0 10px;font-size:14px;font-weight:600;display:flex;align-items:baseline;gap:10px}
+.cx h4 span{font-family:var(--font-mono);font-size:11px;font-weight:400;letter-spacing:.06em;color:var(--muted)}
+.cx .bar{display:flex;height:8px;gap:2px;margin:0 0 8px}
+.cx .bar i{display:block;height:100%}
+.cx .bar .s{background:var(--brand)}.cx .bar .t{background:var(--line)}.cx .bar .r{background:var(--ink)}
+.cx p{margin:0;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
+.cx p b{font-family:var(--font-en);font-size:15px;font-weight:800;color:var(--ink);letter-spacing:-.01em}

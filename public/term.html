@@ -24,6 +24,7 @@ const FCAP = 5;   /* 寫法最多列 5 種（08-29 拍板），其餘收成一�
 $('lang').onclick = () => { N.toggleLang(); N.loadTranslations().then(draw); };
 
 let SIGHT = { ok: false, sightings: [] };
+let SIDE = null;   /* 使用者點過的語料側；null＝依資料自動選 */
 
 const src = s => { const o = s.source || {};
   return '<a href="' + esc(o.url || '#') + '" target="_blank" rel="noopener">' + esc(o.title || o.url || '—') + '</a>'
@@ -35,7 +36,14 @@ function draw() {
   N.applyLang(); $('lang').textContent = T('lang');
   const e = N.bySlug(slug);
   const rows = SIGHT.sightings.filter(s => N.termKey(s) === slug);
+  /* 雙語（契約 §4 lang）：同一個 term_key 的兩側。lang 是「來源文章」的語言，
+     不是詞的語言 —— 英文詞名出現在中文文章裡仍算中文語料。舊資料缺 lang 時
+     退回中文側（語料絕大多數是中文），不讓它整筆消失。 */
+  const side = { zh: rows.filter(r => (r.lang || 'zh') === 'zh'),
+                 en: rows.filter(r => r.lang === 'en') };
+  const cur = SIDE || (side.en.length && !side.zh.length ? 'en' : N.lang() === 'en' && side.en.length ? 'en' : 'zh');
   const name = e ? e.term : (rows[0] ? rows[0].term_raw : slug);
+  const ROWS = side[cur];   /* 當前語料側；底下所有分析都吃它 */
   document.title = name + ' · ai-nomos';
 
   const note = $('note');
@@ -56,10 +64,10 @@ function draw() {
 
   /* A 義項：定義句去重，當字典的義項 */
   const seen = new Map();
-  rows.filter(s => s.definition_quote).forEach(s => { const k = s.definition_quote.trim();
+  ROWS.filter(s => s.definition_quote).forEach(s => { const k = s.definition_quote.trim();
     if (!seen.has(k)) seen.set(k, []); seen.get(k).push(s); });
   const senses = [...seen.entries()];
-  const nExplain = rows.filter(s => s.definition_quote).length;
+  const nExplain = ROWS.filter(s => s.definition_quote).length;
   const A = senses.map(([q, ss], i) => '<div class="sense"><div class="no">' + String(i + 1).padStart(2, '0') + '</div>'
       + '<p>' + N.tq(q) + '</p><div class="fn">' + src(ss[0])
       + (ss.length > 1 ? T('sameLine')(ss.length - 1) : '')
@@ -67,7 +75,7 @@ function draw() {
 
   /* G 寫法：只列前 5 種 */
   const fc = new Map();
-  rows.forEach(s => { const k = (s.term_raw || '').trim(); fc.set(k, (fc.get(k) || 0) + 1); });
+  ROWS.forEach(s => { const k = (s.term_raw || '').trim(); fc.set(k, (fc.get(k) || 0) + 1); });
   const forms = [...fc.entries()].sort((x, y) => y[1] - x[1]);
   const rest = forms.length - FCAP;
   const G = forms.length > 1
@@ -76,9 +84,9 @@ function draw() {
     : '';
 
   /* B 賣 vs 擔心 */
-  const sell = rows.filter(s => s.intent === 'selling_point'),
-        tech = rows.filter(s => s.intent === 'technical'),
-        risk = rows.filter(s => s.intent === 'risk_or_limit');
+  const sell = ROWS.filter(s => s.intent === 'selling_point'),
+        tech = ROWS.filter(s => s.intent === 'technical'),
+        risk = ROWS.filter(s => s.intent === 'risk_or_limit');
   const col = (list, cls, label) => {
     const q = list.filter(s => s.definition_quote), m = list.filter(s => !s.definition_quote);
     return '<div class="' + cls + '"><h3><b>' + list.length + '</b>' + label + '</h3>'
@@ -88,7 +96,7 @@ function draw() {
           + m.slice(0, 3).map(src).join('、') + (m.length > 3 ? ' …' : '') + '</p>' : '')
       + '</div>';
   };
-  const B = rows.length
+  const B = ROWS.length
     ? '<div class="bar"><i class="s" style="flex:' + sell.length + '"></i><i class="t" style="flex:' + tech.length + '"></i><i class="r" style="flex:' + risk.length + '"></i></div>'
       + '<div class="legend"><span><b>' + sell.length + '</b>' + T('sellingIt') + '</span>'
       + '<span>' + T('technicalN')(tech.length) + '</span>'
@@ -97,10 +105,10 @@ function draw() {
     : '';
 
   /* C 術語濃度 */
-  const n = rows.length,
-        d = rows.filter(s => s.explained === 'has_definition').length,
-        m = rows.filter(s => s.explained === 'mentioned').length,
-        a = rows.filter(s => s.explained === 'assumed').length;
+  const n = ROWS.length,
+        d = ROWS.filter(s => s.explained === 'has_definition').length,
+        m = ROWS.filter(s => s.explained === 'mentioned').length,
+        a = ROWS.filter(s => s.explained === 'assumed').length;
   const verdict = a > d ? T('vAssumed') : (d >= m && d >= a) ? T('vFriendly') : T('vPassing');
   const C = n ? '<div class="dens">'
       + '<div><b>' + n + '</b><span>' + T('mentions') + '</span></div>'
@@ -111,15 +119,49 @@ function draw() {
 
   /* 提到它但沒解釋：一篇一條 */
   const u = new Map();
-  rows.filter(s => !s.definition_quote).forEach(s => { const k = s.source && s.source.url; if (k && !u.has(k)) u.set(k, s); });
+  ROWS.filter(s => !s.definition_quote).forEach(s => { const k = s.source && s.source.url; if (k && !u.has(k)) u.set(k, s); });
   const R = u.size ? '<div class="refs">' + [...u.values()].map(s => '<div>' + src(s) + '</div>').join('') + '</div>' : '';
 
   const foot = '<div class="foot"><span>' + T('contribute') + '</span>'
     + '<a class="btn" href="/read">' + T('bring') + '</a>'
     + '<span class="dim">' + T('evidence') + '</span></div>';
 
+  /* 語料側切換：兩側都有資料才出現 */
+  const tabs = (side.zh.length && side.en.length)
+    ? '<div class="sides">' + ['zh','en'].map(l =>
+        '<button class="s' + (l === cur ? ' on' : '') + '" data-side="' + l + '">'
+        + (l === 'zh' ? T('sideZh') : T('sideEn'))
+        + '<b>' + new Set(side[l].map(r => r.source && r.source.url).filter(Boolean)).size + '</b></button>').join('')
+      + '</div>'
+    : '';
+
+  /* 跨語言對照：兩邊各自的 intent 比重，只有兩側都有料才算得出來 */
+  const share = list => { const n = list.length || 1;
+    return { sell: list.filter(x => x.intent === 'selling_point').length / n,
+             risk: list.filter(x => x.intent === 'risk_or_limit').length / n }; };
+  let CROSS = '';
+  if (side.zh.length >= 3 && side.en.length >= 3) {
+    const z = share(side.zh), e2 = share(side.en);
+    const dSell = z.sell - e2.sell, dRisk = z.risk - e2.risk;
+    const pick = Math.abs(dSell) >= Math.abs(dRisk) ? ['sell', dSell] : ['risk', dRisk];
+    const label = pick[0] === 'sell' ? T('crossSell') : T('crossRisk');
+    const verdict = Math.abs(pick[1]) < 0.15 ? T('crossSame')
+      : T('crossDiff')(pick[1] > 0 ? T('langOf').zh : T('langOf').en, label);
+    const bar = (o, lbl, nDocs) => '<div class="cx"><h4>' + lbl + '<span>' + T('sideCount')(nDocs) + '</span></h4>'
+      + '<div class="bar"><i class="s" style="flex:' + Math.round(o.sell*100) + '"></i>'
+      + '<i class="t" style="flex:' + Math.round((1-o.sell-o.risk)*100) + '"></i>'
+      + '<i class="r" style="flex:' + Math.round(o.risk*100) + '"></i></div>'
+      + '<p><b>' + Math.round(o.sell*100) + '%</b> ' + T('crossSell')
+      + ' · <b>' + Math.round(o.risk*100) + '%</b> ' + T('crossRisk') + '</p></div>';
+    CROSS = bar(z, T('sideZh'), new Set(side.zh.map(r => r.source && r.source.url).filter(Boolean)).size)
+          + bar(e2, T('sideEn'), new Set(side.en.map(r => r.source && r.source.url).filter(Boolean)).size)
+          + '<p class="verdict">' + verdict + '</p>';
+  }
+
   $('page').innerHTML =
-      band('sec--paper', senses.length
+      (tabs ? band('', tabs) : '')
+    + (CROSS ? band('', h2('', T('crossLead')) + '<div class="cross">' + CROSS + '</div>') : '')
+    + band('sec--paper', senses.length
         ? h2(senses.length, T('senses')(nExplain)) + A
         : '<p class="dim">' + T('noDefs') + '</p>')
     + band('', G ? h2(forms.length, T('spellings')) + G : '')
@@ -127,6 +169,12 @@ function draw() {
     + band('', C ? h2('', T('density')) + C : '')
     + band('sec--ink', (R ? h2(u.size, T('mentionNoExplain')) + R : '') + foot);
 
+  if (!ROWS.length) {
+    $('page').innerHTML = (tabs ? band('', tabs) : '')
+      + band('sec--paper', '<p class="dim">' + T('sideEmpty')(T('langOf')[cur]) + '</p>');
+  }
+  document.querySelectorAll('.sides .s').forEach(b =>
+    b.onclick = () => { SIDE = b.dataset.side; draw(); });
   N.reveal();   /* 捲動進場（coreplay 2027 節奏），draw 後掛一次 */
 }
 
