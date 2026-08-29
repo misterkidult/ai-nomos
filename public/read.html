@@ -31,6 +31,10 @@ code{background:#fff;border:1px solid #000;padding:1px 6px;font-size:13px}
 @media (prefers-reduced-motion:reduce){.whead b::before{animation:none}}
 .wsec{font-family:ui-monospace,monospace;font-size:12px;color:#555;font-variant-numeric:tabular-nums}
 .wurl{margin:6px 0 0;font-size:12px;color:#555;word-break:break-all;font-family:ui-monospace,monospace}
+/* reportDocument 回來之後的文件卡：標題是 agent 真的到過那頁的證據 */
+.wtitle{margin:8px 0 0;font-size:17px;font-weight:700;line-height:1.35}
+.wmeta{margin:3px 0 0;font-size:12px;color:#555}
+.wgist{margin:8px 0 0;font-size:14px;line-height:1.6;padding-left:11px;border-left:2px solid #2540d8}
 .wterms{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
 .wterms .lbl{font-size:12px;color:#555;margin-right:4px}
 .wt{font-size:13px;padding:2px 9px;border:1px solid #ccc;background:#fff;border-radius:2px}
@@ -182,6 +186,8 @@ const I18N={
   nickNote:'署名會跟著你的目擊一起公開，可留空。字典不驗證這個名字，也不用它做任何排名',
   signedBy:n=>'—— '+n,unsigned:'未署名',
   storeFail:e=>'伺服器沒收：'+e+'，這批只留在畫面上',storeOff:e=>'連不到伺服器（'+e+'），這批只留在畫面上',
+  reported:t=>'reportDocument：'+t,
+  docOpened:'你的 AI 打開了這篇',docWords:n=>n.toLocaleString()+' 字',docReading:'正在抽詞…',
   workingTitle:'你的 AI 正在讀這篇',workingFor:t=>'已經 '+t+' 秒',
   workingWhat:'它拿到的東西：這個連結、你指定的詞、抽取規則、133 則字典索引。文章不經過我們的伺服器 —— 是它用你的瀏覽器去讀的。',
   workingTerms:'你指定要找的詞',workingSeeking:'搜尋中',workingNone:'你沒有指定詞 —— agent 會自己判斷該收哪些',
@@ -223,6 +229,8 @@ const I18N={
   nickNote:'Your signature is published alongside your sightings and can be left empty. The dictionary does not verify the name, and nothing is ranked by it',
   signedBy:n=>'— '+n,unsigned:'unsigned',
   storeFail:e=>'server refused: '+e+' — this batch stays on screen only',storeOff:e=>'server unreachable ('+e+') — this batch stays on screen only',
+  reported:t=>'reportDocument: '+t,
+  docOpened:'Your AI opened this article',docWords:n=>n.toLocaleString()+' words',docReading:'extracting terms…',
   workingTitle:'Your AI is reading this article',workingFor:t=>t+'s so far',
   workingWhat:'What it was handed: this link, the terms you asked for, the extraction rules, and a 133-entry index. The article never touches our server — your agent reads it in your browser.',
   workingTerms:'Terms you asked for',workingSeeking:'looking',workingNone:'You did not name any terms — the agent will decide what to report',
@@ -297,6 +305,7 @@ $('doc').addEventListener('input',()=>{$('doclen').textContent=T('chars')($('doc
 const CONTRACT_VERSION=1;
 const STOPLIST=['導入','自架','本地','整合','平台','系統','流程','資料','知識庫','工具','應用','服務','方案','自動化','數位轉型','雲端','上線','部署','優化'];
 const RULES=`You are helping the user read one article. feedDocument gives you its url (fetch and read it yourself; the page never uploads it) and the terms the user wants pulled out (requested_terms). Do not take the user's list at face value: find each requested term in the article and judge it; add AI terms you notice that the user did not list; report everything with submitFindings, following these rules.
+0. Order of work: call feedDocument for the link and the rules, open the article, then call reportDocument once with what you can see of it (title, byline, date, rough length, one sentence on what it is about) before you start extracting. The person is watching an otherwise blank screen while you read; that call is what tells them you reached the page. Then report the terms with submitFindings.
 1. Copy, don't explain. term_raw = exactly as written. sentence = the one sentence it appears in (max 120 chars). context = that sentence plus one sentence before and after.
    definition_quote only when the document itself explains the term, and it must be a verbatim substring of context. If the document does not explain it, leave it "" — never fill from your own knowledge.
 2. For each term answer three single-choice fields: explained (has_definition / mentioned / assumed), intent (selling_point / technical / risk_or_limit), domain (core / edge / not).
@@ -535,12 +544,26 @@ function renderWorking(){
         }).join('')
       + '</div>'
     : '<p class="dim">'+esc(T('workingNone'))+'</p>';
+  const d=WORK.doc;
+  const head = WORK.done ? T('workingDone')(secs) : d ? T('docOpened') : T('workingTitle');
+  const meta = d ? [d.byline, d.published, d.words?T('docWords')(d.words):''].filter(Boolean).join(' · ') : '';
   box.innerHTML =
-      '<div class="whead"><b>'+esc(WORK.done?T('workingDone')(secs):T('workingTitle'))+'</b>'
+      '<div class="whead"><b>'+esc(head)+'</b>'
     + (WORK.done?'':'<span class="wsec">'+esc(T('workingFor')(secs))+'</span>')+'</div>'
+    + (d ? '<p class="wtitle">'+esc(d.title)+'</p>'
+         + (meta?'<p class="wmeta">'+esc(meta)+'</p>':'')
+         + (d.gist?'<p class="wgist">'+esc(d.gist)+'</p>':'')
+      : '')
     + (WORK.url?'<p class="wurl">'+esc(WORK.url)+'</p>':'')
     + chips
     + (WORK.done?'':'<p class="dim wnote">'+esc(T('workingWhat'))+'</p>');
+}
+
+/* 第一段回報進來：畫面從「正在讀」換成「打開了這篇《標題》」＋它看到的東西。
+   這也是 agent 真的到過那頁的證據 —— 標題對不上就是它沒讀。 */
+function workDoc(doc){
+  if(!WORK) WORK={t0:Date.now(), url:'', terms:[], done:false, secs:0, found:null, missing:null, timer:setInterval(renderWorking,1000)};
+  WORK.doc=doc; renderWorking();
 }
 
 function workStart(url, terms){
@@ -598,6 +621,19 @@ function setup(mc){
        log(T('fed')(url||(text.length+' chars'),req.length),'ok');
        return {contract_version:CONTRACT_VERSION,url,requested_terms:req,document:text,known_hits:hits.map(h=>({term:h.term,zh:h.zh,slug:h.slug,matched:h.matched})),
          lexicon:LEX.map(e=>({term:e.term,aka:e.aka,zh:e.zh})),rules:RULES,finding_schema:FINDING_SCHEMA};
+     }},
+    /* 分段回報的第一段（契約 §5 reportDocument）：agent 打開文章、還沒開始抽詞時
+       先講它看到什麼。不寫入、不影響鎖 —— 存在的理由是那段等待原本完全空白。
+       ⚠ 這是唯一一個「agent 講、頁面無法查證」的欄位，所以只當狀態列用，不落資料。 */
+    {name:'reportDocument',description:'Call this once, right after you open the article and before you start extracting terms. Report what you can see of the document: title (verbatim, required), byline, published (YYYY-MM-DD, only if the page states one), words (rough length), gist (one sentence, max 100 chars, in the article\'s own language, on what the article is about — not what the terms mean). The person is watching a blank screen while you read; this is what tells them you reached the page. Nothing here is stored.',
+     inputSchema:{type:'object',properties:{title:{type:'string'},byline:{type:'string'},published:{type:'string'},words:{type:'number'},gist:{type:'string'}},required:['title'],additionalProperties:false},
+     annotations:{readOnlyHint:true},
+     async execute(input){
+       const d=input||{};
+       workDoc({title:String(d.title||''),byline:String(d.byline||''),published:String(d.published||''),
+                words:Number(d.words)||0,gist:String(d.gist||'').slice(0,100)});
+       log(T('reported')(d.title||'—'),'ok');
+       return {contract_version:CONTRACT_VERSION,ok:true};
      }},
     {name:'submitFindings',description:'Send the AI-term sightings found in the article back to the dictionary. findings: items per finding_schema (requested=true for the user\'s terms, false for ones you added). not_found: requested terms you could not locate in the article. The server applies the locks and may reject some items; rejected items carry reason codes. This does NOT write to the dictionary: it returns status pending_review and the findings wait on the page until the person confirms them. That is the final answer to this call — do not resubmit or poll.',
      inputSchema:{type:'object',properties:{findings:{type:'array',items:FINDING_SCHEMA},not_found:{type:'array',items:{type:'string'}}},required:['findings','not_found'],additionalProperties:false},

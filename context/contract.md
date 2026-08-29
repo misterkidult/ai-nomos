@@ -71,6 +71,7 @@ JSON Schema (also returned by `feedDocument` as `finding_schema`):
 
 ```
 You are helping the user read one article. feedDocument gives you its url (fetch and read it yourself; the page never uploads it) and the terms the user wants pulled out (requested_terms). Do not take the user's list at face value: find each requested term in the article and judge it; add AI terms you notice that the user did not list; report everything with submitFindings, following these rules.
+0. Order of work: call feedDocument for the link and the rules, open the article, then call reportDocument once with what you can see of it (title, byline, date, rough length, one sentence on what it is about) before you start extracting. The person is watching an otherwise blank screen while you read; that call is what tells them you reached the page. Then report the terms with submitFindings.
 1. Copy, don't explain. term_raw = exactly as written. sentence = the one sentence it appears in (max 120 chars). context = that sentence plus one sentence before and after.
    definition_quote only when the document itself explains the term, and it must be a verbatim substring of context. If the document does not explain it, leave it "" — never fill from your own knowledge.
 2. For each term answer three single-choice fields: explained (has_definition / mentioned / assumed), intent (selling_point / technical / risk_or_limit), domain (core / edge / not).
@@ -141,6 +142,26 @@ The page gives the agent an article by **URL** and the user's list of terms to p
  "rules":"<§2>",
  "finding_schema":{"…§1"}}
 ```
+
+### `reportDocument` (input `{title, byline, published, words, gist}`)
+
+Called **once, right after the agent opens the article and before it starts extracting**. Everything is what the agent can see on the page; none of it is stored — it exists so the person watching knows their agent really opened the link, and what it opened.
+
+```json
+{"title":"", "byline":"", "published":"", "words":0, "gist":""}
+```
+
+| field | rule |
+|---|---|
+| `title` | the article's own title, verbatim. Required — it is the proof the agent reached the page |
+| `byline` | author or publication as printed; `""` when the page shows none |
+| `published` | `YYYY-MM-DD` when the page states a date; `""` otherwise. Never guess |
+| `words` | rough length. An estimate is fine; `0` when the agent cannot tell |
+| `gist` | one sentence, ≤ 100 characters, in the article's own language, saying what the article is about — **not** what the terms mean |
+
+Answers `{"contract_version":1,"ok":true}`. It writes nothing and cannot fail the batch: an agent that skips it still submits normally, and a page that never receives it just shows less. The point is the seam — without it the interface is blank for however long the reading takes, which is most of the interaction.
+
+**This is the only place the agent tells the page something the page could not have known.** Everything else it sends is evidence copied out of the article; this is the agent reporting on its own progress, so it is also the only field the locks cannot check. Treat it as a status line, never as data: it is not stored, not published, and no sighting depends on it.
 
 ### `submitFindings` (input `{findings: Finding[], not_found: string[]}`)
 
