@@ -18,6 +18,29 @@ code{background:#fff;border:1px solid #000;padding:1px 6px;font-size:13px}
 /* quiet＝備妥但沒人來叫：琥珀而非紅，這不是壞掉、是還沒接上 */
 .link.quiet b::before{background:#E5A400;box-shadow:0 0 0 4px rgba(229,164,0,.18)}
 .link.quiet span{color:#7a5c00}
+/* 等待態：agent 在讀那篇的時候 */
+.working{border:1px solid #000;border-left-width:5px;border-left-color:#2540d8;
+  padding:14px 16px;margin:14px 0;background:#F5F7FF}
+.working.done{border-left-color:#999;background:#fafafa}
+.whead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.whead b{font-size:15px;display:inline-flex;align-items:baseline;gap:9px}
+.whead b::before{content:"";width:8px;height:8px;border-radius:50%;background:#2540d8;flex:0 0 auto;
+  animation:wpulse 1.4s ease-in-out infinite}
+.working.done .whead b::before{background:#999;animation:none}
+@keyframes wpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
+@media (prefers-reduced-motion:reduce){.whead b::before{animation:none}}
+.wsec{font-family:ui-monospace,monospace;font-size:12px;color:#555;font-variant-numeric:tabular-nums}
+.wurl{margin:6px 0 0;font-size:12px;color:#555;word-break:break-all;font-family:ui-monospace,monospace}
+.wterms{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.wterms .lbl{font-size:12px;color:#555;margin-right:4px}
+.wt{font-size:13px;padding:2px 9px;border:1px solid #ccc;background:#fff;border-radius:2px}
+.wt.q{border-style:dashed;color:#555}
+.wt.y{border-color:#2540d8;color:#2540d8;font-weight:700}
+.wt.y::before{content:"✓ ";}
+.wt.n{border-color:#ccc;color:#999;text-decoration:line-through}
+.wt.u{border-color:#E5A400;color:#7a5c00;border-style:dashed}
+.wt.u::before{content:"? ";}
+.wnote{margin:12px 0 0;font-size:12px;line-height:1.6}
 .link span{font-size:13px;color:#555;flex:1 1 22em}
 /* 第四關：人確認才寫入。用醒目的黃底 —— 這是唯一一個「不按就不會發生」的地方 */
 .confirm{border:1px solid #000;border-left-width:5px;padding:16px;margin:16px 0;background:#FFF7C2}
@@ -100,6 +123,10 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
 <div class="box">
   <h2><span data-i="s3">3 · 目擊紀錄</span> <span class="dim" data-i="mockNote">（送出即寫入字典；被鎖擋下的不寫）</span></h2>
   <p class="dim"><span data-i="agentHint" data-html="1"></span> <button id="demo" class="ghost" data-i="demo">載入範例目擊（廠商文，14 筆）</button></p>
+  <!-- 等待態：feedDocument 之後、submitFindings 之前。WebMCP 是請求／回應，
+       頁面不可能知道 agent 讀到哪 —— 所以顯示的是「經過時間」與「它拿到什麼」，
+       不是假進度條。 -->
+  <div class="working" id="working" hidden></div>
   <div id="findings"></div>
   <div class="confirm" id="confirm" hidden></div>
   <div id="nf"></div>
@@ -155,6 +182,11 @@ const I18N={
   nickNote:'署名會跟著你的目擊一起公開，可留空。字典不驗證這個名字，也不用它做任何排名',
   signedBy:n=>'—— '+n,unsigned:'未署名',
   storeFail:e=>'伺服器沒收：'+e+'，這批只留在畫面上',storeOff:e=>'連不到伺服器（'+e+'），這批只留在畫面上',
+  workingTitle:'你的 AI 正在讀這篇',workingFor:t=>'已經 '+t+' 秒',
+  workingWhat:'它拿到的東西：這個連結、你指定的詞、抽取規則、133 則字典索引。文章不經過我們的伺服器 —— 是它用你的瀏覽器去讀的。',
+  workingTerms:'你指定要找的詞',workingSeeking:'搜尋中',workingNone:'你沒有指定詞 —— agent 會自己判斷該收哪些',
+  foundIt:'找到了',notFoundIt:'這篇裡沒有',unreported:'agent 沒交代這個詞',
+  workingDone:t=>'讀完了，花了 '+t+' 秒',
   linkIdle:'還沒有 agent 叫過工具',linkOn:'agent 接上了',linkQuiet:'工具備妥了，但還沒有 agent 來叫',
   linkQuietHint:'如果你已經跟 AI 講過了卻沒反應：ChatGPT 桌面版要在 Work 模式、Settings › Browser › Permissions 開「啟用網站工具」；Claude in Chrome 目前不會叫頁面的工具。',
   linkHint:'跟你的 AI 說：「呼叫 feedDocument，讀那篇文章，照規則找詞，再用 submitFindings 送回來」',
@@ -191,6 +223,11 @@ const I18N={
   nickNote:'Your signature is published alongside your sightings and can be left empty. The dictionary does not verify the name, and nothing is ranked by it',
   signedBy:n=>'— '+n,unsigned:'unsigned',
   storeFail:e=>'server refused: '+e+' — this batch stays on screen only',storeOff:e=>'server unreachable ('+e+') — this batch stays on screen only',
+  workingTitle:'Your AI is reading this article',workingFor:t=>t+'s so far',
+  workingWhat:'What it was handed: this link, the terms you asked for, the extraction rules, and a 133-entry index. The article never touches our server — your agent reads it in your browser.',
+  workingTerms:'Terms you asked for',workingSeeking:'looking',workingNone:'You did not name any terms — the agent will decide what to report',
+  foundIt:'found',notFoundIt:'not in this article',unreported:'the agent did not report back on this one',
+  workingDone:t=>'done in '+t+'s',
   linkIdle:'no agent has called a tool yet',linkOn:'agent connected',linkQuiet:'tools are ready, but no agent has called them',
   linkQuietHint:'If you already asked your AI and nothing happened: in the ChatGPT desktop app you need Work mode with Settings › Browser › Permissions › site tools enabled. Claude in Chrome does not call page tools at all.',
   linkHint:'Tell your AI: “call feedDocument, read the article, find the terms following the rules, then send them back with submitFindings”',
@@ -212,7 +249,7 @@ function applyLang(){
     if(el.dataset.attr)el.setAttribute(el.dataset.attr,v);else if(el.dataset.html)el.innerHTML=v;else el.textContent=v;});
   $('lang').textContent=LANG==='zh'?'EN':'中文';
   localStorage.setItem('lang',LANG);
-  renderHits(HITS);renderFindings();renderLink();renderConfirm();
+  renderHits(HITS);renderFindings();renderLink();renderConfirm();renderWorking();
 }
 
 $('lang').onclick=()=>{LANG=LANG==='zh'?'en':'zh';applyLang()};
@@ -374,6 +411,7 @@ try{const v=localStorage.getItem('nick');if(v)$('nick').value=v}catch(e){}
 let PENDING = null;   /* {list, accepted, notFound} 等人確認的那批 */
 
 async function submit(findings,from,notFound,store=true){
+  if(store) workDone(findings, notFound);
   const list=Array.isArray(findings)?findings:[];
   const nf=Array.isArray(notFound)?notFound.filter(Boolean).map(String):[];
   const acc=[],rej=[];
@@ -473,6 +511,56 @@ $('look').onclick=()=>{const q=$('q').value.trim();if(!q){log(T('qEmpty'),'no');
 $('trend').onclick=()=>{renderTrend(trending());log('trending()')};
 
 /* ---------- WebMCP tools ---------- */
+/* 等待態（2026-08-29）：agent 讀文章那段畫面原本完全靜止 —— feedDocument 一行 log，
+   然後 10–60 秒沒有任何訊號，看起來像當掉，而那正是這個產品最有價值的一段。
+   ⚠ WebMCP 是請求／回應，agent 不會回報「我讀到第三段」。所以這裡顯示的是
+   **經過時間**與**它確實拿到的東西**，不是假進度 —— 詞的狀態一開始全是「搜尋中」
+   （那是事實：它確實在找），submitFindings 回來才依真實結果打勾或畫叉。 */
+let WORK = null;   /* {t0, url, terms, done, secs, timer} */
+
+function renderWorking(){
+  const box=$('working'); if(!box) return;
+  if(!WORK){ box.hidden=true; box.innerHTML=''; return; }
+  box.hidden=false;
+  box.className='working'+(WORK.done?' done':'');
+  const secs=WORK.done?WORK.secs:Math.round((Date.now()-WORK.t0)/1000);
+  const chips = WORK.terms.length
+    ? '<div class="wterms"><span class="lbl">'+esc(T('workingTerms'))+'</span>'
+      + WORK.terms.map(t=>{
+          /* 讀完之後只有三種：找到／agent 明說沒有／agent 沒交代。
+             最後那種不能留在「搜尋中」—— 讀都讀完了還顯示在找，是騙人的。 */
+          const st = !WORK.found ? 'q' : WORK.found.has(t) ? 'y' : WORK.missing.has(t) ? 'n' : 'u';
+          const tip = st==='y'?T('foundIt') : st==='n'?T('notFoundIt') : st==='u'?T('unreported') : T('workingSeeking');
+          return '<span class="wt '+st+'" title="'+esc(tip)+'">'+esc(t)+'</span>';
+        }).join('')
+      + '</div>'
+    : '<p class="dim">'+esc(T('workingNone'))+'</p>';
+  box.innerHTML =
+      '<div class="whead"><b>'+esc(WORK.done?T('workingDone')(secs):T('workingTitle'))+'</b>'
+    + (WORK.done?'':'<span class="wsec">'+esc(T('workingFor')(secs))+'</span>')+'</div>'
+    + (WORK.url?'<p class="wurl">'+esc(WORK.url)+'</p>':'')
+    + chips
+    + (WORK.done?'':'<p class="dim wnote">'+esc(T('workingWhat'))+'</p>');
+}
+
+function workStart(url, terms){
+  clearInterval(WORK&&WORK.timer);
+  WORK={t0:Date.now(), url, terms:terms.slice(), done:false, secs:0, found:null, missing:null,
+        timer:setInterval(renderWorking, 1000)};
+  renderWorking();
+}
+/* submitFindings 回來：用真實結果收尾，不清掉 —— 讓人看得到「花了幾秒、哪些找到了」 */
+function workDone(findings, notFound){
+  if(!WORK) return;
+  clearInterval(WORK.timer);
+  WORK.done=true; WORK.secs=Math.round((Date.now()-WORK.t0)/1000);
+  const raw=(findings||[]).map(f=>String((f&&f.term_raw)||'').toLowerCase());
+  const nf=new Set((notFound||[]).map(x=>String(x).toLowerCase()));
+  WORK.found=new Set(WORK.terms.filter(t=>raw.some(r=>r.includes(t.toLowerCase())||t.toLowerCase().includes(r))));
+  WORK.missing=new Set(WORK.terms.filter(t=>nf.has(t.toLowerCase())));
+  renderWorking();
+}
+
 /* ② 訊號：agent 真的呼叫過工具了嗎。feedDocument 一被叫就點亮，之後不再變回去。
    三態：idle（工具還沒備妥／剛備妥）→ quiet（備妥 45 秒沒人來叫）→ on（來過了）。
    quiet 用時間不用按鈕：人會先開口講、沒反應才想找答案，要他先按一次「我叫過了」
@@ -506,6 +594,7 @@ function setup(mc){
        const url=$('url').value.trim(), text=$('doc').value.trim(), req=requestedTerms();
        const hits=text?matchKnown(text):[];if(text){$('hitn').dataset.ran='1';renderHits(hits);}
        linkUp();
+       workStart(url, req);
        log(T('fed')(url||(text.length+' chars'),req.length),'ok');
        return {contract_version:CONTRACT_VERSION,url,requested_terms:req,document:text,known_hits:hits.map(h=>({term:h.term,zh:h.zh,slug:h.slug,matched:h.matched})),
          lexicon:LEX.map(e=>({term:e.term,aka:e.aka,zh:e.zh})),rules:RULES,finding_schema:FINDING_SCHEMA};
