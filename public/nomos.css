@@ -26,3 +26,110 @@ button.lang{padding:4px 10px;font-size:13px;font-weight:400;background:#fff;whit
 .feed{font-size:14px}.feed div{padding:6px 0;border-top:1px solid #eee}.feed .ago{color:#777;font-size:12px;width:6em;display:inline-block}.feed b{margin:0 4px}.feed a{color:inherit}.feed .meta{margin-left:8px}
 .fresh a{color:inherit;text-decoration:none}
 .def{font-size:18px;margin:8px 0 2px}.card h2{font-size:14px;margin:18px 0 4px;border-bottom:1px solid #000;padding-bottom:2px}.src{padding:8px 0;border-top:1px solid #eee}.src a{color:inherit;font-weight:700}.src .meta{margin-left:8px}.src q{margin-top:4px}
+
+/* ══ 2026-08-29：詞條頁改版（coreplay 2027 token｜全幅色帶｜無 inner container）══
+   舊的 .box 卡片樣式上面還在，首頁與 /read 仍在用；/term 已不吃它。 */
+:root{--ink:#16161a;--ink-soft:#3c3c44;--bg:#fff;--paper:#f7f7f5;--brand:#2540d8;--accent-lime:#C5FF4A;--muted:#74747c;--line:#e4e4e8;
+  --font-en:"Inter","Noto Sans TC",sans-serif;--font-mono:"IBM Plex Mono","SFMono-Regular",ui-monospace,monospace}
+
+/* 只有掛 .doc 的頁面走新版面：body 不再是 860px 窄欄 */
+body.doc{font-family:"Noto Sans TC",-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);
+  max-width:none;margin:0;padding:0;line-height:1.7;-webkit-font-smoothing:antialiased}
+body.doc .wrap{max-width:1600px;margin:0 auto;padding-left:clamp(20px,4vw,48px);padding-right:clamp(20px,4vw,48px)}
+body.doc .head{padding-top:32px;padding-bottom:clamp(56px,7vw,88px)}
+body.doc a{color:inherit}
+body.doc .top .dim a{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:var(--muted);text-decoration:none}
+body.doc button.lang{border:1px solid var(--line);background:#fff;font-family:var(--font-mono);font-size:12px;letter-spacing:.08em}
+body.doc .note{background:#FFF7C2;border:0;border-left:4px solid var(--ink);padding:8px 14px;font-size:13px;margin:0 0 24px}
+
+/* 詞頭 */
+.hd h1{display:inline-block;font-family:var(--font-en);font-size:clamp(64px,11vw,160px);font-weight:800;letter-spacing:-.02em;line-height:1;margin:0;padding-bottom:14px;border-bottom:5px solid var(--brand)}
+.hd .zh{font-size:clamp(20px,2.6vw,26px);font-weight:800;color:var(--ink);margin:18px 0 0}
+.hd .zh .dim{font-weight:400;color:var(--muted);font-size:14px}
+.hd .ed{font-size:16px;color:var(--ink-soft);margin:10px 0 0;max-width:48em}
+.hd .ed i{font-style:normal;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--muted);margin-left:10px}
+.hd .new{background:var(--accent-lime);border:0;padding:2px 8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;margin-left:12px;vertical-align:middle}
+
+/* 全幅色帶：白／紙／藍／墨黑正反交錯 */
+.sec{margin:0;padding-top:clamp(56px,7vw,88px);padding-bottom:clamp(56px,7vw,88px)}
+.sec--paper{background:var(--paper)}
+.sec--blue{background:var(--brand);color:#fff}
+.sec--ink{background:var(--ink);color:#fff}
+.sec h2{display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:12px;font-weight:500;letter-spacing:.1em;color:var(--muted);border:0;margin:0 0 24px;padding:0}
+.sec h2::before{content:"+";color:var(--brand);font-weight:600}
+.sec h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.sec h2 b{color:var(--ink);font-weight:600;font-size:12px;margin:0 4px 0 0}
+.sec--blue h2,.sec--ink h2{color:rgba(255,255,255,.72)}
+.sec--blue h2 b,.sec--ink h2 b{color:#fff}
+.sec--blue h2::before{color:#fff}.sec--ink h2::before{color:var(--accent-lime)}
+.sec--blue h2::after,.sec--ink h2::after{background:rgba(255,255,255,.24)}
+
+/* A 義項 */
+.sense{display:grid;grid-template-columns:3em 1fr;gap:0 12px;padding:18px 0;border-top:1px solid var(--line);margin:0}
+.sense:first-of-type{border-top:1px solid var(--ink)}
+.sense .no{font-family:var(--font-mono);font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--brand);line-height:2.6}
+.sense p{margin:0;font-size:clamp(19px,2.4vw,22px);line-height:1.55;font-weight:500}
+.sense .fn{grid-column:2;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:8px}
+.sense .fn a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
+.sense .fn a:hover{color:var(--brand);border-color:var(--brand)}
+.sense .fn .tag{margin-left:10px;color:var(--ink-soft)}.sense .fn .d{margin-left:6px}
+/* 譯文層：譯文在上、原文縮小附下（原文才可查核） */
+.orig{display:block;font-size:.62em;color:var(--muted);margin-top:6px;line-height:1.5}
+.sec--blue .orig,.sec--ink .orig{color:rgba(255,255,255,.5)}
+
+/* B 賣 vs 擔心 */
+.bar{display:flex;height:8px;margin:0 0 10px;gap:2px}.bar i{display:block;height:100%}
+.bar .s{background:var(--brand)}.bar .t{background:var(--line)}.bar .r{background:var(--ink)}
+.sec--blue .bar .s{background:#fff}.sec--blue .bar .t{background:rgba(255,255,255,.22)}.sec--blue .bar .r{background:var(--ink)}
+.legend{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--muted);margin-bottom:28px;gap:16px;flex-wrap:wrap}
+.legend b{font-family:var(--font-en);color:var(--ink);font-size:18px;margin-right:4px;letter-spacing:0}
+.sec--blue .legend{color:rgba(255,255,255,.7)}.sec--blue .legend b{color:#fff}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:40px}@media(max-width:700px){.vs{grid-template-columns:1fr}}
+.vs h3{font-size:13px;margin:0 0 12px;font-weight:400;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--ink)}
+.vs h3 b{font-family:var(--font-en);font-size:28px;font-weight:800;color:var(--ink);margin-right:8px;letter-spacing:-.02em}
+.vs .s h3{border-color:var(--brand)}
+.sec--blue .vs h3{color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.5)}
+.sec--blue .vs h3 b{color:#fff}.sec--blue .vs .s h3{border-color:#fff}
+.vs q{display:block;border-left:2px solid var(--ink);padding-left:12px;margin:0 0 14px;font-size:15px;line-height:1.6}
+.vs q::before,.vs q::after{content:""}
+.vs .s q{border-color:var(--brand)}
+.sec--blue .vs q{border-color:var(--ink)}.sec--blue .vs .s q{border-color:#fff}
+.vs q small{display:block;font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:6px}
+.vs q small a{color:var(--muted);text-decoration:none}
+.sec--blue .vs q small,.sec--blue .vs q small a{color:rgba(255,255,255,.7)}
+.vs .only{font-size:13px;color:var(--muted)}
+.vs .only a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
+.sec--blue .vs .only{color:rgba(255,255,255,.7)}.sec--blue .vs .only a{color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.3)}
+
+/* C 術語濃度 */
+.dens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:620px}
+.dens div b{font-family:var(--font-en);font-size:clamp(36px,5vw,48px);font-weight:800;letter-spacing:-.02em;line-height:1;display:block}
+.dens div span{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.dens .stack{grid-column:1/-1;display:flex;height:8px;gap:2px}.dens .stack i{display:block;height:100%}
+.dens .stack .d{background:var(--brand)}.dens .stack .m{background:var(--ink-soft)}.dens .stack .a{background:var(--line)}
+.verdict{font-size:clamp(16px,1.8vw,19px);margin:18px 0 0;max-width:44em;font-weight:500}
+
+/* G 寫法（08-29 拍板：只留前 5 種） */
+.forms{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:baseline}
+.forms span{font-size:15px}
+.forms span b{font-family:var(--font-mono);font-size:11px;color:var(--muted);font-weight:400;margin-left:6px}
+.forms span:first-child{font-family:var(--font-en);font-size:28px;font-weight:800;letter-spacing:-.02em}
+.forms .more{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
+
+/* 提到它但沒解釋：註腳體 */
+.refs{font-size:13px;color:var(--muted);columns:2;column-gap:44px;border-top:1px solid var(--ink);padding-top:12px}
+@media(max-width:700px){.refs{columns:1}}
+.refs div{break-inside:avoid;padding:5px 0;border-bottom:1px solid var(--line)}
+.refs a{color:var(--ink-soft);text-decoration:none}.refs a:hover{color:var(--brand)}
+.refs .d{font-family:var(--font-mono);color:var(--muted);margin-left:8px;font-size:11px}
+.sec--ink .refs{color:rgba(255,255,255,.55);border-color:rgba(255,255,255,.5)}
+.sec--ink .refs div{border-color:rgba(255,255,255,.12)}
+.sec--ink .refs a{color:rgba(255,255,255,.8)}.sec--ink .refs a:hover{color:var(--accent-lime)}
+.sec--ink .refs .d{color:rgba(255,255,255,.4)}
+
+/* 收尾 */
+body.doc .foot{margin-top:clamp(56px,7vw,80px);padding-top:22px;border-top:1px solid var(--ink);font-size:14px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
+.sec--ink .foot{border-color:rgba(255,255,255,.3)}
+.sec--ink .foot .dim{color:rgba(255,255,255,.5)}
+.sec--ink .foot .btn{background:var(--accent-lime);color:var(--ink);border:0}
