@@ -154,7 +154,17 @@ The page gives the agent an article by **URL** and the user's list of terms to p
  "status":"mock"}
 ```
 
-`status`: `mock` (page only, nothing written) · `stored` · `pending_review` (server batch check not yet run).
+`status`: `mock` (no agent, page only) · `pending_review` (**the normal answer**: findings are held on the page, awaiting the person) · `stored` (written; only reachable after the person confirms).
+
+**The agent proposes, the person decides.** `submitFindings` never writes. It returns the lock verdicts so the agent learns what passed, and the page holds the findings until the person confirms them — the write to `POST /api/findings` happens then, from the page, not from the tool call. This is the fourth gate:
+
+```
+① browser exposes modelContext   ② feedDocument called   ③ submitFindings called   ④ person confirms → stored
+```
+
+Why the gate is a person and not a rule: §3 catches findings that are malformed, and the fidelity layer catches quotes that are not in the source, but neither can answer *should this article be in the dictionary at all* — that is an editorial judgement about the source, and nothing in the contract makes it for you. It is also the only moment the contributor is a participant rather than a bystander; before this gate the dictionary changed without them being asked.
+
+The agent is told the outcome it can act on (`accepted`, `rejected` with reasons) and is not kept waiting for the human — `pending_review` is a final answer to the tool call, not a promise to call back. An agent that re-submits because it saw `pending_review` would double the batch; the page de-duplicates by (document, term) so it does not, but the tool description says so plainly.
 
 ### `lookupTerm` (read-only; input `{term: string}`)
 

@@ -61,11 +61,11 @@ WebMCP is not everywhere yet. With no `modelContext` present, the page degrades 
 
 - **Four tools**, dual-registered on `document.modelContext` (ChatGPT desktop, Chrome 152+) and `navigator.modelContext` (older spec drafts):
   - `feedDocument` (read-only) → returns the URL, the user's requested terms, a thin lexicon index, the extraction rules verbatim, and the JSON Schema for a finding
-  - `submitFindings` (`readOnlyHint: false`) → the write path
+  - `submitFindings` (`readOnlyHint: false`) → hands the findings to the page and answers `pending_review`; it does not write
   - `lookupTerm`, `trending` (read-only) → the public read side
 - **One data contract** (`context/contract.md`, English, versioned) is the single source of truth for page ↔ agent and page ↔ server. Changes go through a `contract:` commit, never through conversation.
 - **Three server-side locks** every finding must pass — the sentence must contain the term, the definition quote must be a verbatim substring of the context, and a borderline term with no quote is dropped as noise. `scripts/check-findings.py` is the reference implementation; `api/*` must produce identical verdicts on the same fixtures.
-- **Writes are gated on the server, not the page.** Our probe found no working page-side confirmation API: `requestUserInteraction` was removed from the WebMCP spec in PR #205 (June 2026, "not fully specified, no implementations"), and ChatGPT's shim returns "requestUserInteraction is not supported by the Codex WebMCP shim". So the page does not pretend to gate; it marks `submitFindings` as a write and lets the client's own confirmation policy apply, while the real gate — locks, stoplist, rate limiting, PII regex — lives server-side.
+- **The spec has no page-side confirmation, so the page stops being the thing that writes.** Our probe found no working confirmation API: `requestUserInteraction` was removed from the WebMCP spec in PR #205 (June 2026, "not fully specified, no implementations"), and ChatGPT's shim returns "requestUserInteraction is not supported by the Codex WebMCP shim". Rather than pretend to gate, we moved the write out of the tool call entirely: `submitFindings` returns `pending_review` and holds the findings on the page; the person confirms and *the page* posts to `/api/findings`. The agent proposes, the person decides, and no tool call can write on its own. The server still applies the locks, stoplist, rate limits and PII regex — a confirmed batch is checked again, because a page is not a trustworthy caller either.
 - **Anti-spam is described as a limit, not a security feature**: an anonymous browser-held id and a salted document hash deduplicate honest use. Neither stops a determined actor, and we do not claim they do.
 - Static pages, no build step, deployed prebuilt to Vercel.
 
@@ -73,7 +73,7 @@ WebMCP is not everywhere yet. With no `modelContext` present, the page degrades 
 
 Verified on 2026-08-27: `registerTool` works, tools execute, and the agent channel is live in ChatGPT desktop (Work mode, GPT-5.6 Terra, built-in browser). Chrome 152 exposes `document.modelContext` natively with no flag.
 
-Not available anywhere we tested: page-side write confirmation. We report this as a spec gap rather than designing around a feature that does not exist.
+Not available anywhere we tested: page-side write confirmation (`requestUserInteraction`). We report it as a spec gap and designed around its absence rather than around a feature that does not exist — the confirmation lives in the page's own UI, where the spec cannot take it away.
 
 ---
 
