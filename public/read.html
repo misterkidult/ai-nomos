@@ -15,6 +15,9 @@ code{background:#fff;border:1px solid #000;padding:1px 6px;font-size:13px}
 .link b{font-weight:700;display:inline-flex;align-items:baseline;gap:8px;font-size:14px}
 .link b::before{content:"";width:8px;height:8px;border-radius:50%;background:#bbb;flex:0 0 auto}
 .link.on b::before{background:#2540d8;box-shadow:0 0 0 4px rgba(37,64,216,.16)}
+/* quiet＝備妥但沒人來叫：琥珀而非紅，這不是壞掉、是還沒接上 */
+.link.quiet b::before{background:#E5A400;box-shadow:0 0 0 4px rgba(229,164,0,.18)}
+.link.quiet span{color:#7a5c00}
 .link span{font-size:13px;color:#555;flex:1 1 22em}
 /* 第四關：人確認才寫入。用醒目的黃底 —— 這是唯一一個「不按就不會發生」的地方 */
 .confirm{border:1px solid #000;border-left-width:5px;padding:16px;margin:16px 0;background:#FFF7C2}
@@ -152,7 +155,8 @@ const I18N={
   nickNote:'署名會跟著你的目擊一起公開，可留空。字典不驗證這個名字，也不用它做任何排名',
   signedBy:n=>'—— '+n,unsigned:'未署名',
   storeFail:e=>'伺服器沒收：'+e+'，這批只留在畫面上',storeOff:e=>'連不到伺服器（'+e+'），這批只留在畫面上',
-  linkIdle:'還沒有 agent 叫過工具',linkOn:'agent 接上了',
+  linkIdle:'還沒有 agent 叫過工具',linkOn:'agent 接上了',linkQuiet:'工具備妥了，但還沒有 agent 來叫',
+  linkQuietHint:'如果你已經跟 AI 講過了卻沒反應：ChatGPT 桌面版要在 Work 模式、Settings › Browser › Permissions 開「啟用網站工具」；Claude in Chrome 目前不會叫頁面的工具。',
   linkHint:'跟你的 AI 說：「呼叫 feedDocument，讀那篇文章，照規則找詞，再用 submitFindings 送回來」',
   noAgent:'無（退化模式：只做本地比對）',noAgentLog:'無 modelContext，退化模式',fed:(u,r)=>'feedDocument 被呼叫（'+u+'，指定 '+r+' 個詞）',
   registered:n=>'已註冊 '+n+' 個工具',regFail:'registerTool 失敗',
@@ -187,7 +191,8 @@ const I18N={
   nickNote:'Your signature is published alongside your sightings and can be left empty. The dictionary does not verify the name, and nothing is ranked by it',
   signedBy:n=>'— '+n,unsigned:'unsigned',
   storeFail:e=>'server refused: '+e+' — this batch stays on screen only',storeOff:e=>'server unreachable ('+e+') — this batch stays on screen only',
-  linkIdle:'no agent has called a tool yet',linkOn:'agent connected',
+  linkIdle:'no agent has called a tool yet',linkOn:'agent connected',linkQuiet:'tools are ready, but no agent has called them',
+  linkQuietHint:'If you already asked your AI and nothing happened: in the ChatGPT desktop app you need Work mode with Settings › Browser › Permissions › site tools enabled. Claude in Chrome does not call page tools at all.',
   linkHint:'Tell your AI: “call feedDocument, read the article, find the terms following the rules, then send them back with submitFindings”',
   noAgent:'none (fallback: local match only)',noAgentLog:'no modelContext, fallback mode',fed:(u,r)=>'feedDocument called ('+u+', '+r+' requested terms)',
   registered:n=>'registered '+n+' tools',regFail:'registerTool failed',
@@ -468,15 +473,22 @@ $('look').onclick=()=>{const q=$('q').value.trim();if(!q){log(T('qEmpty'),'no');
 $('trend').onclick=()=>{renderTrend(trending());log('trending()')};
 
 /* ---------- WebMCP tools ---------- */
-/* ② 訊號：agent 真的呼叫過工具了嗎。feedDocument 一被叫就點亮，之後不再變回去 */
-let LINKED=false;
+/* ② 訊號：agent 真的呼叫過工具了嗎。feedDocument 一被叫就點亮，之後不再變回去。
+   三態：idle（工具還沒備妥／剛備妥）→ quiet（備妥 45 秒沒人來叫）→ on（來過了）。
+   quiet 用時間不用按鈕：人會先開口講、沒反應才想找答案，要他先按一次「我叫過了」
+   順序是反的。45 秒是「講完一句話並等 agent 回應」大致夠、又不會太早嚇人的長度。 */
+let LINKED=false, QUIET=false, quietTimer=null;
 function renderLink(){
   const box=$('link'); if(!box) return;
-  box.className='link'+(LINKED?' on':'');
-  box.querySelector('b').textContent=LINKED?T('linkOn'):T('linkIdle');
-  box.querySelector('span').textContent=LINKED?'':T('linkHint');
+  const state = LINKED ? 'on' : QUIET ? 'quiet' : '';
+  box.className='link'+(state?' '+state:'');
+  box.querySelector('b').textContent = LINKED?T('linkOn') : QUIET?T('linkQuiet') : T('linkIdle');
+  box.querySelector('span').textContent = LINKED?'' : QUIET?T('linkQuietHint') : T('linkHint');
 }
-function linkUp(){ if(!LINKED){LINKED=true;renderLink();} }
+function linkUp(){ if(!LINKED){LINKED=true;QUIET=false;clearTimeout(quietTimer);renderLink();} }
+/* 工具註冊完才開始計時 —— 在那之前「沒人來叫」是正常的 */
+function linkArm(){ clearTimeout(quietTimer);
+  quietTimer=setTimeout(()=>{ if(!LINKED){QUIET=true;renderLink();} }, 45000); }
 
 function pick(){return (typeof document.modelContext?.registerTool==='function')?document.modelContext:(navigator.modelContext&&typeof navigator.modelContext.registerTool==='function')?navigator.modelContext:null}
 let tries=0;
@@ -508,7 +520,7 @@ function setup(mc){
      inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
      async execute(){const r=trending();renderTrend(r);log('trending()','ok');return r;}}
   ];
-  try{tools.forEach(t=>{const r=mc.registerTool(t);if(r&&r.then)r.catch(e=>log('registerTool '+t.name+': '+e.message,'no'))});$('tools').textContent=tools.map(t=>t.name).join(' · ');log(T('registered')(tools.length),'ok');}
+  try{tools.forEach(t=>{const r=mc.registerTool(t);if(r&&r.then)r.catch(e=>log('registerTool '+t.name+': '+e.message,'no'))});$('tools').textContent=tools.map(t=>t.name).join(' · ');log(T('registered')(tools.length),'ok');linkArm();}
   catch(e){$('tools').innerHTML='<span class="no">'+T('regFail')+'</span>';log(T('regFail')+': '+e.message,'no');}
 }
 applyLang();
