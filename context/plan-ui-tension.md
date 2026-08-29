@@ -61,6 +61,6 @@
 
 - 假畫面在 `context/mock/`（`home-mock.html`、`term-mock.html?slug=…`、`mock.css`、`en.json`）。看法：repo 根目錄 `python3 -m http.server 8787 --bind 0.0.0.0`，開 `/context/mock/home-mock.html`；假畫面直接吃 `/public/` 的真 CSS／JS／資料
 - 做了：套 coreplay 2027 token（Inter／Noto Sans TC／IBM Plex Mono、果核藍 `#2540d8`、hairline、mono kicker）；白／紙／藍／墨黑正反交錯**全幅色帶**、無 inner container、內容寬 1600；`/term`＝義項 ①②…（A）＋寫法（G）＋賣 vs 擔心（B）＋術語濃度（C）＋「提到但沒解釋」註腳；首頁＝本週在夯（詞＋最多人用的那句，矛盾標籤已拿掉）＋賣 vs 擔心＋剛冒出來（D）＋動態牆（詞＋那句話）
-- **英文資料層** `en.json`：`lexicon`（133 句字典白話 slug→en）＋`quotes`（415 句引句去重，**原文當 key**→en）。畫面英文為主、原文縮小附下（原文才可查核）。契約／`public/`／`nomos.js` 未動；詞名（`term_raw`）與文章標題不翻。⚠ 不可逆：原文當 key，原文一改譯文就對不上 —— Supabase 建表時決定譯文是否與目擊同列
-- **待 Kidult 拍**：① Agent 頁「16 種寫法」要不要只留前 5 種 ② 動態牆同一篇文章要不要合併成一條（張力 F）③ 契約要不要加「translations are a display layer」（§3 agent never translates 的解讀）
+- **英文資料層** `en.json`：`lexicon`（133 句字典白話 slug→en）＋`quotes`（415 句引句去重，**原文當 key**→en）。畫面英文為主、原文縮小附下（原文才可查核）。契約／`public/`／`nomos.js` 未動；詞名（`term_raw`）與文章標題不翻。⚠ 不可逆：原文當 key，原文一改譯文就對不上。**08-29 拍板維持原文當 key** —— Supabase 不加譯文欄位，理由是有欄位遲早會被 agent 填、三條鎖擋不住；孤兒譯文讓畫面掉回原文是可接受的降級
+- **待 Kidult 拍**：① Agent 頁「16 種寫法」要不要只留前 5 種 ② 動態牆同一篇文章要不要合併成一條（張力 F）~~③ 契約要不要加「translations are a display layer」~~ → **08-29 拍板：加了**。譯文留 `en.json`、原文當 key，不進儲存欄位。契約 §2 末尾新增一節，`contract_version` 維持 1（§1–§3 的規則未動）
 - 拍了之後：先搬 `/term`（`public/term.html`＋`nomos.css`），`en.json` 進 `public/`，再首頁
