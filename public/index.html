@@ -1,86 +1,158 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ai-nomos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400..900&family=Noto+Sans+TC:wght@100..900&display=swap">
 <link rel="stylesheet" href="/tokens.css">
 <link rel="stylesheet" href="/nomos.css">
 </head>
-<body>
-<div class="top"><div><h1>ai-nomos</h1><p class="sub" data-i="tagline"></p></div><button class="lang" id="lang">EN</button></div>
-<p class="note" id="note" hidden></p>
-
-<div class="box"><div class="nums">
-  <div><b id="n-terms">—</b><span data-i="nTerms"></span></div>
-  <div><b id="n-sightings">—</b><span><span data-i="nSightings"></span> <small id="n-sources"></small></span></div>
-  <div><b id="n-fresh">—</b><span data-i="nFresh"></span></div>
-  <div><b id="n-contrib">—</b><span data-i="nContrib"></span></div>
-  <div><b id="n-last">—</b><span data-i="nLast"></span></div>
-</div></div>
-
-<div class="box">
-  <h2><span data-i="hot"></span> <span class="dim" data-i="hotNote"></span></h2>
-  <div class="hot" id="hot"></div>
+<body class="doc">
+<div class="wrap hero">
+  <div class="top"><p class="dim" style="margin:0"></p><button class="lang" id="lang">EN</button></div>
+  <p class="note" id="note" hidden></p>
+  <h1>ai-nomos</h1>
+  <p class="tag" data-i="heroTag"></p>
+  <div class="nums">
+    <div><b id="n-terms">—</b><span data-i="nTerms"></span></div>
+    <div><b id="n-sightings">—</b><span><span data-i="nSightings"></span> <small id="n-sources"></small></span></div>
+    <div><b id="n-fresh">—</b><span data-i="nFresh"></span></div>
+    <div><b id="n-contrib">—</b><span data-i="nContrib"></span></div>
+    <div><b id="n-last">—</b><span data-i="nLast"></span></div>
+  </div>
 </div>
-
-<div class="box two">
-  <div><h3 data-i="sell"></h3><div id="sell"></div></div>
-  <div><h3 data-i="risk"></h3><div id="risk"></div></div>
-</div>
-
-<div class="box">
-  <h2><span data-i="fresh"></span> <span class="dim" data-i="freshNote"></span></h2>
-  <div id="fresh"></div>
-</div>
-
-<div class="box">
-  <h2><span data-i="feed"></span> <span class="dim" data-i="feedNote"></span></h2>
-  <div class="feed" id="feed"></div>
-</div>
-
-<div class="box act"><input id="filter" data-i="filterPh" data-attr="placeholder" style="flex:1;min-width:240px;margin:0"><a href="/terms" class="dim" id="alllink"></a></div>
-<div class="box" id="hits" hidden><div class="list" id="list"></div></div>
-
-<div class="box act"><span data-i="contribute"></span><a class="btn" href="/read" data-i="bring"></a><span class="dim" data-i="contributeNote"></span></div>
+<div id="page"></div>
 
 <script src="/nomos.js"></script>
 <script>
-const N=NOMOS,$=id=>document.getElementById(id),esc=N.esc,T=N.T;
-$('lang').onclick=()=>{N.toggleLang();draw()};
-let SIGHT={ok:false,sightings:[],contributors:0};
-const when=s=>new Date((s.submitted_at)||(s.source&&s.source.published)||0);
-const href=k=>'/term/'+encodeURIComponent(k);
-const nameOf=(k,rows)=>{const e=N.bySlug(k);return e?e.term:rows[0].term_raw};
-function render(q){q=(q||'').toLowerCase();$('hits').hidden=!q;if(!q)return;const rows=N.lex().filter(e=>[e.term,e.zh,...(e.aka||[])].some(k=>k&&k.toLowerCase().includes(q)));
-  $('list').innerHTML=rows.length?rows.map(e=>'<div class="e"><a href="'+href(e.slug)+'">'+esc(e.term)+'</a>'+(e.zh&&e.zh!==e.term?'<small>'+esc(e.zh)+'</small>':'')+'<span class="line">'+esc(e.line)+'</span></div>').join(''):'<p class="dim">'+T('noMatch')+'</p>'}
-function draw(){
-  N.applyLang();$('lang').textContent=T('lang');$('alllink').textContent=T('allLink')(N.lex().length);
-  const S=SIGHT.sightings,groups=N.groupByTerm(S),now=Date.now(),d7=now-7*864e5,d14=now-14*864e5;
-  $('n-terms').textContent=N.lex().length;$('n-sightings').textContent=S.length;$('n-sources').textContent=S.length?T('nSources')(new Set(S.map(s=>s.source&&s.source.url).filter(Boolean)).size):'';
-  $('n-contrib').textContent=SIGHT.contributors;
-  const latest=S.length?Math.max(...S.map(s=>+when(s))):null;$('n-last').textContent=latest?N.ago(latest):'—';
-  /* hot: last 7 days, with prev 7 and daily bars */
-  const hot=[...groups].map(([k,rows])=>{const n7=rows.filter(s=>+when(s)>=d7).length,p7=rows.filter(s=>{const t=+when(s);return t<d7&&t>=d14}).length;
-    const bars=Array.from({length:7},(_,i)=>rows.filter(s=>{const d=Math.floor((now-when(s))/864e5);return d===6-i}).length);
-    return {k,rows,n7,p7,bars,st:N.stats(rows)}}).filter(h=>h.n7).sort((a,b)=>b.n7-a.n7).slice(0,12);
-  $('hot').innerHTML=hot.length?hot.map(h=>'<a href="'+href(h.k)+'"><b style="font-size:'+(14+Math.min(h.n7,12)*2.4)+'px">'+esc(nameOf(h.k,h.rows))+'</b>'+(!N.bySlug(h.k)?'<span class="new">'+T('newTerm')+'</span>':'')+(h.st.conflicting?'<span class="conflict">'+T('conflict')+'</span>':'')+(h.p7===0?'<span class="up">'+T('up')+'</span>':'')+'<span class="n">'+h.n7+'</span><span class="bars">'+h.bars.map(b=>'<i style="height:'+(2+Math.min(b,4)*3)+'px"></i>').join('')+'</span></a>').join(''):'<p class="dim">'+T('hotEmpty')+'</p>';
-  /* sell / risk by intent, last 30 days */
-  const d30=now-30*864e5,by=intent=>[...groups].map(([k,rows])=>({k,rows,n:rows.filter(s=>s.intent===intent&&+when(s)>=d30).length})).filter(x=>x.n).sort((a,b)=>b.n-a.n).slice(0,6);
-  const col=list=>list.length?list.map(x=>'<div class="t"><a href="'+href(x.k)+'"><b>'+esc(nameOf(x.k,x.rows))+'</b></a><small>'+T('times')(x.n)+'</small></div>').join(''):'<p class="dim">'+T('activeEmpty')+'</p>';
-  $('sell').innerHTML=col(by('selling_point'));$('risk').innerHTML=col(by('risk_or_limit'));
-  /* fresh: unknown terms, newest first */
-  const fresh=[...groups].filter(([k])=>!N.bySlug(k)).map(([k,rows])=>({k,rows,st:N.stats(rows),last:Math.max(...rows.map(s=>+when(s)))})).sort((a,b)=>b.last-a.last).slice(0,6);
-  $('n-fresh').textContent=[...groups].filter(([k])=>!N.bySlug(k)).length;
-  $('fresh').innerHTML=fresh.length?fresh.map(f=>'<div class="fresh"><a href="'+href(f.k)+'"><b>'+esc(f.rows[0].term_raw)+'</b></a><span class="new">'+T('newTerm')+'</span> <span class="meta">'+N.metaLine(f.st)+(f.st.defs.length?'':' · '+T('assumedNoDef'))+'</span>'+(f.st.defs[0]?N.quoteHtml(f.st.defs[0]):'')+'</div>').join(''):'<p class="dim">'+T('freshEmpty')+'</p>';
-  /* feed */
-  const feed=[...S].sort((a,b)=>when(b)-when(a)).slice(0,10);
-  $('feed').innerHTML=feed.length?feed.map(s=>{const k=N.termKey(s),e=N.bySlug(k);return '<div><span class="ago">'+N.ago(+when(s))+'</span>'+T('seenIn')('<a href="'+esc(s.source&&s.source.url||'#')+'" target="_blank" rel="noopener">'+esc(s.source&&s.source.title||s.source&&s.source.url||'—')+'</a>','<a href="'+href(k)+'"><b>'+esc(s.term_raw)+'</b></a>')+'<span class="meta">'+[e?null:T('newTerm'),T('enums')[s.explained],T('enums')[s.intent]].filter(Boolean).join(' · ')+'</span></div>'}).join(''):'<p class="dim">'+T('feedEmpty')+'</p>';
-  const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(SIGHT.interim){note.hidden=false;note.textContent=T('interim')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
-  render($('filter').value);
+const N = NOMOS, $ = id => document.getElementById(id), esc = N.esc, T = N.T;
+$('lang').onclick = () => { N.toggleLang(); N.loadTranslations().then(draw); };
+
+let SIGHT = { ok:false, sightings:[], contributors:0 };
+const when = s => new Date(s.submitted_at || (s.source && s.source.published) || 0);
+const href = k => '/term/' + encodeURIComponent(k);
+const nameOf = (k, rows) => { const e = N.bySlug(k); return e ? e.term : rows[0].term_raw; };
+const src = s => { const o = s.source || {};
+  return '<a href="' + esc(o.url || '#') + '" target="_blank" rel="noopener">' + esc(o.title || o.url || '—') + '</a>'
+       + (o.published ? '<span class="d">' + esc(o.published) + '</span>' : ''); };
+const band = (cls, inner) => inner ? '<section class="sec ' + cls + '"><div class="wrap">' + inner + '</div></section>' : '';
+const h2 = (num, label) => '<h2>' + (num !== '' ? '<b>' + num + '</b>' : '') + label + '</h2>';
+/* 一個詞最多人用的那句定義 */
+const topQuote = rows => {
+  const c = new Map();
+  rows.filter(s => s.definition_quote).forEach(s => { const q = s.definition_quote.trim();
+    if (!c.has(q)) c.set(q, { q, s, n:0 }); c.get(q).n++; });
+  return [...c.values()].sort((a,b) => b.n - a.n)[0] || null;
+};
+
+function renderHits(q) {
+  q = (q || '').toLowerCase();
+  const box = $('hits'); if (!box) return;
+  box.hidden = !q; if (!q) return;
+  const rows = N.lex().filter(e => [e.term, e.zh, ...(e.aka||[])].some(k => k && k.toLowerCase().includes(q)));
+  box.innerHTML = rows.length
+    ? rows.map(e => '<div class="e"><a href="' + href(e.slug) + '">' + esc(e.term) + '</a>'
+        + (e.zh && e.zh !== e.term ? '<small>' + esc(e.zh) + '</small>' : '')
+        + '<span class="line">' + N.tline(e) + '</span></div>').join('')
+    : '<p class="dim">' + T('noMatch') + '</p>';
 }
-$('filter').oninput=e=>render(e.target.value);
-/* ?days=365：無參數走契約 §5 的「latest 200」上限，首頁要的是總量不是最近 200 筆 */
-Promise.all([N.loadLexicon(),N.loadSightings('?days=365')]).then(([,s])=>{SIGHT=s;draw()});
+
+function draw() {
+  N.applyLang(); $('lang').textContent = T('lang');
+  const S = SIGHT.sightings, groups = N.groupByTerm(S), now = Date.now(), d7 = now-7*864e5, d14 = now-14*864e5, d30 = now-30*864e5;
+
+  $('n-terms').textContent = N.lex().length;
+  $('n-sightings').textContent = S.length;
+  $('n-sources').textContent = S.length ? T('nSources')(new Set(S.map(s => s.source && s.source.url).filter(Boolean)).size) : '';
+  $('n-contrib').textContent = SIGHT.contributors;
+  const latest = S.length ? Math.max(...S.map(s => +when(s))) : null;
+  $('n-last').textContent = latest ? N.ago(latest) : '—';
+  const freshAll = [...groups].filter(([k]) => !N.bySlug(k));
+  $('n-fresh').textContent = freshAll.length;
+
+  const note = $('note');
+  const msg = SIGHT.demo ? T('demoOn') : SIGHT.interim ? T('interim') : !SIGHT.ok ? T('apiDown') : null;
+  note.hidden = !msg; if (msg) note.textContent = msg;
+
+  /* 本週在夯：詞是主角，配它最多人用的那句 */
+  const hot = [...groups].map(([k, rows]) => {
+      const n7 = rows.filter(s => +when(s) >= d7).length;
+      const p7 = rows.filter(s => { const t = +when(s); return t < d7 && t >= d14; }).length;
+      return { k, rows, n7, p7, tq: topQuote(rows) };
+    }).filter(h => h.n7).sort((a,b) => b.n7 - a.n7).slice(0, 12);
+  const HOT = hot.length ? '<div class="hotl">' + hot.map(h =>
+      '<div class="h"><a class="w" href="' + href(h.k) + '" style="font-size:' + (20 + Math.min(h.n7,12)*1.6) + 'px">'
+      + esc(nameOf(h.k, h.rows)) + '</a>'
+      + '<span class="n">' + h.n7 + (h.p7 === 0 ? ' <span class="up">' + T('up') + '</span>' : '') + '</span>'
+      + (h.tq ? '<p>' + N.tq(h.tq.q) + '</p>' : '<p class="none">' + T('hotNoQuote') + '</p>')
+      + '</div>').join('') + '</div>'
+    : '<p class="dim">' + T('hotEmpty') + '</p>';
+
+  /* 賣 vs 擔心 */
+  const by = intent => [...groups].map(([k, rows]) =>
+      ({ k, rows, n: rows.filter(s => s.intent === intent && +when(s) >= d30).length }))
+    .filter(x => x.n).sort((a,b) => b.n - a.n).slice(0, 6);
+  const col = (list, label) => '<div><h3>' + label + '</h3>'
+    + (list.length ? list.map(x => '<div class="row"><a href="' + href(x.k) + '">' + esc(nameOf(x.k, x.rows)) + '</a>'
+        + '<small>' + T('times')(x.n) + '</small></div>').join('')
+      : '<p class="dim">' + T('activeEmpty') + '</p>') + '</div>';
+  const SR = '<div class="sr">' + col(by('selling_point'), T('sell')) + col(by('risk_or_limit'), T('risk')) + '</div>';
+
+  /* 剛冒出來：新詞，有引句的排前面 */
+  const fr = freshAll.map(([k, rows]) => ({ k, rows, tq: topQuote(rows) }))
+    .sort((a,b) => (b.tq?1:0) - (a.tq?1:0) || b.rows.length - a.rows.length).slice(0, 6);
+  const FR = fr.length ? '<div class="fr">' + fr.map(f =>
+      '<div class="f"><a class="w" href="' + href(f.k) + '">' + esc(f.rows[0].term_raw) + '</a>'
+      + '<span class="nt">' + T('unnamed') + '</span>'
+      + (f.tq ? '<p>' + N.tq(f.tq.q) + '</p><div class="fn">' + src(f.tq.s) + '</div>'
+              : '<p class="none">' + T('freshFell')(f.rows.length) + '</p><div class="fn">' + src(f.rows[0]) + '</div>')
+      + '</div>').join('') + '</div>'
+    : '<p class="dim">' + T('freshEmpty') + '</p>';
+
+  /* 動態牆：一篇文章一條（張力 F，08-29 拍板）。文章是容器，詞才是主角 */
+  const docs = new Map();
+  S.forEach(s => { const u = s.source && s.source.url; if (!u) return;
+    if (!docs.has(u)) docs.set(u, []); docs.get(u).push(s); });
+  const TCAP = 6;
+  const feed = [...docs.values()].map(rows => {
+      const uniq = new Map();
+      rows.forEach(r => { const k = N.termKey(r); if (!uniq.has(k)) uniq.set(k, r); });
+      const terms = [...uniq.values()].sort((a,b) => (b.definition_quote?1:0) - (a.definition_quote?1:0));
+      return { rows, terms, t: Math.max(...rows.map(r => +when(r))), lead: terms.find(r => r.definition_quote) || terms[0] };
+    }).sort((a,b) => b.t - a.t).slice(0, 8);
+  const FD = feed.length ? '<div class="fd">' + feed.map(f => {
+      const shown = f.terms.slice(0, TCAP), rest = f.terms.length - TCAP;
+      const chips = shown.map(r => { const k = N.termKey(r);
+          return '<span class="c"><a class="w" href="' + href(k) + '">' + esc(r.term_raw) + '</a>'
+               + (N.bySlug(k) ? '' : '<span class="nt">' + T('newTerm') + '</span>') + '</span>'; }).join('')
+        + (rest > 0 ? '<span class="rest">+' + rest + '</span>' : '');
+      return '<div class="i"><span class="ago">' + N.ago(f.t) + '</span><div>'
+        + '<div class="chips">' + chips + '</div>'
+        + '<p class="cnt">' + T('feedThrew')(f.terms.length) + '</p>'
+        + (f.lead && f.lead.definition_quote ? '<p>' + N.tq(f.lead.definition_quote) + '</p>' : '')
+        + '<div class="fn">' + src(f.rows[0]) + '</div></div></div>';
+    }).join('') + '</div>' : '<p class="dim">' + T('feedEmpty') + '</p>';
+
+  const find = '<div class="find"><input id="filter" data-i="filterPh" data-attr="placeholder">'
+    + '<a href="/terms">' + T('allLink')(N.lex().length) + '</a></div><div class="hits" id="hits" hidden></div>';
+  const foot = '<div class="foot"><span>' + T('contribute') + '</span>'
+    + '<a class="btn" href="/read">' + T('bring') + '</a>'
+    + '<span class="dim">' + T('onlyEdit') + '</span></div>';
+
+  $('page').innerHTML =
+      band('sec--paper', h2('', T('hot') + ' · ' + T('hotLead')) + HOT)
+    + band('sec--blue',  h2('', T('sellVsWorryHome')) + SR)
+    + band('',           h2(freshAll.length, T('freshHome')) + FR)
+    + band('sec--ink',   h2('', T('feed') + ' · ' + T('feedHome')) + FD + find + foot);
+
+  N.applyLang();
+  $('filter').oninput = e => renderHits(e.target.value);
+  N.reveal();
+}
+
+Promise.all([N.loadLexicon(), N.loadTranslations(), N.loadSightings('?days=365')])
+  .then(([, , s]) => { SIGHT = s; draw(); });
 </script>
 </body>
 </html>

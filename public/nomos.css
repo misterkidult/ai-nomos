@@ -47,6 +47,8 @@ body.doc .note{background:#FFF7C2;border:0;border-left:4px solid var(--ink);padd
   transition:opacity .9s var(--ease-out),transform .9s var(--ease-out);
   transition-delay:var(--d,0s)}
 .rv.is-in{opacity:1;transform:none}
+/* 保險：JS 沒跑（載入失敗／擋 script）時內容仍要看得見，不能停在 opacity:0 */
+.no-js .rv{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;transition:none}}
 
@@ -141,3 +143,66 @@ body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px
 .sec--ink .foot{border-color:rgba(255,255,255,.3)}
 .sec--ink .foot .dim{color:rgba(255,255,255,.5)}
 .sec--ink .foot .btn{background:var(--accent-lime);color:var(--ink);border:0}
+
+/* ══ 首頁改版（2026-08-29）：與 /term 同一套骨架，全幅色帶、無 inner container ══ */
+.hero{padding-top:40px;padding-bottom:clamp(48px,6vw,72px)}
+.hero h1{display:inline-block;font-family:var(--font-en);font-size:clamp(56px,9vw,104px);font-weight:800;letter-spacing:-.02em;line-height:1;margin:0;padding-bottom:14px;border-bottom:5px solid var(--brand)}
+.hero .tag{font-size:clamp(17px,2vw,20px);font-weight:500;margin:22px 0 0;max-width:34em}
+.nums{display:flex;gap:clamp(28px,5vw,56px);flex-wrap:wrap;margin-top:36px}
+.nums b{font-family:var(--font-en);font-size:clamp(32px,4vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1;display:block}
+.nums span{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
+
+/* 本週在夯：詞＋它最常見的那句 */
+.hotl{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(28px,4vw,56px)}
+@media(max-width:760px){.hotl{grid-template-columns:1fr}}
+.hotl .h{padding:18px 0;border-top:1px solid var(--line);break-inside:avoid}
+.hotl .h a.w{font-family:var(--font-en);font-weight:800;letter-spacing:-.02em;text-decoration:none;line-height:1;display:inline-block;vertical-align:baseline}
+.hotl .h .n{font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-left:10px;letter-spacing:.06em}
+.hotl .h .n .up{color:var(--brand)}
+.hotl .h p{margin:8px 0 0;font-size:15px;line-height:1.55}
+.hotl .h p.none{color:var(--muted);font-size:13px}
+
+/* 賣 vs 擔心（藍帶） */
+.sr{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px)}
+@media(max-width:700px){.sr{grid-template-columns:1fr}}
+.sr h3{font-size:13px;margin:0 0 12px;font-weight:400;color:rgba(255,255,255,.7);padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.5)}
+.sr .row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+.sr .row a{font-family:var(--font-en);font-weight:700;font-size:18px;text-decoration:none;letter-spacing:-.01em}
+.sr .row small{font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.7)}
+
+/* 剛冒出來 */
+.fr{display:grid;grid-template-columns:repeat(2,1fr);gap:28px clamp(28px,4vw,56px)}
+@media(max-width:760px){.fr{grid-template-columns:1fr}}
+.fr .f{border-top:1px solid var(--ink);padding-top:12px}
+.fr .f a.w{font-size:24px;font-weight:800;text-decoration:none;letter-spacing:-.01em;line-height:1.2}
+.fr .f .nt{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;color:#fff;background:var(--brand);padding:1px 6px;margin-left:10px;vertical-align:middle}
+.fr .f p{margin:8px 0 0;font-size:15px;line-height:1.55}
+.fr .f p.none{color:var(--muted);font-size:13px}
+.fr .f .fn{font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:6px}
+.fr .f .fn a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
+
+/* 動態牆（墨黑）：一篇文章一條 */
+.fd .i{display:grid;grid-template-columns:5.5em 1fr;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+@media(max-width:600px){.fd .i{grid-template-columns:1fr}}
+.fd .i .ago{font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.04em;padding-top:5px}
+.fd .i .chips{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline}
+.fd .i .chips .c{display:inline-flex;align-items:baseline;gap:5px}
+.fd .i a.w{font-family:var(--font-en);font-weight:800;font-size:20px;letter-spacing:-.01em;text-decoration:none;color:#fff}
+.fd .i .nt{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;color:var(--ink);background:var(--accent-lime);padding:1px 6px}
+.fd .i .rest{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:rgba(255,255,255,.45)}
+.fd .i p.cnt{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:rgba(255,255,255,.42);margin:8px 0 0}
+.fd .i p{margin:4px 0 0;font-size:15px;line-height:1.55;color:rgba(255,255,255,.85)}
+.fd .i .fn{font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.4);margin-top:6px}
+.fd .i .fn a{color:rgba(255,255,255,.55);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.2)}
+
+/* 搜尋（墨黑帶內） */
+.find{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:32px}
+.find input{flex:1;min-width:240px;margin:0;border:0;border-bottom:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;padding:10px 0;font-size:16px}
+.find input::placeholder{color:rgba(255,255,255,.4)}
+.find a{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:rgba(255,255,255,.6);text-decoration:none}
+.hits{margin-top:24px;columns:2;column-gap:44px}
+@media(max-width:700px){.hits{columns:1}}
+.hits .e{break-inside:avoid;padding:8px 0;border-top:1px solid rgba(255,255,255,.14)}
+.hits .e a{font-weight:700;color:#fff;text-decoration:none}
+.hits .e small{color:rgba(255,255,255,.55);margin-left:6px}
+.hits .e .line{font-size:13px;color:rgba(255,255,255,.6);display:block;margin-top:2px}

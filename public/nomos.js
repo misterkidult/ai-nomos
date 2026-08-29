@@ -1,7 +1,10 @@
 /* ai-nomos shared: lexicon, sightings, i18n. Contract: context/contract.md v1 */
 window.NOMOS = (() => {
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  let LANG = new URLSearchParams(location.search).get('lang') || localStorage.getItem('lang') || 'zh';
+  /* 預設英文（2026-08-29 拍板）：這是參賽作品，第一次來的人是英文讀者。
+     ?lang= 與使用者選過的語言仍優先。⚠ 引句永遠是來源語言，不因介面語言改寫 —— 
+     那是證據，要能對照來源頁（契約前言 Translations are a display layer）。 */
+  let LANG = new URLSearchParams(location.search).get('lang') || localStorage.getItem('lang') || 'en';
   const I18N = {
     zh: {
       tagline: '約定成俗 —— AI 的詞，由大家怎麼用決定。想改字典，拿一篇文章來。',
@@ -20,6 +23,14 @@ window.NOMOS = (() => {
       sell: '🟢 大家在賣什麼', risk: '🔴 大家在擔心什麼', feed: '動態牆', feedNote: '（最新目擊，每一條都有來源）', feedEmpty: '還沒有目擊。', seenIn: (src, term) => '有人在《' + src + '》看到' + term, allLink: n => '全部 ' + n + ' 則 →', noMatch: '沒有符合的詞。',
       justNow: '剛剛', hoursAgo: n => n + ' 小時前', yesterday: '昨天', daysAgo: n => n + ' 天前',
       /* term page (08-29): senses / spellings / sell-vs-worry / jargon density */
+      /* home (08-29 改版) */
+      heroTag: '約定成俗 —— AI 的詞，由大家怎麼用決定。想改字典，拿一篇文章來。',
+      hotLead: '詞，和最多人用的那句', hotNoQuote: '還沒有人給它定義句。',
+      sellVsWorryHome: '賣它的人 vs 擔心它的人',
+      freshHome: '個新詞剛從文章裡掉出來', freshFell: n => '從 ' + n + ' 篇文章裡掉出來，沒人解釋它。',
+      unnamed: '還沒名分',
+      feedHome: '最近讀過的文章，每篇丟出幾個詞', feedThrew: n => '這篇丟出 ' + n + ' 個詞',
+      onlyEdit: '唯一的編輯動作是提交一筆目擊。',
       senses: d => '種說法 · 從 ' + d + ' 篇解釋它的文章裡', sameLine: n => ' ＋' + n + ' 篇同一句',
       spellings: '種寫法', moreSpellings: n => '＋另外 ' + n + ' 種寫法',
       sellVsWorry: '賣它的人 vs 擔心它的人', sellingIt: '篇在賣它', technicalN: n => n + ' 篇技術描述', worriedIt: '篇在擔心它',
@@ -49,6 +60,14 @@ window.NOMOS = (() => {
       sell: '🟢 What people are selling', risk: '🔴 What people are worried about', feed: 'Activity', feedNote: '(latest sightings, each with its source)', feedEmpty: 'No sightings yet.', seenIn: (src, term) => 'someone saw ' + term + ' in “' + src + '”', allLink: n => 'all ' + n + ' entries →', noMatch: 'No matching term.',
       justNow: 'just now', hoursAgo: n => n + ' h ago', yesterday: 'yesterday', daysAgo: n => n + ' days ago',
       /* term page (08-29) */
+      /* home (08-29) */
+      heroTag: 'Nomos — AI words mean what people use them to mean. To change the dictionary, bring an article.',
+      hotLead: 'the term, and the line most people use', hotNoQuote: 'Nobody has defined it yet.',
+      sellVsWorryHome: 'Those selling it vs those worried about it',
+      freshHome: 'new terms just fell out of articles', freshFell: n => 'Fell out of ' + n + ' articles; nobody explained it.',
+      unnamed: 'UNNAMED',
+      feedHome: 'articles just read, and the terms each threw out', feedThrew: n => 'This article threw out ' + n + ' terms',
+      onlyEdit: 'The only edit is submitting a sighting.',
       senses: d => 'readings · from ' + d + ' articles that explain it', sameLine: n => ' +' + n + ' more with the same line',
       spellings: 'spellings', moreSpellings: n => '+' + n + ' more spellings',
       sellVsWorry: 'Those selling it vs those worried about it', sellingIt: ' selling it', technicalN: n => n + ' technical', worriedIt: ' worried about it',
@@ -113,7 +132,10 @@ window.NOMOS = (() => {
   /* 捲動進場：對齊 coreplay 2027 官網 main.js（stagger +70ms 封頂 420ms、
      threshold .08、rootMargin -6%、reduced-motion 直接顯示）。
      draw() 後呼叫一次；已掛過的不重掛。 */
-  const reveal = (selector = '.sec > .wrap > *') => {
+  /* ⚠ 目標必須是小元素，不能是整段容器：容器比視窗高時它的頂端永遠跨不過
+     threshold，整段就停在 opacity:0（2026-08-29 踩過，首頁四個色帶全空白）。
+     官網 main.js 的 REVEAL_TARGETS 也是逐個小元件列出來的。 */
+  const reveal = (selector = '.sec h2, .sense, .hotl .h, .fr .f, .fd .i, .sr .row, .vs q, .b-qg .q, .refs div, .forms, .dens, .bar, .verdict, .foot') => {
     const els = [...document.querySelectorAll(selector)].filter(el => !el.classList.contains('rv'));
     if (!els.length) return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
