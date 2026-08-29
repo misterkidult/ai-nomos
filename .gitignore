@@ -6,3 +6,4 @@ node_modules/
 context/mock/
 .playwright-mcp/
 collect/
+__pycache__/
