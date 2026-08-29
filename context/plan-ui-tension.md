@@ -62,5 +62,8 @@
 - 假畫面在 `context/mock/`（`home-mock.html`、`term-mock.html?slug=…`、`mock.css`、`en.json`）。看法：repo 根目錄 `python3 -m http.server 8787 --bind 0.0.0.0`，開 `/context/mock/home-mock.html`；假畫面直接吃 `/public/` 的真 CSS／JS／資料
 - 做了：套 coreplay 2027 token（Inter／Noto Sans TC／IBM Plex Mono、果核藍 `#2540d8`、hairline、mono kicker）；白／紙／藍／墨黑正反交錯**全幅色帶**、無 inner container、內容寬 1600；`/term`＝義項 ①②…（A）＋寫法（G）＋賣 vs 擔心（B）＋術語濃度（C）＋「提到但沒解釋」註腳；首頁＝本週在夯（詞＋最多人用的那句，矛盾標籤已拿掉）＋賣 vs 擔心＋剛冒出來（D）＋動態牆（詞＋那句話）
 - **英文資料層** `en.json`：`lexicon`（133 句字典白話 slug→en）＋`quotes`（415 句引句去重，**原文當 key**→en）。畫面英文為主、原文縮小附下（原文才可查核）。契約／`public/`／`nomos.js` 未動；詞名（`term_raw`）與文章標題不翻。⚠ 不可逆：原文當 key，原文一改譯文就對不上 —— Supabase 建表時決定譯文是否與目擊同列
-- **待 Kidult 拍**：① Agent 頁「16 種寫法」要不要只留前 5 種 ② 動態牆同一篇文章要不要合併成一條（張力 F）③ 契約要不要加「translations are a display layer」（§3 agent never translates 的解讀）
+- **08-29 Kidult 拍板，三題全定**：
+  - ① Agent 頁「16 種寫法」**只留前 5 種**（按出現次數）。真資料：Agent 16 種／33 次、Fine-tuning 8 種／13 次、Context Window 與 LLM 各 7 種 —— 全列會把「同一個詞被寫成好幾種樣子」這件事稀釋成一張表
+  - ② 動態牆同一篇文章**合併成一條**。⚠ 合併的理由是**去重**（374 篇平均 2.47 個詞、最多 6，同一篇會在牆上重複出現），**不是**為了做「這篇文章教你 N 個詞」那個賣點 —— 階段 D 用真資料驗過，張力 F 撐不起那句話，最多只有 6 個詞。合併之後那一條的主角仍是詞與引句，文章標題退成註腳
+  - ③ 契約**加**「translations are a display layer」。已寫進 `context/contract.md` 前言（commit `contract:`）：目擊以來源語言保存、譯文只能並列不能取代、譯文自成一表以目擊 `id` 為鍵（不以原文為鍵，否則引句一修譯文就無聲對不上 —— 08-28 那版 `en.json` 正是以原文為鍵）。契約版本不動，§7 只在 §1–§3 有改時 bump
 - 拍了之後：先搬 `/term`（`public/term.html`＋`nomos.css`），`en.json` 進 `public/`，再首頁

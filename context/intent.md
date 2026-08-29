@@ -262,7 +262,7 @@ Devpost 交件四項的現況：
 
 **擋住 8/30 開工的三題：**
 
-1. `plan-ui-tension.md` §7 那三題（Agent 頁 16 種寫法只留前 5／動態牆同篇文章合併／契約加 “translations are a display layer”）—— **從 8/28 掛到現在**
+1. ~~`plan-ui-tension.md` §7 那三題~~ —— **08-29 拍板：只留前 5、動態牆合併、契約加 translations**。契約那條已進（`contract:` commit），另兩條記在 `plan-ui-tension.md` §7，8/30 動 UI 時實作
 2. 上表第 1 項「四處補連到 `/term/{slug}`」現在做嗎？照規矩前端動線改動要先出假畫面給你點，假畫面已經有了
 3. 階段 D 建議「剛冒出來」只做一句對比、不做榜（理由：177 個新詞裡 167 個只出現一次，做成榜是雜訊）。這與 `plan-ui-tension.md` §四原本的規劃有出入
 
