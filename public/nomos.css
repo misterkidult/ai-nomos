@@ -227,3 +227,4 @@ body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px
 .cx .bar .s{background:var(--brand)}.cx .bar .t{background:var(--line)}.cx .bar .r{background:var(--ink)}
 .cx p{margin:0;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
 .cx p b{font-family:var(--font-en);font-size:15px;font-weight:800;color:var(--ink);letter-spacing:-.01em}
+

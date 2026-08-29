@@ -10,6 +10,12 @@ h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 8px}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 code{background:#fff;border:1px solid #000;padding:1px 6px;font-size:13px}
 .box{background:#fff;border:1px solid #000;padding:16px;margin:16px 0}
+/* 第四關：人確認才寫入。用醒目的黃底 —— 這是唯一一個「不按就不會發生」的地方 */
+.confirm{border:1px solid #000;border-left-width:5px;padding:16px;margin:16px 0;background:#FFF7C2}
+.confirm h3{margin:0 0 4px;font-size:16px}
+.confirm p{margin:0 0 12px}
+.confirm .act{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.confirm button:not(.btn){background:transparent;border:1px solid #999;font-weight:400}
 .ok{color:#0a7d2c}.no{color:#b00020}.dim{color:#777}
 textarea,input[type=url]{width:100%;min-height:220px;border:1px solid #000;padding:10px;font:inherit;font-size:14px;resize:vertical;box-sizing:border-box}
 input[type=url]{min-height:0}
@@ -83,6 +89,7 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
   <h2><span data-i="s3">3 · 目擊紀錄</span> <span class="dim" data-i="mockNote">（送出即寫入字典；被鎖擋下的不寫）</span></h2>
   <p class="dim"><span data-i="agentHint" data-html="1"></span> <button id="demo" class="ghost" data-i="demo">載入範例目擊（廠商文，14 筆）</button></p>
   <div id="findings"></div>
+  <div class="confirm" id="confirm" hidden></div>
   <div id="nf"></div>
 </div>
 
@@ -125,6 +132,13 @@ const I18N={
   empty:'文件是空的',matched:n=>'本地比對命中 '+n+' 則',chars:n=>n+' 字',noFindings:'尚無目擊',known:'已知',newTerm:'新詞',
   submitLog:(from,a,r)=>from+'：收 '+a+' 筆、擋 '+r+' 筆',demoFrom:'範例目擊',demoFail:e=>'範例載入失敗：'+e,
   stored:'已寫入字典',notStored:'未寫入（只在畫面上）',
+  pending:n=>'等你決定：'+n+' 筆待確認',
+  confirmTitle:'這篇要進字典嗎？',
+  confirmNote:'你的 AI 讀完了。按下去才會寫進字典 —— 在那之前只有你看得到。',
+  confirmBtn:n=>'收進字典（'+n+' 筆）',
+  discardBtn:'這篇不收',
+  discarded:'已捨棄，沒有寫進字典',
+  confirming:'寫入中…',
   nickPh:'署名（選填，最多 24 字）',
   nickNote:'署名會跟著你的目擊一起公開，可留空。字典不驗證這個名字，也不用它做任何排名',
   signedBy:n=>'—— '+n,unsigned:'未署名',
@@ -151,6 +165,13 @@ const I18N={
   empty:'document is empty',matched:n=>'local match: '+n+' known terms',chars:n=>n+' chars',noFindings:'no sightings yet',known:'known',newTerm:'new',
   submitLog:(from,a,r)=>from+': accepted '+a+', rejected '+r,demoFrom:'sample',demoFail:e=>'sample failed: '+e,
   stored:'written to the dictionary',notStored:'not written (on screen only)',
+  pending:n=>'waiting on you: '+n+' to confirm',
+  confirmTitle:'Should this article go into the dictionary?',
+  confirmNote:'Your AI has read it. Nothing is written until you say so — until then only you can see this.',
+  confirmBtn:n=>'Add to the dictionary ('+n+')',
+  discardBtn:'Skip this article',
+  discarded:'discarded — nothing was written',
+  confirming:'writing…',
   nickPh:'Sign your sightings (optional, 24 chars)',
   nickNote:'Your signature is published alongside your sightings and can be left empty. The dictionary does not verify the name, and nothing is ranked by it',
   signedBy:n=>'— '+n,unsigned:'unsigned',
@@ -327,34 +348,68 @@ try{const v=localStorage.getItem('nick');if(v)$('nick').value=v}catch(e){}
    unreachable the page keeps the local verdict and says the batch was not written — the
    fallback mode stays honest rather than pretending a sighting was stored.
    store=false for the sample button: a demo must never write into the dictionary. */
+/* 第四關：agent 提議，人決定（契約 §5，2026-08-29）。
+   submitFindings 不再寫入 —— 它跑三條鎖給 agent 即時回饋，然後把通過的那批
+   留在 PENDING 等人；確認之後由「頁面」POST /api/findings。工具呼叫本身寫不了
+   東西，這也是規格沒有 requestUserInteraction 之後唯一拿得回來的閘。
+   store=false 是範例按鈕：demo 永遠不進字典，也不進待確認區。 */
+let PENDING = null;   /* {list, accepted, notFound} 等人確認的那批 */
+
 async function submit(findings,from,notFound,store=true){
   const list=Array.isArray(findings)?findings:[];
   const nf=Array.isArray(notFound)?notFound.filter(Boolean).map(String):[];
   const acc=[],rej=[];
   list.forEach((f,i)=>{const why=check(f||{});if(why.length)rej.push({index:i,term_raw:(f&&f.term_raw)||'',reasons:why});else acc.push(f)});
-  let out={contract_version:CONTRACT_VERSION,accepted:acc.length,not_found:nf,rejected:rej,status:'mock'},shown=acc;
-
-  if(store&&list.length){
-    try{
-      const r=await fetch('/api/findings',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({findings:list,not_found:nf,submitter:SUBMITTER,submitter_name:nick()})});
-      const d=await r.json().catch(()=>null);
-      if(r.ok&&d&&d.status==='stored'){
-        const blocked=new Set((d.rejected||[]).map(x=>x.index));
-        shown=list.filter((_,i)=>!blocked.has(i));
-        out={contract_version:CONTRACT_VERSION,accepted:d.accepted,not_found:d.not_found||nf,rejected:d.rejected||[],status:'stored'};
-      }else{ log(T('storeFail')((d&&d.error)||('HTTP '+r.status)),'no'); }
-    }catch(e){ log(T('storeOff')(e.message),'no'); }
-  }
 
   const signature=store?nick():'';
-  FINDINGS=FINDINGS.concat(signature?shown.map(f=>({...f,_signed:signature})):shown);renderFindings();
+  FINDINGS=FINDINGS.concat(signature?acc.map(f=>({...f,_signed:signature})):acc);renderFindings();
   $('nf').textContent=nf.length?T('notFound')(nf):'';
+
   const C=T('codes');
-  log(T('submitLog')(from,out.accepted,out.rejected.length)+' · '+T(out.status==='stored'?'stored':'notStored')+
-    (out.rejected.length?'（'+out.rejected.map(r=>r.term_raw+'：'+r.reasons.map(c=>C[c]||c).join('／')).join('；')+'）':''),
-    out.rejected.length?'no':'ok');
-  return out;
+  const detail=rej.length?'（'+rej.map(r=>r.term_raw+'：'+r.reasons.map(c=>C[c]||c).join('／')).join('；')+'）':'';
+
+  if(store&&acc.length){
+    PENDING={list:acc,notFound:nf};
+    renderConfirm();
+    log(T('submitLog')(from,acc.length,rej.length)+' · '+T('pending')(acc.length)+detail, rej.length?'no':'ok');
+    return {contract_version:CONTRACT_VERSION,accepted:acc.length,not_found:nf,rejected:rej,status:'pending_review'};
+  }
+  log(T('submitLog')(from,acc.length,rej.length)+' · '+T('notStored')+detail, rej.length?'no':'ok');
+  return {contract_version:CONTRACT_VERSION,accepted:acc.length,not_found:nf,rejected:rej,status:'mock'};
+}
+
+function renderConfirm(){
+  const box=$('confirm'); if(!box) return;
+  if(!PENDING){ box.hidden=true; box.innerHTML=''; return; }
+  box.hidden=false;
+  box.innerHTML='<h3>'+esc(T('confirmTitle'))+'</h3><p class="dim">'+esc(T('confirmNote'))+'</p>'
+    +'<div class="act"><button class="btn" id="do-confirm">'+esc(T('confirmBtn')(PENDING.list.length))+'</button>'
+    +'<button id="do-discard">'+esc(T('discardBtn'))+'</button></div>';
+  $('do-confirm').onclick=confirmPending;
+  $('do-discard').onclick=()=>{PENDING=null;renderConfirm();log(T('discarded'),'no')};
+}
+
+/* 人按下去才寫。伺服器仍然重跑三條鎖 —— 頁面同樣不是可信的呼叫端。 */
+async function confirmPending(){
+  if(!PENDING) return;
+  const btn=$('do-confirm'); if(btn){btn.disabled=true;btn.textContent=T('confirming')}
+  try{
+    const r=await fetch('/api/findings',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({findings:PENDING.list,not_found:PENDING.notFound,submitter:SUBMITTER,submitter_name:nick()})});
+    const d=await r.json().catch(()=>null);
+    if(r.ok&&d&&d.status==='stored'){
+      const C=T('codes');
+      const extra=(d.rejected||[]).length?'（'+d.rejected.map(x=>x.term_raw+'：'+(x.reasons||[]).map(c=>C[c]||c).join('／')).join('；')+'）':'';
+      log(T('stored')+'：'+d.accepted+extra,'ok');
+      PENDING=null;renderConfirm();
+    }else{
+      log(T('storeFail')((d&&d.error)||('HTTP '+r.status)),'no');
+      if(btn){btn.disabled=false;btn.textContent=T('confirmBtn')(PENDING.list.length)}
+    }
+  }catch(e){
+    log(T('storeOff')(e.message),'no');
+    if(btn){btn.disabled=false;btn.textContent=T('confirmBtn')(PENDING.list.length)}
+  }
 }
 const requestedTerms=()=>$('terms').value.split('\n').map(s=>s.trim()).filter(Boolean);
 /* sample: fixtures/out_A.json is the raw 2026-08-26 experiment (zh enum values); mapped here to contract v1 */
@@ -419,7 +474,7 @@ function setup(mc){
        return {contract_version:CONTRACT_VERSION,url,requested_terms:req,document:text,known_hits:hits.map(h=>({term:h.term,zh:h.zh,slug:h.slug,matched:h.matched})),
          lexicon:LEX.map(e=>({term:e.term,aka:e.aka,zh:e.zh})),rules:RULES,finding_schema:FINDING_SCHEMA};
      }},
-    {name:'submitFindings',description:'Send the AI-term sightings found in the article back to the dictionary. findings: items per finding_schema (requested=true for the user\'s terms, false for ones you added). not_found: requested terms you could not locate in the article. The server applies the locks and may reject some items; rejected items carry reason codes.',
+    {name:'submitFindings',description:'Send the AI-term sightings found in the article back to the dictionary. findings: items per finding_schema (requested=true for the user\'s terms, false for ones you added). not_found: requested terms you could not locate in the article. The server applies the locks and may reject some items; rejected items carry reason codes. This does NOT write to the dictionary: it returns status pending_review and the findings wait on the page until the person confirms them. That is the final answer to this call — do not resubmit or poll.',
      inputSchema:{type:'object',properties:{findings:{type:'array',items:FINDING_SCHEMA},not_found:{type:'array',items:{type:'string'}}},required:['findings','not_found'],additionalProperties:false},
      async execute(input){ return await submit(input&&input.findings,'submitFindings',input&&input.not_found); }},
     {name:'lookupTerm',description:'Ask the dictionary what a term currently looks like on the web: every definition quote with its source, first seen, number of sources, quiet days, and whether the quotes conflict. Evidence only; the dictionary does not rule which definition is right. Read-only.',
