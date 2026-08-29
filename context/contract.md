@@ -102,7 +102,8 @@ What the server keeps after a finding passes the locks. Public read surfaces onl
 | `source.hash` | salted hash of the document text, computed client-side; dedup key and the "N documents" counter |
 | ★ `source.url`, ★ `source.title`, ★ `source.published` | **always public when present.** A sighting without a source is just a quote; the link is what lets a reader check it. The agent reads the article at `url` and copies it into `source.url`; only a pasted document (fallback mode) has no URL. |
 | ★ `submitted_at` | server time, ISO 8601 |
-| `submitter` | anonymous browser id (client-held; a limit, not a security feature) |
+| `submitter` | anonymous browser id (client-held; a limit, not a security feature). **Never public** — it is the rate-limit and contributor-count key, nothing a reader needs |
+| ★ `submitter_name` | optional nickname the submitter signs with, `""` when they did not sign. Free text, ≤ 24 characters, control characters stripped. **Self-asserted and unverified** — the page must never render it as though the dictionary vouched for it, and no ranking, weighting or trust may be derived from it. Two people may sign the same name; `submitter` remains the only identity the counters use |
 | `contract_version` | integer, see §7 |
 
 Public via `lookupTerm`／`trending` (§5), never stored: `first_seen` = min `submitted_at` (when the dictionary first received it — never the article's `published`, which can be years older); `doc_count` = distinct `source.hash`; `quiet_days` = today − last `submitted_at` whose `definition_quote` is non-empty. Signal block hidden when `doc_count < 3`.
@@ -163,6 +164,23 @@ The read side of the loop: another agent asks the dictionary what a term current
 ```
 
 Top 10 by sightings in the last 30 days. `contributors` = distinct `submitter` in the window and is always exposed: with one feeder the ranking is that person's feeding order, and the reader must be able to see that.
+
+### `POST /api/findings` (page → server)
+
+The write path of §6. The page forwards what `submitFindings` received, plus the two things only
+the page knows: the anonymous `submitter` id it holds, and the optional `submitter_name` the user
+typed. The agent never sees or sets either.
+
+```json
+{"findings":[…§1],"not_found":[""],"submitter":"anon-…","submitter_name":""}
+```
+
+Applies §3 to every finding (including `PII_DETECTED`, which is server-only) and stores those that
+pass, as §4 records. Answers with the `submitFindings` object of this section, `status: "stored"`.
+
+Limits, not security features: 50 findings per request, 60 requests per hour per `submitter`, 120
+per hour per IP. Over them: `429`. One sighting is kept per (document, term) — contract §2 rule 6
+says a term is reported once per document, so re-feeding an article overwrites rather than piles up.
 
 ### `GET /api/sightings` (server → pages, Matt)
 
