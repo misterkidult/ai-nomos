@@ -10,7 +10,7 @@ const MAX = 200;
    later writer adds, and sentence/context are the two that must never leave. `id` is not starred
    in §4 but the pages use it — see context/loop-spec.md, open question for the contract owner. */
 const PUBLIC = ['id', 'term_key', 'term_raw', 'term_normalized', 'explained', 'intent', 'domain',
-  'definition_quote', 'origin', 'submitted_at'];
+  'definition_quote', 'origin', 'submitted_at', 'submitter_name'];
 
 const publish = s => {
   const out = {};
@@ -53,6 +53,9 @@ export default async function handler(req, res) {
 
     const [contributors] = await redis([['SCARD', 'contributors']]);
     const blobs = ids.length ? await redis(ids.map(id => ['GET', `sighting:${id}`])) : [];
+    // Allowlist (PR #2): stripping private fields instead would publish every new field a later
+    // writer adds. submitter_name (★ in §4) is the one identity meant to be seen; submitter and
+    // source_hash stay server-side.
     const sightings = blobs
       .filter(Boolean)
       .map(b => (typeof b === 'string' ? JSON.parse(b) : b))

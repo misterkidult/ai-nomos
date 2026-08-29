@@ -14,7 +14,7 @@ window.NOMOS = (() => {
       assumedNoDef: '假設你懂，還沒有人給定義句', editorial: '字典白話（editorial，不進信號）：',
       noSightings: '還沒有任何目擊 —— 拿一篇提到它的文章來。', noDefs: '有人看見它，但還沒有人給定義句。',
       evidence: '只給證據不裁判；要引用就引用帶來源的那句。', back: '← 回字典', notFound: '字典裡沒有這個詞，也還沒有人看見它。',
-      apiDown: '目擊資料層尚未上線（8/29）；現在顯示的是空狀態。', interim: '過渡儲存：目擊暫存在 repo 的 sightings.json（只收公開文章），8/29 起改由伺服器保存。', demoOn: '示範資料（fixtures/sightings-sample.json），不是真目擊。',
+      apiDown: '目擊資料層讀不到；現在顯示的是空狀態。', interim: '目擊資料層讀不到，改讀 repo 的過渡檔 sightings.json（只收公開文章）。', demoOn: '示範資料（fixtures/sightings-sample.json），不是真目擊。',
       editorialTag: '字典白話（editorial，不進信號）', explainedBy: n => '解釋這個詞的文章（' + n + '）', mentionedBy: n => '提到這個詞的文章（' + n + '）',
       nLast: '最近一次目擊', hot: '本週在夯', hotNote: '（近 7 天目擊數；字越大越常被看見，↑＝本週才進榜）', hotEmpty: '近 7 天沒有目擊。', up: '↑ 新進榜',
       sell: '🟢 大家在賣什麼', risk: '🔴 大家在擔心什麼', feed: '動態牆', feedNote: '（最新目擊，每一條都有來源）', feedEmpty: '還沒有目擊。', seenIn: (src, term) => '有人在《' + src + '》看到' + term, allLink: n => '全部 ' + n + ' 則 →', noMatch: '沒有符合的詞。',
@@ -43,7 +43,7 @@ window.NOMOS = (() => {
       assumedNoDef: 'assumed known; nobody has defined it yet', editorial: 'hand-written line (editorial, not a signal): ',
       noSightings: 'No sightings yet — bring an article that mentions it.', noDefs: 'Seen, but no source has defined it yet.',
       evidence: 'Evidence only, no ruling; cite the quote with its source.', back: '← back to the dictionary', notFound: 'Not in the dictionary, and nobody has seen it yet.',
-      apiDown: 'Sighting storage is not live yet (8/29); this is the empty state.', interim: 'Interim storage: sightings live in sightings.json in the repo (public articles only) until the server takes over on 8/29.', demoOn: 'Demo data (fixtures/sightings-sample.json), not real sightings.',
+      apiDown: 'Sighting storage is unreachable; this is the empty state.', interim: 'Sighting storage is unreachable; falling back to sightings.json in the repo (public articles only).', demoOn: 'Demo data (fixtures/sightings-sample.json), not real sightings.',
       editorialTag: 'hand-written line (editorial, not a signal)', explainedBy: n => 'Articles that explain it (' + n + ')', mentionedBy: n => 'Articles that mention it (' + n + ')',
       nLast: 'last sighting', hot: 'Hot this week', hotNote: '(sightings in the last 7 days; bigger = seen more; ↑ = entered the list this week)', hotEmpty: 'No sightings in the last 7 days.', up: '↑ new',
       sell: '🟢 What people are selling', risk: '🔴 What people are worried about', feed: 'Activity', feedNote: '(latest sightings, each with its source)', feedEmpty: 'No sightings yet.', seenIn: (src, term) => 'someone saw ' + term + ' in “' + src + '”', allLink: n => 'all ' + n + ' entries →', noMatch: 'No matching term.',
@@ -93,7 +93,7 @@ window.NOMOS = (() => {
     const get = async u => { const r = await fetch(u); if (!r.ok) throw new Error(r.status); return r.json(); };
     try { const d = await get(url); return { ok: true, demo: !!demo, contributors: d.contributors ?? 0, sightings: d.sightings || [] }; }
     catch (e) {
-      /* interim storage until api/* exists: a static file in the repo (public articles only, no sentence/context) */
+      /* fallback while GET /api/sightings is down: the static file in the repo (public articles only, no sentence/context). Ruling 2026-08-29: it stays until the video is recorded on 9/2, then goes. */
       try { const d = await get('/sightings.json'); let list = d.sightings || []; const m = query.match(/term_key=([^&]+)/); if (m) list = list.filter(s => s.term_key === decodeURIComponent(m[1])); return { ok: true, interim: true, demo: false, contributors: d.contributors ?? 0, sightings: list }; }
       catch (e2) { return { ok: false, demo: !!demo, contributors: 0, sightings: [] }; }
     }

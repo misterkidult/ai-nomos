@@ -25,7 +25,13 @@ WebMCP 參賽作品。計畫與審查在 `context/`，產品原則見 README。*
 ## 規則
 
 - 繁體中文、全形標點；**agent 契約（規則、enum、拒絕碼）只用英文**，UI 字串 zh／en 兩套在 `read.html` 的 `I18N`
-- 三條鎖的參考實作是 `scripts/check-findings.py`，`api/*` 的判定必須與它對 `fixtures/*.json` 完全一致
+- 三條鎖的參考實作是 `scripts/check-findings.py`，`api/*` 的判定必須與它對 `fixtures/*.json` 完全一致。判定寫在 `api/_locks.js`（`api/*` 與測試共用一份），改鎖要三處同步：契約 §3、這支 py、那支 js
+- 寫入路徑是 `POST /api/findings`（契約 §6 唯一的編輯動作）。改動前後跑：
+  ```
+  diff <(python3 scripts/check-findings.py fixtures/locks-v1.json) <(node scripts/check-findings.mjs fixtures/locks-v1.json)   # 判定一致
+  node scripts/test-findings.mjs                                                                                              # 端點（假 Upstash，免憑證）
+  npm i --no-save playwright && node scripts/test-read-e2e.mjs                                                                 # /read 真瀏覽器全流程
+  ```
 - 目擊紀錄不回寫 `ai-dictionary` 的 `terms/`
 - `public/lexicon.json` 是 vendor 進來的產出，勿手改：字典 repo 是 private 且無線上站，瀏覽器抓不到，部署前跑 `scripts/sync-lexicon.sh`（＝字典 `build.py --index` ＋複製）
 - `public/fixtures/` 只放 `/read` 退化模式「載入範例目擊」用的檔；來源是根目錄 `fixtures/`。**沒有 seed**：既有 133 則由 Kidult 照 `fixtures/feed-list-133.md` 親自餵

@@ -61,6 +61,8 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
   <h2 data-i="s1">1 · 文章</h2>
   <input id="url" type="url" data-i="urlPh" data-attr="placeholder">
   <textarea id="terms" rows="3" style="min-height:0;margin-top:8px" data-i="termsPh" data-attr="placeholder"></textarea>
+  <input id="nick" type="text" maxlength="24" autocomplete="nickname" style="margin-top:8px" data-i="nickPh" data-attr="placeholder">
+  <div class="dim" style="margin-top:4px;font-size:.85em" data-i="nickNote">署名會跟著你的目擊一起公開，可留空。字典不驗證這個名字，也不用它做任何排名</div>
   <details id="fallback" style="margin-top:12px">
     <summary class="dim" data-i="pasteFallback">沒有 agent？貼全文，頁面自己比對已知詞</summary>
     <textarea id="doc" style="margin-top:8px" data-i="ph" data-attr="placeholder"></textarea>
@@ -78,7 +80,7 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
 </div>
 
 <div class="box">
-  <h2><span data-i="s3">3 · 目擊紀錄</span> <span class="dim" data-i="mockNote">（mock：只在畫面上，尚未寫入伺服器）</span></h2>
+  <h2><span data-i="s3">3 · 目擊紀錄</span> <span class="dim" data-i="mockNote">（送出即寫入字典；被鎖擋下的不寫）</span></h2>
   <p class="dim"><span data-i="agentHint" data-html="1"></span> <button id="demo" class="ghost" data-i="demo">載入範例目擊（廠商文，14 筆）</button></p>
   <div id="findings"></div>
   <div id="nf"></div>
@@ -110,7 +112,7 @@ const I18N={
   title:'ai-nomos · 讀一篇文件',h1:'ai-nomos · 讀一篇文件',
   sub:'丟一篇文章的連結進來，寫下你想撈出來的詞。瀏覽器裡的 agent 會自己去讀那篇（<strong>文章不經過我們的伺服器</strong>）：找你指定的詞、判斷它是不是 AI 詞、再補上它看到而你沒列的，一起送回字典當目擊紀錄。',
   lexLabel:'字典',toolsLabel:'工具',s1:'1 · 文章',urlPh:'文章連結 https://…',termsPh:'想撈出來的詞，一行一個（可留空，讓 agent 自己找）',pasteFallback:'沒有 agent？貼全文，頁面自己比對已知詞',ph:'貼一篇提案、報價、新聞、白皮書…',match:'本地比對已知詞',clear:'清空',
-  s2:'2 · 已知詞命中',s3:'3 · 目擊紀錄',mockNote:'（mock：只在畫面上，尚未寫入伺服器）',
+  s2:'2 · 已知詞命中',s3:'3 · 目擊紀錄',mockNote:'（送出即寫入字典；被鎖擋下的不寫）',
   agentHint:'填好連結與詞之後對 agent 說：「呼叫 <code>feedDocument</code>，去讀那篇，照規則找詞，再用 <code>submitFindings</code> 送回」。沒有 agent 也可以',
   s5:'5 · 查一個詞',s5Note:'（另一個 AI 也能用 lookupTerm／trending 問同樣的問題）',qPh:'要查的詞，例如 MCP',look:'查',trend:'近 30 天熱門',
   editorialLine:'字典白話（editorial，不進信號）：',noDefs:'沒有任何來源給過定義句',sightings:n=>n+' 次目擊',windowT:d=>'近 '+d+' 天',contributors:n=>n+' 位貢獻者',oneFeeder:'（只有一個人在餵時，排名＝他的餵食順序）',qEmpty:'要查的詞是空的',
@@ -122,16 +124,21 @@ const I18N={
   lexErr:e=>'lexicon.json 載入失敗：'+e,notMatched:'尚未比對',noHits:'沒有命中已知詞',hitn:n=>'（'+n+' 則）',
   empty:'文件是空的',matched:n=>'本地比對命中 '+n+' 則',chars:n=>n+' 字',noFindings:'尚無目擊',known:'已知',newTerm:'新詞',
   submitLog:(from,a,r)=>from+'：收 '+a+' 筆、擋 '+r+' 筆',demoFrom:'範例目擊',demoFail:e=>'範例載入失敗：'+e,
+  stored:'已寫入字典',notStored:'未寫入（只在畫面上）',
+  nickPh:'署名（選填，最多 24 字）',
+  nickNote:'署名會跟著你的目擊一起公開，可留空。字典不驗證這個名字，也不用它做任何排名',
+  signedBy:n=>'—— '+n,unsigned:'未署名',
+  storeFail:e=>'伺服器沒收：'+e+'，這批只留在畫面上',storeOff:e=>'連不到伺服器（'+e+'），這批只留在畫面上',
   noAgent:'無（退化模式：只做本地比對）',noAgentLog:'無 modelContext，退化模式',fed:(u,r)=>'feedDocument 被呼叫（'+u+'，指定 '+r+' 個詞）',
   registered:n=>'已註冊 '+n+' 個工具',regFail:'registerTool 失敗',
   enums:{has_definition:'有定義句',mentioned:'順帶提到',assumed:'假設你懂',selling_point:'賣點',technical:'技術描述',risk_or_limit:'風險或限制',core:'AI 詞',edge:'邊緣',not:'非 AI 詞'},
-  codes:{MISSING_FIELD:'缺欄位',ENUM_INVALID:'選項不在 enum 內',SENTENCE_LACKS_TERM:'sentence 不含 term_raw',SENTENCE_TOO_LONG:'sentence 超過 120 字',QUOTE_NOT_IN_CONTEXT:'definition_quote 不在 context 裡',EDGE_WITHOUT_QUOTE:'domain=edge 且無定義句',STOPLISTED:'停用清單',NOT_AI_TERM:'agent 自己加的非 AI 詞'}
+  codes:{MISSING_FIELD:'缺欄位',ENUM_INVALID:'選項不在 enum 內',SENTENCE_LACKS_TERM:'sentence 不含 term_raw',SENTENCE_TOO_LONG:'sentence 超過 120 字',QUOTE_NOT_IN_CONTEXT:'definition_quote 不在 context 裡',EDGE_WITHOUT_QUOTE:'domain=edge 且無定義句',STOPLISTED:'停用清單',NOT_AI_TERM:'agent 自己加的非 AI 詞',PII_DETECTED:'貼上的文件含個資或金額'}
  },
  en:{
   title:'ai-nomos · Read a document',h1:'ai-nomos · Read a document',
   sub:'Drop the link to an article and list the terms you want pulled out. The agent in your browser reads the article itself (<strong>it never passes through our server</strong>): it finds your terms, judges whether each is really an AI term, adds AI terms you did not list, and sends them all back to the dictionary as sightings.',
   lexLabel:'lexicon',toolsLabel:'tools',s1:'1 · Article',urlPh:'Article link https://…',termsPh:'Terms to pull out, one per line (leave empty to let the agent choose)',pasteFallback:'No agent? Paste the text and the page matches known terms itself',ph:'Paste a proposal, quote, news article, white paper…',match:'Match known terms locally',clear:'Clear',
-  s2:'2 · Known terms found',s3:'3 · Sightings',mockNote:'(mock: on screen only, not written to the server)',
+  s2:'2 · Known terms found',s3:'3 · Sightings',mockNote:'(submitting writes to the dictionary; anything a lock catches is not written)',
   agentHint:'With the link and terms filled in, tell the agent: “call <code>feedDocument</code>, read the article, find the terms following the rules, then send them back with <code>submitFindings</code>”. Without an agent you can',
   s5:'5 · Look up a term',s5Note:'(another AI can ask the same via lookupTerm / trending)',qPh:'term to look up, e.g. MCP',look:'Look up',trend:'Trending, last 30 days',
   editorialLine:'hand-written line (editorial, not a signal): ',noDefs:'no source has ever defined it',sightings:n=>n+' sightings',windowT:d=>'last '+d+' days',contributors:n=>n+' contributors',oneFeeder:'(with a single feeder the ranking is that person\'s feeding order)',qEmpty:'nothing to look up',
@@ -143,10 +150,15 @@ const I18N={
   lexErr:e=>'lexicon.json failed: '+e,notMatched:'not matched yet',noHits:'no known terms found',hitn:n=>'('+n+')',
   empty:'document is empty',matched:n=>'local match: '+n+' known terms',chars:n=>n+' chars',noFindings:'no sightings yet',known:'known',newTerm:'new',
   submitLog:(from,a,r)=>from+': accepted '+a+', rejected '+r,demoFrom:'sample',demoFail:e=>'sample failed: '+e,
+  stored:'written to the dictionary',notStored:'not written (on screen only)',
+  nickPh:'Sign your sightings (optional, 24 chars)',
+  nickNote:'Your signature is published alongside your sightings and can be left empty. The dictionary does not verify the name, and nothing is ranked by it',
+  signedBy:n=>'— '+n,unsigned:'unsigned',
+  storeFail:e=>'server refused: '+e+' — this batch stays on screen only',storeOff:e=>'server unreachable ('+e+') — this batch stays on screen only',
   noAgent:'none (fallback: local match only)',noAgentLog:'no modelContext, fallback mode',fed:(u,r)=>'feedDocument called ('+u+', '+r+' requested terms)',
   registered:n=>'registered '+n+' tools',regFail:'registerTool failed',
   enums:{has_definition:'has definition',mentioned:'mentioned',assumed:'assumed known',selling_point:'selling point',technical:'technical',risk_or_limit:'risk / limit',core:'AI term',edge:'edge',not:'not AI'},
-  codes:{MISSING_FIELD:'missing field',ENUM_INVALID:'value not in enum',SENTENCE_LACKS_TERM:'sentence lacks term_raw',SENTENCE_TOO_LONG:'sentence over 120 chars',QUOTE_NOT_IN_CONTEXT:'definition_quote not in context',EDGE_WITHOUT_QUOTE:'domain=edge without quote',STOPLISTED:'stoplisted',NOT_AI_TERM:'non-AI term volunteered by the agent'}
+  codes:{MISSING_FIELD:'missing field',ENUM_INVALID:'value not in enum',SENTENCE_LACKS_TERM:'sentence lacks term_raw',SENTENCE_TOO_LONG:'sentence over 120 chars',QUOTE_NOT_IN_CONTEXT:'definition_quote not in context',EDGE_WITHOUT_QUOTE:'domain=edge without quote',STOPLISTED:'stoplisted',NOT_AI_TERM:'non-AI term volunteered by the agent',PII_DETECTED:'pasted document carries PII or an amount'}
  }
 };
 let LANG=(new URLSearchParams(location.search).get('lang')||localStorage.getItem('lang')||'zh');
@@ -243,7 +255,7 @@ function check(f){
   for(const k in ENUMS) if(!ENUMS[k].includes(f[k])) why.add('ENUM_INVALID');
   const s=String(f.sentence||''),t=String(f.term_raw||'');
   if(t&&s&&!s.toLowerCase().includes(t.toLowerCase())) why.add('SENTENCE_LACKS_TERM');
-  if([...s].length>120) why.add('SENTENCE_TOO_LONG');  // code points, like the reference impl — not UTF-16 units
+  if([...s].length>120) why.add('SENTENCE_TOO_LONG');   /* code points, as api/_locks.js and check-findings.py count them */
   const q=f.definition_quote||'';
   if(q&&!(f.context||s).includes(q)) why.add('QUOTE_NOT_IN_CONTEXT');
   if(f.domain==='edge'&&!q) why.add('EDGE_WITHOUT_QUOTE');
@@ -259,19 +271,29 @@ const lbl=v=>T('enums')[v]||v;
 function renderFindings(){
   if(!FINDINGS.length){$('findings').innerHTML='<p class="dim">'+T('noFindings')+'</p>';return}
   $('findings').innerHTML=FINDINGS.map(f=>{
-    const e=lookup(f.term_normalized)||lookup(f.term_raw);
+    const e=normalized(f);
     return '<div class="f"><span class="t">'+esc(f.term_raw)+'</span>'+(e?'<span class="known">'+T('known')+' · '+esc(e.term)+'</span>':'<span class="new">'+T('newTerm')+'</span>')+
       (f.requested?'<span class="req">'+T('reqBadge')+'</span>':'<span class="known">'+T('addBadge')+'</span>')+
       ' <span class="tags">'+esc(lbl(f.explained))+' · '+esc(lbl(f.intent))+' · '+(f.domain==='not'?'<span class="notai">'+T('notAi')+'</span>':esc(lbl(f.domain)))+'</span>'+srcLink(f.source)+
-      (f.definition_quote?'<q>'+esc(f.definition_quote)+'</q>':'')+'</div>';
+      (f.definition_quote?'<q>'+esc(f.definition_quote)+'</q>':'')+
+      (f._signed?'<span class="dim" style="font-size:.85em">'+esc(T('signedBy')(f._signed))+'</span>':'')+'</div>';
   }).join('');
   renderLife();
 }
 const srcLink=s=>s&&s.url?' <a class="src" href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.title||s.url.replace(/^https?:\/\//,'').slice(0,40))+'</a>':'';
 
+/* Contract §4: first_seen / quiet_days count from when the dictionary received the sighting,
+   never from the article's publication date, which can be years older. A finding this page just
+   collected has no submitted_at yet — the server assigns it — so it counts as today. */
+const seenAt=f=>(f&&f.submitted_at||'').slice(0,10)||new Date().toISOString().slice(0,10);
+
 /* ---------- life history + conflicts (mock: this page only; server will supply all past sightings) ---------- */
 let SEED=[];   // placeholder for sightings fetched from api/* once it exists
-const keyOf=f=>{const e=lookup(f.term_normalized)||lookup(f.term_raw);return e?e.slug:String(f.term_raw||'').trim().toLowerCase()};
+/* Mirrors api/findings.js: the lexicon entry the agent named, matched exactly — never guessed
+   from term_raw. Contract §1: term_normalized is "" precisely when the term is not a known one. */
+const normalized=f=>{const tn=(f&&f.term_normalized||'').trim();return tn?LEX.find(e=>e.term===tn)||null:null};
+/* Contract §4: the lexicon slug when term_normalized is known, otherwise lowercased term_raw. */
+const keyOf=f=>{const e=normalized(f);return e?e.slug:String(f.term_raw||'').trim().toLowerCase()};
 function renderLife(){
   const box=$('life');
   const keys=new Set(FINDINGS.map(keyOf));
@@ -281,7 +303,7 @@ function renderLife(){
     const rows=[...SEED.filter(f=>keyOf(f)===k).map(f=>({...f,_from:'server'})),...FINDINGS.filter(f=>keyOf(f)===k).map(f=>({...f,_from:'page'}))];
     if(!rows.length) return '';
     const e=lookup(k)||{term:rows[0].term_normalized||rows[0].term_raw};
-    const dates=rows.map(f=>f.source&&f.source.published).filter(Boolean).sort();
+    const dates=rows.map(seenAt).filter(Boolean).sort();
     const srcs=new Set(rows.map(f=>f.source&&f.source.url||('page:'+f.sentence)));
     const quotes=[...new Set(rows.map(f=>f.definition_quote).filter(Boolean))];
     const lastQ=dates.length?Math.round((today-new Date(dates[dates.length-1]))/864e5):null;
@@ -290,15 +312,49 @@ function renderLife(){
       rows.map(f=>'<q>'+(f.definition_quote?esc(f.definition_quote):'<span class="dim">'+T('noQuote')+'</span>')+(f.source&&f.source.url?' <a href="'+esc(f.source.url)+'" target="_blank" rel="noopener">'+esc(f.source.title||f.source.url)+'</a>':' <a>'+T('thisPage')+'</a>')+'</q>').join('')+'</div>';
   }).join('');
 }
-function submit(findings,from,notFound){
+/* Anonymous browser id. Contract §4 calls this a limit, not a security feature. */
+const SUBMITTER=(()=>{try{let v=localStorage.getItem('submitter');
+  if(!v){v='anon-'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);localStorage.setItem('submitter',v)}
+  return v}catch(e){return 'anonymous'}})();
+
+/* The signature is the submitter's to keep: remembered here, sent with the submission, and
+   never touched by the agent — contract §5 gives submitFindings no field for it. */
+const nick=()=>{const v=$('nick').value.trim().slice(0,24);try{localStorage.setItem('nick',v)}catch(e){}return v};
+try{const v=localStorage.getItem('nick');if(v)$('nick').value=v}catch(e){}
+
+/* The page runs the locks for instant feedback, then POSTs to /api/findings, whose verdict is
+   the authoritative one (it also applies PII_DETECTED, which is server-only). If the server is
+   unreachable the page keeps the local verdict and says the batch was not written — the
+   fallback mode stays honest rather than pretending a sighting was stored.
+   store=false for the sample button: a demo must never write into the dictionary. */
+async function submit(findings,from,notFound,store=true){
+  const list=Array.isArray(findings)?findings:[];
+  const nf=Array.isArray(notFound)?notFound.filter(Boolean).map(String):[];
   const acc=[],rej=[];
-  (findings||[]).forEach((f,i)=>{const why=check(f);if(why.length)rej.push({index:i,term_raw:f.term_raw,reasons:why});else acc.push(f)});
-  FINDINGS=FINDINGS.concat(acc);renderFindings();
-  const nf=Array.isArray(notFound)?notFound.filter(Boolean):[];
+  list.forEach((f,i)=>{const why=check(f||{});if(why.length)rej.push({index:i,term_raw:(f&&f.term_raw)||'',reasons:why});else acc.push(f)});
+  let out={contract_version:CONTRACT_VERSION,accepted:acc.length,not_found:nf,rejected:rej,status:'mock'},shown=acc;
+
+  if(store&&list.length){
+    try{
+      const r=await fetch('/api/findings',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({findings:list,not_found:nf,submitter:SUBMITTER,submitter_name:nick()})});
+      const d=await r.json().catch(()=>null);
+      if(r.ok&&d&&d.status==='stored'){
+        const blocked=new Set((d.rejected||[]).map(x=>x.index));
+        shown=list.filter((_,i)=>!blocked.has(i));
+        out={contract_version:CONTRACT_VERSION,accepted:d.accepted,not_found:d.not_found||nf,rejected:d.rejected||[],status:'stored'};
+      }else{ log(T('storeFail')((d&&d.error)||('HTTP '+r.status)),'no'); }
+    }catch(e){ log(T('storeOff')(e.message),'no'); }
+  }
+
+  const signature=store?nick():'';
+  FINDINGS=FINDINGS.concat(signature?shown.map(f=>({...f,_signed:signature})):shown);renderFindings();
   $('nf').textContent=nf.length?T('notFound')(nf):'';
   const C=T('codes');
-  log(T('submitLog')(from,acc.length,rej.length)+(rej.length?'（'+rej.map(r=>r.term_raw+'：'+r.reasons.map(c=>C[c]||c).join('／')).join('；')+'）':''),rej.length?'no':'ok');
-  return {contract_version:CONTRACT_VERSION,accepted:acc.length,not_found:nf,rejected:rej,status:'mock'};
+  log(T('submitLog')(from,out.accepted,out.rejected.length)+' · '+T(out.status==='stored'?'stored':'notStored')+
+    (out.rejected.length?'（'+out.rejected.map(r=>r.term_raw+'：'+r.reasons.map(c=>C[c]||c).join('／')).join('；')+'）':''),
+    out.rejected.length?'no':'ok');
+  return out;
 }
 const requestedTerms=()=>$('terms').value.split('\n').map(s=>s.trim()).filter(Boolean);
 /* sample: fixtures/out_A.json is the raw 2026-08-26 experiment (zh enum values); mapped here to contract v1 */
@@ -306,7 +362,7 @@ const LEGACY={'有定義句':'has_definition','順帶提到':'mentioned','假設
 $('demo').onclick=async()=>{
   try{const d=await (await fetch('fixtures/out_A.json')).json();
     const req=new Set(requestedTerms().map(s=>s.toLowerCase()));
-    submit(d.map(x=>({term_raw:x.term,term_normalized:x.known?x.term:'',sentence:x.sentence,context:x.sentence,explained:LEGACY[x.explained]||x.explained,intent:LEGACY[x.intent]||x.intent,domain:LEGACY[x.domain]||x.domain,definition_quote:x.definition_quote||'',requested:req.has(String(x.term).toLowerCase())})),T('demoFrom'),[]);}
+    submit(d.map(x=>({term_raw:x.term,term_normalized:x.known?x.term:'',sentence:x.sentence,context:x.sentence,explained:LEGACY[x.explained]||x.explained,intent:LEGACY[x.intent]||x.intent,domain:LEGACY[x.domain]||x.domain,definition_quote:x.definition_quote||'',requested:req.has(String(x.term).toLowerCase())})),T('demoFrom'),[],false);}
   catch(e){log(T('demoFail')(e.message),'no')}
 };
 
@@ -317,7 +373,7 @@ function lookupTerm(term){
   const e=lookup(term);const k=e?e.slug:String(term||'').trim().toLowerCase();
   const rows=FINDINGS.filter(f=>keyOf(f)===k);
   const defs=rows.filter(f=>f.definition_quote).map(f=>({quote:f.definition_quote,source:f.source||null,explained:f.explained,intent:f.intent}));
-  const dates=rows.map(f=>f.source&&f.source.published).filter(Boolean).sort();
+  const dates=rows.map(seenAt).filter(Boolean).sort();
   return {contract_version:CONTRACT_VERSION,term:e?e.term:String(term||'').trim(),zh:e?e.zh:'',known:!!e,editorial_line:e?e.line:'',
     sightings:rows.length,sources:new Set(rows.map(f=>f.source&&f.source.url).filter(Boolean)).size,first_seen:dates[0]||null,last_seen:dates[dates.length-1]||null,
     quiet_days:dates.length?Math.round((Date.now()-new Date(dates[dates.length-1]))/864e5):null,
@@ -365,7 +421,7 @@ function setup(mc){
      }},
     {name:'submitFindings',description:'Send the AI-term sightings found in the article back to the dictionary. findings: items per finding_schema (requested=true for the user\'s terms, false for ones you added). not_found: requested terms you could not locate in the article. The server applies the locks and may reject some items; rejected items carry reason codes.',
      inputSchema:{type:'object',properties:{findings:{type:'array',items:FINDING_SCHEMA},not_found:{type:'array',items:{type:'string'}}},required:['findings','not_found'],additionalProperties:false},
-     async execute(input){ return submit(input&&input.findings,'submitFindings',input&&input.not_found); }},
+     async execute(input){ return await submit(input&&input.findings,'submitFindings',input&&input.not_found); }},
     {name:'lookupTerm',description:'Ask the dictionary what a term currently looks like on the web: every definition quote with its source, first seen, number of sources, quiet days, and whether the quotes conflict. Evidence only; the dictionary does not rule which definition is right. Read-only.',
      inputSchema:{type:'object',properties:{term:{type:'string'}},required:['term'],additionalProperties:false},annotations:{readOnlyHint:true},
      async execute(input){const r=lookupTerm(input&&input.term);renderCard(r);log('lookupTerm("'+(input&&input.term)+'")','ok');return r;}},

@@ -2,6 +2,20 @@
 
 Single source of truth for everything that crosses a boundary: page ↔ agent (WebMCP tools), page ↔ server (`api/*`). **Change it here, not in chat.** The contract is English only; the agent never translates. UI copy is a separate concern (`public/read.html` carries zh-Hant and en string tables).
 
+**Translations are a display layer.** A sighting is evidence, and evidence is the words the author
+actually wrote — so `definition_quote`, `sentence`, `context` and `term_raw` are stored in the
+language of the source and are never rewritten, never normalised across languages, and never
+replaced by a translation. A translation may be shown beside the original, never instead of it:
+the reader has to be able to check the quote against the page it came from, which is the whole
+point of keeping the link. Translations live in their own table **outside this contract, keyed by
+the source string** — not by a sighting `id`, because a table keyed by `id` sits alongside the
+stored record and invites a `definition_quote_en` column, which the locks of §3 cannot police (they
+verify a quote is a verbatim substring of its context, and a translation never is). Keying by the
+source string keeps that column impossible. The accepted cost: correcting a quote orphans its
+translation and the page falls back to the original — a visible degradation, where an `id`-keyed
+table would instead show a translation that silently no longer matches. Nothing in §1–§4 gains a
+translated field, and no agent ever produces one. (Decided 2026-08-29.)
+
 Owners: page (`public/`) = Claude · `api/*` + storage = Matt · noise review = Addy · verdicts = Kidult.
 
 ---
@@ -70,16 +84,6 @@ Stoplist: <STOPLIST joined by ", ">
 Stoplist (zh-Hant generic words; extend here, nowhere else):
 `導入, 自架, 本地, 整合, 平台, 系統, 流程, 資料, 知識庫, 工具, 應用, 服務, 方案, 自動化, 數位轉型, 雲端, 上線, 部署, 優化`
 
-### Translations are a display layer
-
-The agent never translates (§2 rule 1). Findings and stored sightings carry the source language verbatim — that is what makes `definition_quote` checkable against the page it came from, and what the locks in §3 verify.
-
-Translated text lives **outside** this contract, in a separate table (`en.json`), keyed by the original string. It is applied at render time only. Consequences, accepted 2026-08-29:
-
-- No storage field ever holds a translation. Adding one would put translated text where an agent could write it, and the locks could not tell the difference.
-- A translation is keyed by the exact source string, so an edited source string silently loses its translation and the page falls back to the original. That is an accepted degradation, not a fault.
-- The translation table can be regenerated or dropped without touching a single sighting.
-
 ## 3. Locks (server-side truth; the page mirrors them in a mock)
 
 Applied per finding. Any hit → the finding is rejected with the code(s). Codes are stable identifiers; UI localizes them. Reference implementation: `scripts/check-findings.py` (Python, no deps) — `api/*` must produce identical verdicts on `fixtures/*.json`.
@@ -112,7 +116,8 @@ What the server keeps after a finding passes the locks. Public read surfaces onl
 | `source.hash` | salted hash of the document text, computed client-side; dedup key and the "N documents" counter |
 | ★ `source.url`, ★ `source.title`, ★ `source.published` | **always public when present.** A sighting without a source is just a quote; the link is what lets a reader check it. The agent reads the article at `url` and copies it into `source.url`; only a pasted document (fallback mode) has no URL. |
 | ★ `submitted_at` | server time, ISO 8601 |
-| `submitter` | anonymous browser id (client-held; a limit, not a security feature) |
+| `submitter` | anonymous browser id (client-held; a limit, not a security feature). **Never public** — it is the rate-limit and contributor-count key, nothing a reader needs |
+| ★ `submitter_name` | optional nickname the submitter signs with, `""` when they did not sign. Free text, ≤ 24 characters, control characters stripped. **Self-asserted and unverified** — the page must never render it as though the dictionary vouched for it, and no ranking, weighting or trust may be derived from it. Two people may sign the same name; `submitter` remains the only identity the counters use |
 | `contract_version` | integer, see §7 |
 
 Public via `lookupTerm`／`trending` (§5), never stored: `first_seen` = min `submitted_at` (when the dictionary first received it — never the article's `published`, which can be years older); `doc_count` = distinct `source.hash`; `quiet_days` = today − last `submitted_at` whose `definition_quote` is non-empty. Signal block hidden when `doc_count < 3`.
@@ -173,6 +178,23 @@ The read side of the loop: another agent asks the dictionary what a term current
 ```
 
 Top 10 by sightings in the last 30 days. `contributors` = distinct `submitter` in the window and is always exposed: with one feeder the ranking is that person's feeding order, and the reader must be able to see that.
+
+### `POST /api/findings` (page → server)
+
+The write path of §6. The page forwards what `submitFindings` received, plus the two things only
+the page knows: the anonymous `submitter` id it holds, and the optional `submitter_name` the user
+typed. The agent never sees or sets either.
+
+```json
+{"findings":[…§1],"not_found":[""],"submitter":"anon-…","submitter_name":""}
+```
+
+Applies §3 to every finding (including `PII_DETECTED`, which is server-only) and stores those that
+pass, as §4 records. Answers with the `submitFindings` object of this section, `status: "stored"`.
+
+Limits, not security features: 50 findings per request, 60 requests per hour per `submitter`, 120
+per hour per IP. Over them: `429`. One sighting is kept per (document, term) — contract §2 rule 6
+says a term is reported once per document, so re-feeding an article overwrites rather than piles up.
 
 ### `GET /api/sightings` (server → pages, Matt)
 

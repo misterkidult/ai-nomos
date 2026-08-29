@@ -61,8 +61,12 @@
 
 - 假畫面在 `context/mock/`（`home-mock.html`、`term-mock.html?slug=…`、`mock.css`、`en.json`）。看法：repo 根目錄 `python3 -m http.server 8787 --bind 0.0.0.0`，開 `/context/mock/home-mock.html`；假畫面直接吃 `/public/` 的真 CSS／JS／資料
 - 做了：套 coreplay 2027 token（Inter／Noto Sans TC／IBM Plex Mono、果核藍 `#2540d8`、hairline、mono kicker）；白／紙／藍／墨黑正反交錯**全幅色帶**、無 inner container、內容寬 1600；`/term`＝義項 ①②…（A）＋寫法（G）＋賣 vs 擔心（B）＋術語濃度（C）＋「提到但沒解釋」註腳；首頁＝本週在夯（詞＋最多人用的那句，矛盾標籤已拿掉）＋賣 vs 擔心＋剛冒出來（D）＋動態牆（詞＋那句話）
-- **英文資料層** `en.json`：`lexicon`（133 句字典白話 slug→en）＋`quotes`（415 句引句去重，**原文當 key**→en）。畫面英文為主、原文縮小附下（原文才可查核）。契約／`public/`／`nomos.js` 未動；詞名（`term_raw`）與文章標題不翻。⚠ 不可逆：原文當 key，原文一改譯文就對不上。**08-29 拍板維持原文當 key** —— Supabase 不加譯文欄位，理由是有欄位遲早會被 agent 填、三條鎖擋不住；孤兒譯文讓畫面掉回原文是可接受的降級
-- ~~**待 Kidult 拍**~~ **08-29 三題全拍完**：① 寫法只留前 5 種，其餘收成「＋另外 N 種寫法」（`term-mock` 與 `compose-mock` 的 `spelling-list` 都鎖 `FCAP=5`，agent 給再大也 clamp）② 動態牆改成一篇文章一條（張力 F）：詞當主角橫排、底下一行「這篇丟出 N 個詞」、再附最有代表性的那句引句與來源；12 條目擊變 8 篇文章~~③ 契約要不要加「translations are a display layer」~~ → **08-29 拍板：加了**。譯文留 `en.json`、原文當 key，不進儲存欄位。契約 §2 末尾新增一節，`contract_version` 維持 1（§1–§3 的規則未動）
+- **英文資料層** `en.json`：`lexicon`（133 句字典白話 slug→en）＋`quotes`（415 句引句去重，**原文當 key**→en）。畫面英文為主、原文縮小附下（原文才可查核）。契約／`public/`／`nomos.js` 未動；詞名（`term_raw`）與文章標題不翻。⚠ 不可逆：原文當 key，原文一改譯文就對不上 —— Supabase 建表時決定譯文是否與目擊同列
+- **08-29 Kidult 拍板，三題全定**：
+  - ① Agent 頁「16 種寫法」**只留前 5 種**（按出現次數）。真資料：Agent 16 種／33 次、Fine-tuning 8 種／13 次、Context Window 與 LLM 各 7 種 —— 全列會把「同一個詞被寫成好幾種樣子」這件事稀釋成一張表
+  - ② 動態牆同一篇文章**合併成一條**。⚠ 合併的理由是**去重**（374 篇平均 2.47 個詞、最多 6，同一篇會在牆上重複出現），**不是**為了做「這篇文章教你 N 個詞」那個賣點 —— 階段 D 用真資料驗過，張力 F 撐不起那句話，最多只有 6 個詞。合併之後那一條的主角仍是詞與引句，文章標題退成註腳
+  - ③ 契約**加**「translations are a display layer」。已寫進 `context/contract.md` §2 末尾（commit `a956ecd`）。🔴 **鍵用原文字串，不用目擊 `id`**（Kidult 08-29 15:00 拍板，推翻同日 11:54 那版）——理由是**物理隔離**：原文當鍵時譯文表天生在契約外、儲存層不需要譯文欄位；一旦以 `id` 為鍵、譯文表與 sighting 對齊，很自然就會有人加一欄 `definition_quote_en`，而三條鎖分不出欄位裡是原文還是譯文（鎖驗「引句必須是 context 的逐字子字串」，譯句一定不是）。⚠ 代價已知並接受：原文一修，該句譯文變孤兒、畫面掉回原文 —— 那是**看得見的降級**，不是壞掉；以 `id` 為鍵反而會顯示對不上原文的舊譯文，那才是無聲失效。契約版本不動。
+
 - 拍了之後：先搬 `/term`（`public/term.html`＋`nomos.css`），`en.json` 進 `public/`，再首頁
 
 ## 八、08-29 進度
