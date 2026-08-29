@@ -70,6 +70,16 @@ Stoplist: <STOPLIST joined by ", ">
 Stoplist (zh-Hant generic words; extend here, nowhere else):
 `導入, 自架, 本地, 整合, 平台, 系統, 流程, 資料, 知識庫, 工具, 應用, 服務, 方案, 自動化, 數位轉型, 雲端, 上線, 部署, 優化`
 
+### Translations are a display layer
+
+The agent never translates (§2 rule 1). Findings and stored sightings carry the source language verbatim — that is what makes `definition_quote` checkable against the page it came from, and what the locks in §3 verify.
+
+Translated text lives **outside** this contract, in a separate table (`en.json`), keyed by the original string. It is applied at render time only. Consequences, accepted 2026-08-29:
+
+- No storage field ever holds a translation. Adding one would put translated text where an agent could write it, and the locks could not tell the difference.
+- A translation is keyed by the exact source string, so an edited source string silently loses its translation and the page falls back to the original. That is an accepted degradation, not a fault.
+- The translation table can be regenerated or dropped without touching a single sighting.
+
 ## 3. Locks (server-side truth; the page mirrors them in a mock)
 
 Applied per finding. Any hit → the finding is rejected with the code(s). Codes are stable identifiers; UI localizes them. Reference implementation: `scripts/check-findings.py` (Python, no deps) — `api/*` must produce identical verdicts on `fixtures/*.json`.

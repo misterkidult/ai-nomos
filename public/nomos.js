@@ -19,6 +19,16 @@ window.NOMOS = (() => {
       nLast: '最近一次目擊', hot: '本週在夯', hotNote: '（近 7 天目擊數；字越大越常被看見，↑＝本週才進榜）', hotEmpty: '近 7 天沒有目擊。', up: '↑ 新進榜',
       sell: '🟢 大家在賣什麼', risk: '🔴 大家在擔心什麼', feed: '動態牆', feedNote: '（最新目擊，每一條都有來源）', feedEmpty: '還沒有目擊。', seenIn: (src, term) => '有人在《' + src + '》看到' + term, allLink: n => '全部 ' + n + ' 則 →', noMatch: '沒有符合的詞。',
       justNow: '剛剛', hoursAgo: n => n + ' 小時前', yesterday: '昨天', daysAgo: n => n + ' 天前',
+      /* term page (08-29): senses / spellings / sell-vs-worry / jargon density */
+      senses: d => '種說法 · 從 ' + d + ' 篇解釋它的文章裡', sameLine: n => ' ＋' + n + ' 篇同一句',
+      spellings: '種寫法', moreSpellings: n => '＋另外 ' + n + ' 種寫法',
+      sellVsWorry: '賣它的人 vs 擔心它的人', sellingIt: '篇在賣它', technicalN: n => n + ' 篇技術描述', worriedIt: '篇在擔心它',
+      howGood: '篇說它有多好', howBad: '篇說它有多危險', noQuoteSide: '沒有人在這一邊留下定義句。',
+      onlyMention: (more, n) => (more ? '另外 ' : '') + n + ' 篇只是提到：',
+      density: '術語濃度', mentions: '次被提到', explainedN: '次有人解釋', assumedN: '次假設你懂',
+      vAssumed: '多半直接當你懂 —— 這個詞最容易被丟著不管。', vFriendly: '解釋的人比丟著不管的多，算是友善的詞。', vPassing: '大多順帶提到，講的人不覺得需要解釋。',
+      mentionNoExplain: '篇提到它但沒解釋',
+      editorialInline: '字典白話，不進信號',
       enums: { has_definition: '有定義句', mentioned: '順帶提到', assumed: '假設你懂', selling_point: '賣點', technical: '技術描述', risk_or_limit: '風險或限制' },
       lang: 'EN'
     },
@@ -38,6 +48,16 @@ window.NOMOS = (() => {
       nLast: 'last sighting', hot: 'Hot this week', hotNote: '(sightings in the last 7 days; bigger = seen more; ↑ = entered the list this week)', hotEmpty: 'No sightings in the last 7 days.', up: '↑ new',
       sell: '🟢 What people are selling', risk: '🔴 What people are worried about', feed: 'Activity', feedNote: '(latest sightings, each with its source)', feedEmpty: 'No sightings yet.', seenIn: (src, term) => 'someone saw ' + term + ' in “' + src + '”', allLink: n => 'all ' + n + ' entries →', noMatch: 'No matching term.',
       justNow: 'just now', hoursAgo: n => n + ' h ago', yesterday: 'yesterday', daysAgo: n => n + ' days ago',
+      /* term page (08-29) */
+      senses: d => 'readings · from ' + d + ' articles that explain it', sameLine: n => ' +' + n + ' more with the same line',
+      spellings: 'spellings', moreSpellings: n => '+' + n + ' more spellings',
+      sellVsWorry: 'Those selling it vs those worried about it', sellingIt: ' selling it', technicalN: n => n + ' technical', worriedIt: ' worried about it',
+      howGood: ' say how good it is', howBad: ' say how dangerous it is', noQuoteSide: 'No definition quote on this side.',
+      onlyMention: (more, n) => (more ? 'Another ' : '') + n + ' only mention it: ',
+      density: 'Jargon density', mentions: 'mentions', explainedN: 'explained', assumedN: 'assumed known',
+      vAssumed: 'Mostly assumed known — the term readers are most likely to be left alone with.', vFriendly: 'More people explain it than assume it; a friendly term.', vPassing: 'Mostly mentioned in passing; writers don’t feel it needs explaining.',
+      mentionNoExplain: 'articles mention it without explaining',
+      editorialInline: 'editorial line, not a signal',
       enums: { has_definition: 'has definition', mentioned: 'mentioned', assumed: 'assumed known', selling_point: 'selling point', technical: 'technical', risk_or_limit: 'risk / limit' },
       lang: '中文'
     }
@@ -54,6 +74,17 @@ window.NOMOS = (() => {
   let LEX = [], BUILT = '';
   const loadLexicon = () => fetch('/lexicon.json').then(r => r.json()).then(d => { LEX = d.terms; BUILT = d.built; return LEX; });
   const bySlug = slug => LEX.find(e => e.slug === slug);
+
+  /* Translation display layer (contract.md §2, "Translations are a display layer").
+     Keyed by the source string; never stored with a sighting. Missing key → show the original. */
+  let TR = null;
+  const loadTranslations = () => LANG === 'zh' ? Promise.resolve(null)
+    : fetch('/en.json').then(r => r.ok ? r.json() : null).then(d => (TR = d)).catch(() => null);
+  /* quote: translated line with the source kept underneath — the source is what stays checkable */
+  const tq = z => { z = String(z ?? '').trim(); const e = TR && TR.quotes && TR.quotes[z];
+    return e && e !== z ? esc(e) + '<span class="orig">' + esc(z) + '</span>' : esc(z); };
+  /* editorial line: keyed by slug */
+  const tline = e => esc((TR && TR.lexicon && TR.lexicon[e.slug]) || e.line);
 
   /* sightings: GET /api/sightings (contract §5). ?demo=1 → fixture. */
   const loadSightings = async (query = '') => {
@@ -79,6 +110,28 @@ window.NOMOS = (() => {
   const quoteHtml = s => '<q>' + esc(s.definition_quote) + (s.source && s.source.url ? ' <a href="' + esc(s.source.url) + '" target="_blank" rel="noopener">' + esc(s.source.title || s.source.url) + '</a>' : '') + ' <span class="dim">' + esc((s.source && s.source.published) || '') + '</span></q>';
   const metaLine = st => [st.first ? T('firstSeen')(st.first) : null, T('sources')(st.sources), T('sightings')(st.sightings), st.quiet != null ? T('quiet')(st.quiet) : null].filter(Boolean).join(' · ');
 
+  /* 捲動進場：對齊 coreplay 2027 官網 main.js（stagger +70ms 封頂 420ms、
+     threshold .08、rootMargin -6%、reduced-motion 直接顯示）。
+     draw() 後呼叫一次；已掛過的不重掛。 */
+  const reveal = (selector = '.sec > .wrap > *') => {
+    const els = [...document.querySelectorAll(selector)].filter(el => !el.classList.contains('rv'));
+    if (!els.length) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      els.forEach(el => el.classList.add('rv', 'is-in')); return;
+    }
+    const idx = new Map();
+    els.forEach(el => {
+      el.classList.add('rv');
+      const parent = el.parentElement, i = idx.get(parent) ?? 0;
+      idx.set(parent, i + 1);
+      el.style.setProperty('--d', `${Math.min(i * 70, 420)}ms`);
+    });
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (!e.isIntersecting) return; e.target.classList.add('is-in'); io.unobserve(e.target); });
+    }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+    els.forEach(el => io.observe(el));
+  };
+
   const ago = t => { const h = Math.round((Date.now() - t) / 36e5); if (h < 1) return T('justNow'); if (h < 24) return T('hoursAgo')(h); const d = Math.round(h / 24); return d === 1 ? T('yesterday') : T('daysAgo')(d); };
-  return { esc, T, ago, applyLang, toggleLang, loadLexicon, bySlug, lex: () => LEX, built: () => BUILT, loadSightings, termKey, groupByTerm, stats, quoteHtml, metaLine };
+  return { esc, T, ago, reveal, lang: () => LANG, applyLang, toggleLang, loadLexicon, bySlug, lex: () => LEX, built: () => BUILT, loadTranslations, tq, tline, loadSightings, termKey, groupByTerm, stats, quoteHtml, metaLine };
 })();

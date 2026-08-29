@@ -3,36 +3,135 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title id="title">ai-nomos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400..900&family=Noto+Sans+TC:wght@100..900&display=swap">
+<link rel="stylesheet" href="/tokens.css">
 <link rel="stylesheet" href="/nomos.css">
 </head>
-<body>
-<div class="top"><p class="dim" style="margin:0"><a href="/" data-i="back"></a></p><button class="lang" id="lang">EN</button></div>
-<p class="note" id="note" hidden></p>
-<div class="box card" id="card"></div>
-<div class="box act"><span data-i="contribute"></span><a class="btn" href="/read" data-i="bring"></a></div>
+<body class="doc">
+<div class="wrap head">
+  <div class="top"><p class="dim" style="margin:0"><a href="/" data-i="back"></a></p><button class="lang" id="lang">EN</button></div>
+  <p class="note" id="note" hidden></p>
+  <div class="hd" id="hd"></div>
+</div>
+<div id="page"></div>
 <script src="/nomos.js"></script>
 <script>
-const N=NOMOS,$=id=>document.getElementById(id),esc=N.esc,T=N.T;
-const slug=decodeURIComponent((location.pathname.match(/\/term\/([^/]+)/)||[])[1]||new URLSearchParams(location.search).get('slug')||'');
-$('lang').onclick=()=>{N.toggleLang();$('lang').textContent=T('lang');draw()};
-let SIGHT={ok:false,sightings:[]};
-function draw(){
-  N.applyLang();$('lang').textContent=T('lang');
-  const e=N.bySlug(slug);const rows=SIGHT.sightings.filter(s=>N.termKey(s)===slug);
-  const name=e?e.term:(rows[0]?rows[0].term_raw:slug);document.title=name+' · ai-nomos';
-  const st=N.stats(rows);
-  if(!e&&!rows.length){$('card').innerHTML='<h1>'+esc(slug)+'</h1><p class="dim">'+T('notFound')+'</p>';return}
-  const explain=rows.filter(s=>s.definition_quote),mention=rows.filter(s=>!s.definition_quote);
-  const row=s=>'<div class="src"><a href="'+esc(s.source&&s.source.url||'#')+'" target="_blank" rel="noopener">'+esc(s.source&&s.source.title||s.source&&s.source.url||'—')+'</a><span class="meta">'+[s.source&&s.source.published,T('enums')[s.explained],T('enums')[s.intent]].filter(Boolean).join(' · ')+'</span>'+(s.definition_quote?'<q>'+esc(s.definition_quote)+'</q>':'')+'</div>';
-  $('card').innerHTML='<h1>'+esc(name)+(e&&e.zh&&e.zh!==e.term?' <small class="meta">'+esc(e.zh)+'</small>':'')+(!e?'<span class="new">'+T('newTerm')+'</span>':'')+(st.conflicting?'<span class="conflict">'+T('conflict')+'</span>':'')+'</h1>'+
-    (e?'<p class="def">'+esc(e.line)+'</p><p class="meta">'+T('editorialTag')+(e.aka&&e.aka.length?' · aka '+esc(e.aka.join('、')):'')+'</p>':'')+
-    (rows.length?'<p class="meta">'+N.metaLine(st)+'</p>':'<p class="meta">'+T('noSightings')+'</p>')+
-    (explain.length?'<h2>'+T('explainedBy')(explain.length)+'</h2>'+explain.map(row).join(''):'')+
-    (mention.length?'<h2>'+T('mentionedBy')(mention.length)+'</h2>'+mention.map(row).join(''):'')+
-    '<p class="dim" style="margin:12px 0 0">'+T('evidence')+'</p>';
-  const note=$('note');if(SIGHT.demo){note.hidden=false;note.textContent=T('demoOn')}else if(SIGHT.interim){note.hidden=false;note.textContent=T('interim')}else if(!SIGHT.ok){note.hidden=false;note.textContent=T('apiDown')}else note.hidden=true;
+const N = NOMOS, $ = id => document.getElementById(id), esc = N.esc, T = N.T;
+const slug = decodeURIComponent((location.pathname.match(/\/term\/([^/]+)/) || [])[1] || new URLSearchParams(location.search).get('slug') || '');
+const FCAP = 5;   /* 寫法最多列 5 種（08-29 拍板），其餘收成一句 */
+
+$('lang').onclick = () => { N.toggleLang(); N.loadTranslations().then(draw); };
+
+let SIGHT = { ok: false, sightings: [] };
+
+const src = s => { const o = s.source || {};
+  return '<a href="' + esc(o.url || '#') + '" target="_blank" rel="noopener">' + esc(o.title || o.url || '—') + '</a>'
+       + (o.published ? '<span class="d">' + esc(o.published) + '</span>' : ''); };
+const band = (cls, inner) => inner ? '<section class="sec ' + cls + '"><div class="wrap">' + inner + '</div></section>' : '';
+const h2 = (num, label) => '<h2>' + (num !== '' ? '<b>' + num + '</b>' : '') + label + '</h2>';
+
+function draw() {
+  N.applyLang(); $('lang').textContent = T('lang');
+  const e = N.bySlug(slug);
+  const rows = SIGHT.sightings.filter(s => N.termKey(s) === slug);
+  const name = e ? e.term : (rows[0] ? rows[0].term_raw : slug);
+  document.title = name + ' · ai-nomos';
+
+  const note = $('note');
+  const msg = SIGHT.demo ? T('demoOn') : SIGHT.interim ? T('interim') : !SIGHT.ok ? T('apiDown') : null;
+  note.hidden = !msg; if (msg) note.textContent = msg;
+
+  if (!e && !rows.length) {
+    $('hd').innerHTML = '<h1>' + esc(slug) + '</h1><p class="ed">' + T('notFound') + '</p>';
+    $('page').innerHTML = ''; return;
+  }
+
+  /* 詞頭 */
+  $('hd').innerHTML = '<h1>' + esc(name) + '</h1>'
+    + (!e ? '<span class="new">' + T('newTerm') + '</span>' : '')
+    + (e && e.zh && e.zh !== e.term
+        ? '<p class="zh">' + esc(e.zh) + (e.aka && e.aka.length ? ' <span class="dim">· ' + esc(e.aka.join('、')) + '</span>' : '') + '</p>' : '')
+    + (e ? '<p class="ed">' + N.tline(e) + '<i>' + T('editorialInline') + '</i></p>' : '');
+
+  /* A 義項：定義句去重，當字典的義項 */
+  const seen = new Map();
+  rows.filter(s => s.definition_quote).forEach(s => { const k = s.definition_quote.trim();
+    if (!seen.has(k)) seen.set(k, []); seen.get(k).push(s); });
+  const senses = [...seen.entries()];
+  const nExplain = rows.filter(s => s.definition_quote).length;
+  const A = senses.map(([q, ss], i) => '<div class="sense"><div class="no">' + String(i + 1).padStart(2, '0') + '</div>'
+      + '<p>' + N.tq(q) + '</p><div class="fn">' + src(ss[0])
+      + (ss.length > 1 ? T('sameLine')(ss.length - 1) : '')
+      + '<span class="tag">' + esc(T('enums')[ss[0].intent] || '') + '</span></div></div>').join('');
+
+  /* G 寫法：只列前 5 種 */
+  const fc = new Map();
+  rows.forEach(s => { const k = (s.term_raw || '').trim(); fc.set(k, (fc.get(k) || 0) + 1); });
+  const forms = [...fc.entries()].sort((x, y) => y[1] - x[1]);
+  const rest = forms.length - FCAP;
+  const G = forms.length > 1
+    ? '<div class="forms">' + forms.slice(0, FCAP).map(([k, c]) => '<span>' + esc(k) + '<b>×' + c + '</b></span>').join('')
+      + (rest > 0 ? '<span class="more">' + T('moreSpellings')(rest) + '</span>' : '') + '</div>'
+    : '';
+
+  /* B 賣 vs 擔心 */
+  const sell = rows.filter(s => s.intent === 'selling_point'),
+        tech = rows.filter(s => s.intent === 'technical'),
+        risk = rows.filter(s => s.intent === 'risk_or_limit');
+  const col = (list, cls, label) => {
+    const q = list.filter(s => s.definition_quote), m = list.filter(s => !s.definition_quote);
+    return '<div class="' + cls + '"><h3><b>' + list.length + '</b>' + label + '</h3>'
+      + (q.length ? q.map(s => '<q>' + N.tq(s.definition_quote) + '<small>' + src(s) + '</small></q>').join('')
+                  : '<p class="only">' + T('noQuoteSide') + '</p>')
+      + (m.length ? '<p class="only">' + T('onlyMention')(q.length > 0, m.length)
+          + m.slice(0, 3).map(src).join('、') + (m.length > 3 ? ' …' : '') + '</p>' : '')
+      + '</div>';
+  };
+  const B = rows.length
+    ? '<div class="bar"><i class="s" style="flex:' + sell.length + '"></i><i class="t" style="flex:' + tech.length + '"></i><i class="r" style="flex:' + risk.length + '"></i></div>'
+      + '<div class="legend"><span><b>' + sell.length + '</b>' + T('sellingIt') + '</span>'
+      + '<span>' + T('technicalN')(tech.length) + '</span>'
+      + '<span><b>' + risk.length + '</b>' + T('worriedIt') + '</span></div>'
+      + '<div class="vs">' + col(sell, 's', T('howGood')) + col(risk, 'r', T('howBad')) + '</div>'
+    : '';
+
+  /* C 術語濃度 */
+  const n = rows.length,
+        d = rows.filter(s => s.explained === 'has_definition').length,
+        m = rows.filter(s => s.explained === 'mentioned').length,
+        a = rows.filter(s => s.explained === 'assumed').length;
+  const verdict = a > d ? T('vAssumed') : (d >= m && d >= a) ? T('vFriendly') : T('vPassing');
+  const C = n ? '<div class="dens">'
+      + '<div><b>' + n + '</b><span>' + T('mentions') + '</span></div>'
+      + '<div><b>' + d + '</b><span>' + T('explainedN') + '</span></div>'
+      + '<div><b>' + a + '</b><span>' + T('assumedN') + '</span></div>'
+      + '<div class="stack"><i class="d" style="flex:' + d + '"></i><i class="m" style="flex:' + m + '"></i><i class="a" style="flex:' + a + '"></i></div>'
+      + '</div><p class="verdict">' + verdict + '</p>' : '';
+
+  /* 提到它但沒解釋：一篇一條 */
+  const u = new Map();
+  rows.filter(s => !s.definition_quote).forEach(s => { const k = s.source && s.source.url; if (k && !u.has(k)) u.set(k, s); });
+  const R = u.size ? '<div class="refs">' + [...u.values()].map(s => '<div>' + src(s) + '</div>').join('') + '</div>' : '';
+
+  const foot = '<div class="foot"><span>' + T('contribute') + '</span>'
+    + '<a class="btn" href="/read">' + T('bring') + '</a>'
+    + '<span class="dim">' + T('evidence') + '</span></div>';
+
+  $('page').innerHTML =
+      band('sec--paper', senses.length
+        ? h2(senses.length, T('senses')(nExplain)) + A
+        : '<p class="dim">' + T('noDefs') + '</p>')
+    + band('', G ? h2(forms.length, T('spellings')) + G : '')
+    + band('sec--blue', B ? h2('', T('sellVsWorry')) + B : '')
+    + band('', C ? h2('', T('density')) + C : '')
+    + band('sec--ink', (R ? h2(u.size, T('mentionNoExplain')) + R : '') + foot);
+
+  N.reveal();   /* 捲動進場（coreplay 2027 節奏），draw 後掛一次 */
 }
-Promise.all([N.loadLexicon(),N.loadSightings('?term_key='+encodeURIComponent(slug))]).then(([,s])=>{SIGHT=s;draw()});
+
+Promise.all([N.loadLexicon(), N.loadTranslations(), N.loadSightings('?term_key=' + encodeURIComponent(slug))])
+  .then(([, , s]) => { SIGHT = s; draw(); });
 </script>
 </body>
 </html>
