@@ -41,7 +41,9 @@ function draw() {
      退回中文側（語料絕大多數是中文），不讓它整筆消失。 */
   const side = { zh: rows.filter(r => (r.lang || 'zh') === 'zh'),
                  en: rows.filter(r => r.lang === 'en') };
-  const cur = SIDE || (side.en.length && !side.zh.length ? 'en' : N.lang() === 'en' && side.en.length ? 'en' : 'zh');
+  /* 預設開資料多的那一側，不跟介面語言走 —— 介面英文但英文語料只有 3 筆時，
+     開英文側會讓人以為這個詞沒什麼人談。使用者點過就以他的選擇為準。 */
+  const cur = SIDE || (side.en.length > side.zh.length ? 'en' : 'zh');
   const name = e ? e.term : (rows[0] ? rows[0].term_raw : slug);
   const ROWS = side[cur];   /* 當前語料側；底下所有分析都吃它 */
   document.title = name + ' · ai-nomos';
