@@ -43,7 +43,10 @@
   </div><!-- /idle -->
 
   <!-- 逐段敘事：把工具呼叫翻成人話。不印 lookupTerm("Bias") ×11 -->
-  <div class="live" id="live" hidden><a href="#" id="again"></a></div>
+  <div class="live" id="live" hidden>
+    <div class="busy" id="busy"><i class="spin"></i><b></b><span class="el"></span></div>
+    <a href="#" id="again"></a>
+  </div>
   <div class="steps" id="steps" hidden></div>
   <!-- agent 抽到的詞：畫在頁面上，不是只留在 agent 的回話裡 -->
   <div class="found" id="found" hidden></div>
@@ -185,7 +188,7 @@ function draw() {
   N.applyLang();
   $('filter').oninput = e => renderHits(e.target.value);
   wireSay(); renderSteps(); renderFound(); renderConfirm();
-  if($('live') && !$('live').hidden) setLive(true);
+  if($('live') && !$('live').hidden) { setLive(true); renderBusy(); }
   N.reveal();
 }
 
@@ -210,8 +213,25 @@ function setLive(on){
     const a=$('again'); if(a){ a.textContent=T('startOver');
       a.onclick=e=>{ e.preventDefault();
         STEPS=[]; FOUND=[]; FOUND_NF=[]; PENDING=null; LOOKUPS=0; LOOKUP_KNOWN=0;
-        renderSteps(); renderFound(); renderConfirm(); setLive(false); }; } }
+        busyStop(); renderSteps(); renderFound(); renderConfirm(); setLive(false); }; } }
 }
+
+/* 作業中：圓點旋轉 ＋ 經過時間，只在 agent 還沒交回結果時轉。
+   submitFindings 一到就停 —— 轉圈代表「還在等」，等完了還在轉是騙人的。 */
+let BUSY_T0=null, busyTimer=null;
+function renderBusy(){
+  const box=$('busy'); if(!box) return;
+  const on = BUSY_T0 !== null;
+  box.className = 'busy' + (on ? '' : ' done');
+  const secs = on ? Math.round((Date.now()-BUSY_T0)/1000) : (box.dataset.final|0);
+  box.querySelector('b').textContent = on ? T('busyReading') : T('busyDone');
+  box.querySelector('.el').textContent = T('elapsed')(Math.floor(secs/60), secs%60);
+}
+function busyStart(){ BUSY_T0=Date.now(); clearInterval(busyTimer);
+  busyTimer=setInterval(renderBusy,1000); renderBusy(); }
+function busyStop(){ if(BUSY_T0===null) return;
+  const box=$('busy'); if(box) box.dataset.final=Math.round((Date.now()-BUSY_T0)/1000);
+  BUSY_T0=null; clearInterval(busyTimer); renderBusy(); }
 
 function pushStep(key, title, note){
   const i = STEPS.findIndex(s => s.key === key);
@@ -297,7 +317,7 @@ const TOOLS = [
    async execute(input){
      const url=String((input&&input.url)||'').trim();
      const req=((input&&input.requested_terms)||[]).map(String).filter(Boolean);
-     STEPS=[]; LOOKUPS=0; LOOKUP_KNOWN=0; FOUND=[]; FOUND_NF=[]; renderFound(); setLive(true);
+     STEPS=[]; LOOKUPS=0; LOOKUP_KNOWN=0; FOUND=[]; FOUND_NF=[]; renderFound(); setLive(true); busyStart();
      pushStep('fed', T('stFed'), url);
      return {contract_version:CONTRACT_VERSION,
        next_step:'call reportDocument with what you see of the article, then submitFindings',
@@ -322,6 +342,7 @@ const TOOLS = [
      const acc=[], rej=[];
      list.forEach((f,i)=>{const why=check(f||{});
        if(why.length) rej.push({index:i,term_raw:(f&&f.term_raw)||'',reasons:why}); else acc.push(f)});
+     busyStop();
      FOUND=acc; FOUND_NF=nf; renderFound();
      if(acc.length){ PENDING={list:acc,notFound:nf}; renderConfirm();
        pushStep('reported', T('stReporting'), T('stReportingN')(acc.length)); }

@@ -321,3 +321,27 @@ body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px
 .live{margin:clamp(28px,3.5vw,44px) 0 0}
 .live a{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--muted);text-decoration:none}
 .live a:hover{color:var(--brand)}
+
+/* ══ 作業中：圓點環旋轉 ＋ 經過時間 ══ */
+.busy{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.busy b{font-size:15px;font-weight:600}
+.busy .el{font-family:var(--font-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.busy .el::before{content:"· ";color:var(--line)}
+/* 12 顆點排成環，用 conic-gradient 遮罩轉一圈 —— 不用 12 個 DOM 節點 */
+.spin{width:20px;height:20px;flex:0 0 auto;border-radius:50%;
+  background:
+    radial-gradient(circle 1.7px at 10px 2.6px, var(--brand) 99%, transparent) ,
+    radial-gradient(circle 1.7px at 15.2px 4.8px, var(--brand) 99%, transparent),
+    radial-gradient(circle 1.7px at 17.4px 10px, var(--brand) 99%, transparent),
+    radial-gradient(circle 1.7px at 15.2px 15.2px, var(--brand) 99%, transparent),
+    radial-gradient(circle 1.7px at 10px 17.4px, var(--brand) 99%, transparent),
+    radial-gradient(circle 1.7px at 4.8px 15.2px, var(--brand) 99%, transparent),
+    radial-gradient(circle 1.7px at 2.6px 10px, var(--brand) 99%, transparent),
+    radial-gradient(circle 1.7px at 4.8px 4.8px, var(--brand) 99%, transparent);
+  -webkit-mask:conic-gradient(from 0turn, transparent 0 8%, #000 22% 100%);
+  mask:conic-gradient(from 0turn, transparent 0 8%, #000 22% 100%);
+  animation:spinturn 1.1s steps(8) infinite}
+@keyframes spinturn{to{transform:rotate(1turn)}}
+.busy.done .spin{animation:none;opacity:.3;-webkit-mask:none;mask:none}
+.busy.done b{color:var(--muted);font-weight:400}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}

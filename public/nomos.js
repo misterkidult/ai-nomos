@@ -36,6 +36,8 @@ window.NOMOS = (() => {
       stored:'已寫入字典', notStored:'沒有可收的（都被鎖擋下了）',
       storeFail:e=>'伺服器沒收：'+e, storeOff:e=>'連不到伺服器（'+e+'）',
       foundTitle:'它在這篇裡看到的詞', startOver:'← 換一篇',
+      busyReading:'你的 AI 正在讀', busyDone:'讀完了',
+      elapsed:(m,sec)=>(m?m+'m ':'')+sec+'s',
 
       badgeKnown:'字典有', badgeNew:'新詞', badgeYours:'你點名的', badgeAdded:'它自己補的',
       notAiTerm:'它判定這不是 AI 詞', noQuoteHere:'這篇沒有解釋它',
@@ -114,6 +116,8 @@ window.NOMOS = (() => {
       stored:'written to the dictionary', notStored:'nothing to add (the locks caught them all)',
       storeFail:e=>'server refused: '+e, storeOff:e=>'server unreachable ('+e+')',
       foundTitle:'What it saw in this article', startOver:'← Start over',
+      busyReading:'Your AI is reading', busyDone:'Done',
+      elapsed:(m,sec)=>(m?m+'m ':'')+sec+'s',
 
       badgeKnown:'in the dictionary', badgeNew:'new', badgeYours:'you named it', badgeAdded:'it added this',
       notAiTerm:'it ruled this is not an AI term', noQuoteHere:'this article does not explain it',
