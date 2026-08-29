@@ -62,5 +62,12 @@
 - 假畫面在 `context/mock/`（`home-mock.html`、`term-mock.html?slug=…`、`mock.css`、`en.json`）。看法：repo 根目錄 `python3 -m http.server 8787 --bind 0.0.0.0`，開 `/context/mock/home-mock.html`；假畫面直接吃 `/public/` 的真 CSS／JS／資料
 - 做了：套 coreplay 2027 token（Inter／Noto Sans TC／IBM Plex Mono、果核藍 `#2540d8`、hairline、mono kicker）；白／紙／藍／墨黑正反交錯**全幅色帶**、無 inner container、內容寬 1600；`/term`＝義項 ①②…（A）＋寫法（G）＋賣 vs 擔心（B）＋術語濃度（C）＋「提到但沒解釋」註腳；首頁＝本週在夯（詞＋最多人用的那句，矛盾標籤已拿掉）＋賣 vs 擔心＋剛冒出來（D）＋動態牆（詞＋那句話）
 - **英文資料層** `en.json`：`lexicon`（133 句字典白話 slug→en）＋`quotes`（415 句引句去重，**原文當 key**→en）。畫面英文為主、原文縮小附下（原文才可查核）。契約／`public/`／`nomos.js` 未動；詞名（`term_raw`）與文章標題不翻。⚠ 不可逆：原文當 key，原文一改譯文就對不上。**08-29 拍板維持原文當 key** —— Supabase 不加譯文欄位，理由是有欄位遲早會被 agent 填、三條鎖擋不住；孤兒譯文讓畫面掉回原文是可接受的降級
-- **待 Kidult 拍**：① Agent 頁「16 種寫法」要不要只留前 5 種 ② 動態牆同一篇文章要不要合併成一條（張力 F）~~③ 契約要不要加「translations are a display layer」~~ → **08-29 拍板：加了**。譯文留 `en.json`、原文當 key，不進儲存欄位。契約 §2 末尾新增一節，`contract_version` 維持 1（§1–§3 的規則未動）
+- ~~**待 Kidult 拍**~~ **08-29 三題全拍完**：① 寫法只留前 5 種，其餘收成「＋另外 N 種寫法」（`term-mock` 與 `compose-mock` 的 `spelling-list` 都鎖 `FCAP=5`，agent 給再大也 clamp）② 動態牆改成一篇文章一條（張力 F）：詞當主角橫排、底下一行「這篇丟出 N 個詞」、再附最有代表性的那句引句與來源；12 條目擊變 8 篇文章~~③ 契約要不要加「translations are a display layer」~~ → **08-29 拍板：加了**。譯文留 `en.json`、原文當 key，不進儲存欄位。契約 §2 末尾新增一節，`contract_version` 維持 1（§1–§3 的規則未動）
 - 拍了之後：先搬 `/term`（`public/term.html`＋`nomos.css`），`en.json` 進 `public/`，再首頁
+
+## 八、08-29 進度
+
+- 三題拍板全數落地（見七的修訂）。假畫面已驗：`term-mock.html?slug=agent` 顯示 5 種寫法＋「＋另外 11 種寫法」；`home-mock.html` 動態牆 8 篇文章、每篇 2–4 個詞
+- ⚠ **`TCAP=6` 目前是死碼**：全 374 篇文章最多只丟出 6 個詞（分布 1 詞 131 篇／2 詞 48／3 詞 105／4 詞 77／5 詞 9／6 詞 4），所以「＋N」那條路在現有資料上永遠不會觸發。留著當防護，餵到更長的文章才會生效
+- 另做了 `compose-mock.html`＋`compose-mock.css`：驗證「agent 決定佈局、token 固定」是否可行。9 個 block type、四份手寫 composition（RAG／Agent／Hallucination／故意壞掉的那份）。結論：自由度帶寬存在但窄 —— 能給 agent 的是「選什麼、什麼順序、什麼節奏」，不是「怎麼排」；`cols` 開到 3 就難看，建議上限鎖 2。未擋的是「同一段重複同一個 block」
+- 契約新增「Translations are a display layer」一節（commit `a956ecd`），`contract_version` 維持 1
