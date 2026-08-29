@@ -48,6 +48,23 @@ async function readBody(req) {
   return raw ? JSON.parse(raw) : {};
 }
 
+/* Contract §4: lang is the language of the SOURCE DOCUMENT, not of the term — a term name is no
+   evidence of the language it was used in (`Sora 2`, `Midjourney` appear in Chinese articles
+   constantly; judging by term name misfiled 90 of 924 sightings in testing). Computed over one
+   document's definition quotes plus its title. CJK weighs ×3 because Chinese says in one
+   character roughly what English says in three, so an unweighted count calls a Chinese article
+   English as soon as it quotes a few product names. Must stay identical to
+   scripts/kv-backfill-lang.py. */
+const CJK_RE = /[\u4e00-\u9fff]/g, LATIN_RE = /[A-Za-z]/g;
+function docLang(findings) {
+  let text = findings.map(f => f.definition_quote || '').join(' ');
+  const t = findings[0] && findings[0].source && findings[0].source.title;
+  if (t) text += ' ' + t;
+  const cjk = (text.match(CJK_RE) || []).length, latin = (text.match(LATIN_RE) || []).length;
+  if (cjk + latin === 0) return 'zh';   // no evidence either way; the corpus is overwhelmingly zh
+  return cjk * 3 > latin ? 'zh' : 'en';
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -127,6 +144,12 @@ export default async function handler(req, res) {
     const [known] = await redis([['HMGET', 'docterm', ...pairs]]);
     const existing = Array.isArray(known) ? known : [];
 
+    // group by document first: every sighting from one article shares its lang (§4)
+    const byDoc = new Map();
+    accepted.forEach(f => { const h = docHash(f) || '_';
+      if (!byDoc.has(h)) byDoc.set(h, []); byDoc.get(h).push(f); });
+    const langOf = new Map([...byDoc].map(([h, fs]) => [h, docLang(fs)]));
+
     const rows = accepted.map((f, i) => {
       const h = docHash(f), key = termKey(f);
       const id = existing[i] || (h ? `${h}-${sha16(key).slice(0, 12)}` : `p${now}-${sha16(key + submitter).slice(0, 12)}`);
@@ -137,6 +160,7 @@ export default async function handler(req, res) {
         definition_quote: f.definition_quote || '',
         source: f.source ? { url: f.source.url || '', title: f.source.title || '', published: f.source.published || '' } : null,
         source_hash: h,
+        lang: langOf.get(h || '_'),
         submitted_at: nowIso,
         origin: 'agent',
         submitter,

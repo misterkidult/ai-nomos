@@ -109,6 +109,18 @@ await suite('contract', () => {
   const inPy = clientCodes.filter(c => py.includes(`"${c}"`));
   is('locks: page implements every §3 client code', inPage, clientCodes);
   is('locks: check-findings.py implements every §3 client code', inPy, clientCodes);
+
+  /* §4 lang. The write path shipped without it once (2026-08-29): the backfill set it on stored
+     records, api/findings.js did not set it on new ones, so every sighting fed from then on
+     would have been filed as Chinese by the page's fallback. Both implementations must agree,
+     and both must judge the document rather than the term. */
+  const findings = read('api', 'findings.js');
+  const backfill = read('scripts', 'kv-backfill-lang.py');
+  is('§4: api/findings.js stamps lang on every stored sighting', /\blang:\s*langOf\.get\(/.test(findings), true);
+  is('§4: lang is derived per document, not per finding', /docLang\(/.test(findings) && /byDoc/.test(findings), true);
+  is('§4: the CJK×3 weighting matches kv-backfill-lang.py',
+      /cjk \* 3 > latin/.test(findings) && /cjk \* 3 > latin/.test(backfill), true);
+  is('§4: lang is a public field of GET /api/sightings', /'lang'/.test(read('api', 'sightings.js')), true);
 });
 
 /* ================================================================== *
