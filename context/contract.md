@@ -36,6 +36,8 @@ One finding = one term as it was used in one document.
 | `definition_quote` | string | ✔ (may be `""`) | verbatim from the document, only when the document itself defines the term; must be a substring of `context` |
 | `requested` | boolean | ✔ | `true` when the user listed this term in `requested_terms`; `false` when the agent added it on its own |
 
+`lang` is **not** a finding field: the agent never reports it. The server derives it from the document (§4) — a term name is not evidence of the language it was used in (`Sora 2` and `Midjourney` appear in Chinese articles as often as English ones).
+
 Enum meanings:
 
 - `explained` — `has_definition`: the document states what the term means · `mentioned`: named in passing, no explanation · `assumed`: used as if the reader already knows it
@@ -110,6 +112,7 @@ What the server keeps after a finding passes the locks. Public read surfaces onl
 |---|---|
 | `id` | server-generated |
 | ★ `term_key` | lexicon `slug` when `term_normalized` is known; otherwise lowercased, trimmed `term_raw` |
+| ★ `lang` | `zh` · `en` — **the language of the source document, not of the term**. Server-derived per document: the CJK-to-Latin ratio over that document's definition quotes and title (CJK×3 > Latin ⇒ `zh`). Every sighting from one URL gets the same value, so an English term quoted in a Chinese article is `zh`. A term's two language sides are the same `term_key` split by this field; nothing else relates them |
 | ★ `term_raw`, ★ `term_normalized`, ★ `explained`, ★ `intent`, ★ `domain`, ★ `definition_quote` | from the finding |
 | `sentence`, `context` | **never public** (plan v2 §2) |
 | ★ `origin` | `agent` (via `submitFindings` — the only write path, including the existing 133 entries, which Kidult feeds through `/read` himself) · `editorial` (the 133 hand-written definitions; not in the signal system) |
@@ -198,7 +201,7 @@ says a term is reported once per document, so re-feeding an article overwrites r
 
 ### `GET /api/sightings` (server → pages, Matt)
 
-Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"sightings":[…]}`. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint; until it exists the pages read the interim file `public/sightings.json` (same response shape; Matt imports it into Upstash on 8/29, then deletes it) and fall back to empty states (and `?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
+Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?lang=zh|en` for one language side; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"sightings":[…]}`. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint; until it exists the pages read the interim file `public/sightings.json` (same response shape; Matt imports it into Upstash on 8/29, then deletes it) and fall back to empty states (and `?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
 
 ## 6. No seeding
 
