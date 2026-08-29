@@ -29,18 +29,26 @@ button.lang{padding:4px 10px;font-size:13px;font-weight:400;background:#fff;whit
 
 /* ══ 2026-08-29：詞條頁改版（coreplay 2027 token｜全幅色帶｜無 inner container）══
    舊的 .box 卡片樣式上面還在，首頁與 /read 仍在用；/term 已不吃它。 */
-:root{--ink:#16161a;--ink-soft:#3c3c44;--bg:#fff;--paper:#f7f7f5;--brand:#2540d8;--accent-lime:#C5FF4A;--muted:#74747c;--line:#e4e4e8;
-  --font-en:"Inter","Noto Sans TC",sans-serif;--font-mono:"IBM Plex Mono","SFMono-Regular",ui-monospace,monospace}
+/* design token 在 tokens.css（由 coreplay 2027 衍生），各頁 <link> 先載它 */
 
 /* 只有掛 .doc 的頁面走新版面：body 不再是 860px 窄欄 */
 body.doc{font-family:"Noto Sans TC",-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);
   max-width:none;margin:0;padding:0;line-height:1.7;-webkit-font-smoothing:antialiased}
-body.doc .wrap{max-width:1600px;margin:0 auto;padding-left:clamp(20px,4vw,48px);padding-right:clamp(20px,4vw,48px)}
+body.doc .wrap{max-width:var(--maxw);margin:0 auto;padding-left:clamp(20px,4vw,48px);padding-right:clamp(20px,4vw,48px)}
 body.doc .head{padding-top:32px;padding-bottom:clamp(56px,7vw,88px)}
 body.doc a{color:inherit}
 body.doc .top .dim a{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:var(--muted);text-decoration:none}
 body.doc button.lang{border:1px solid var(--line);background:#fff;font-family:var(--font-mono);font-size:12px;letter-spacing:.08em}
 body.doc .note{background:#FFF7C2;border:0;border-left:4px solid var(--ink);padding:8px 14px;font-size:13px;margin:0 0 24px}
+
+/* 捲動進場 —— 逐字對齊 coreplay 2027 官網 style.sass 的 .rv
+   節奏是這套視覺語言的一部分，不是裝飾：沒有它，大級距與三段色帶會讀成靜態海報 */
+.rv{opacity:0;transform:translateY(30px);
+  transition:opacity .9s var(--ease-out),transform .9s var(--ease-out);
+  transition-delay:var(--d,0s)}
+.rv.is-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}}
 
 /* 詞頭 */
 .hd h1{display:inline-block;font-family:var(--font-en);font-size:clamp(64px,11vw,160px);font-weight:800;letter-spacing:-.02em;line-height:1;margin:0;padding-bottom:14px;border-bottom:5px solid var(--brand)}
@@ -51,7 +59,7 @@ body.doc .note{background:#FFF7C2;border:0;border-left:4px solid var(--ink);padd
 .hd .new{background:var(--accent-lime);border:0;padding:2px 8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;margin-left:12px;vertical-align:middle}
 
 /* 全幅色帶：白／紙／藍／墨黑正反交錯 */
-.sec{margin:0;padding-top:clamp(56px,7vw,88px);padding-bottom:clamp(56px,7vw,88px)}
+.sec{margin:0;padding-top:var(--sec-pad);padding-bottom:var(--sec-pad)}
 .sec--paper{background:var(--paper)}
 .sec--blue{background:var(--brand);color:#fff}
 .sec--ink{background:var(--ink);color:#fff}

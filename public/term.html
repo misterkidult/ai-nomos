@@ -5,6 +5,7 @@
 <title id="title">ai-nomos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400..900&family=Noto+Sans+TC:wght@100..900&display=swap">
+<link rel="stylesheet" href="/tokens.css">
 <link rel="stylesheet" href="/nomos.css">
 </head>
 <body class="doc">
@@ -125,6 +126,8 @@ function draw() {
     + band('sec--blue', B ? h2('', T('sellVsWorry')) + B : '')
     + band('', C ? h2('', T('density')) + C : '')
     + band('sec--ink', (R ? h2(u.size, T('mentionNoExplain')) + R : '') + foot);
+
+  N.reveal();   /* 捲動進場（coreplay 2027 節奏），draw 後掛一次 */
 }
 
 Promise.all([N.loadLexicon(), N.loadTranslations(), N.loadSightings('?term_key=' + encodeURIComponent(slug))])

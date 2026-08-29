@@ -1,0 +1,95 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   ai-nomos design token — derived from coreplay 2027
+   ═══════════════════════════════════════════════════════════════════════
+
+   來源（真值，不從既有 CSS 推斷）：
+     實作 ~/GitHub/coreplay-2027/src/sass/style.sass（2305 行）
+     說明書 ClaudeOS/design-library/SPEC-coreplay-2027.html
+     規範   ClaudeOS/design-library/DESIGN-coreplay-2027.md
+
+   ⚠ 兩份來源對不上時以 style.sass 為準 —— SPEC 是 2026-08-23 的快照，
+     它標「實測」的 --sec-pad 寫 clamp(56px,7vw,92px)，官網現值是
+     clamp(88px,11vw,152px)。數值層會爛、原則層不會（memory
+     project_design_system 2026-08-16 實證：某份規範 492 行裡三分之二
+     數值與程式碼不符，而 Named Rules 一條都沒過期）。
+
+   ⚠ 抄這份檔時不要只抄顏色。這套視覺語言是「工程圖紙 × 編輯排版」，
+     氣質來自三件事，缺一件顏色全對也不像：
+       ① 大級距 display 字（最大到 168–180px，中階不能塌）
+       ② 白／果核藍／墨黑三段節奏，墨黑收場
+       ③ 捲動進場（.rv）—— 節奏的一部分，不是裝飾
+     2026-08-29 踩過：色票與字型全對、間距只有六成又沒有動態，
+     被判「這整套風格就不是 coreplay 2027」。
+
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── 1. 主節奏三段（官網原值，不改）────────────────────────────── */
+  --bg:        #fff;      /* 白段落底 */
+  --paper:     #f7f7f5;   /* 次級底 */
+  --brand:     #2540d8;   /* 果核藍 —— 主色、藍段落底、連結、強調 */
+  --ink:       #16161a;   /* 墨黑 —— 收場段落底、主文字 */
+  --ink-soft:  #3c3c44;   /* 次級文字 */
+  --muted:     #74747c;   /* mono 標籤、圖說 */
+  --line:      #e4e4e8;   /* hairline 分隔線 */
+  --brand-soft:#7c8cff;   /* 墨黑底上的亮藍（深底不用萊姆綠，避免稀釋賽璐璐） */
+
+  /* ── 2. 賽璐璐三件組（品牌招牌．ai-nomos 目前未用）──────────────
+     整組一起用才成立，不可拆單件。純黑框是賽璐璐限定，
+     其餘一律 --line。ai-nomos 保留定義但頁面上不出現。 */
+  --accent-lime:#C5FF4A;  /* 前景 */
+  --lavender:   #DED5E8;  /* 第二層實心位移陰影 */
+  --ink-line:   #000000;  /* 純黑硬框 1.5px —— 賽璐璐限定 */
+
+  /* ── 3. 點綴（可選件，不是必要件）──────────────────────────────
+     一個畫面只出現一次，不進主節奏、不與賽璐璐同框。 */
+  --spark-pink:#F5326B;
+  --spark-gold:#D4AB5B;
+
+  /* ── 4. 語意色（資訊藍與果核藍同源，不另立一套藍）───────────── */
+  --warning:#E5A400;
+  --danger: #D92D20;
+  --info:   #2540d8;
+
+  /* ── 5. 版面 ─────────────────────────────────────────────────── */
+  --maxw:    1600px;
+  --gutter:  clamp(20px,4vw,48px);      /* .container 左右 padding */
+  --sec-pad: clamp(88px,11vw,152px);    /* 區塊上下 —— 官網現值 */
+
+  /* ── 6. 動態 ─────────────────────────────────────────────────── */
+  --ease-out:      cubic-bezier(.22,1,.36,1);
+  --rv-duration:   .9s;                 /* .rv 淡入 */
+  --rv-stagger:    70ms;                /* 兄弟元素遞延 */
+  --rv-stagger-max:420ms;               /* 遞延封頂 */
+  --mask-duration: 400ms;               /* 刷色塊進場（ai-nomos 未用） */
+
+  /* ── 7. 字型 ─────────────────────────────────────────────────── */
+  --font-en:   "Inter","Noto Sans TC",sans-serif;
+  --font-mono: "IBM Plex Mono","SFMono-Regular",ui-monospace,monospace;
+  --font-logo: "Google Sans Flex","Inter","Noto Sans TC",sans-serif;
+  /* 鏤空字專用：variable font 輪廓自重疊，-webkit-text-stroke 會在字身
+     內畫出接縫斜線。凡 text-stroke 一律用它。ai-nomos 未用，未帶字檔。 */
+  --font-outline:"Inter Outline","Inter","Noto Sans TC",sans-serif;
+
+  /* ── 8. 字級階梯（官網 16 階中取 ai-nomos 用得到的 7 階）─────────
+     ⚠ 中階不能塌：從 display 直接掉到內文會讓大級距讀成孤立標題。 */
+  --fs-display: clamp(56px,12vw,180px); /* 詞頭 */
+  --fs-h1:      clamp(44px,6.6vw,104px);
+  --fs-h2:      clamp(30px,4.6vw,60px);
+  --fs-lead:    clamp(21px,3vw,38px);   /* 義項定義句 */
+  --fs-body-lg: clamp(19px,2.2vw,25px);
+  --fs-body:    clamp(16px,1.6vw,19px);
+  --fs-small:   clamp(14px,1.4vw,17px); /* mono 標籤、註腳 */
+}
+
+/* ═══ ai-nomos 專屬擴充 ══════════════════════════════════════════════
+   官網沒有、這個產品才需要的東西。與上面的繼承值分開放，
+   之後官網 token 更新時這一段不受影響。 */
+:root{
+  /* 目擊資料的三種 intent，用主節奏既有的色，不新增色相 */
+  --intent-selling: var(--brand);      /* 賣點 */
+  --intent-technical: var(--line);     /* 技術描述（中性） */
+  --intent-risk: var(--ink);           /* 風險或限制 */
+  /* 譯文層：原文縮小附在譯文下方，原文才可查核 */
+  --orig-scale: .62em;
+}

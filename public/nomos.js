@@ -110,6 +110,28 @@ window.NOMOS = (() => {
   const quoteHtml = s => '<q>' + esc(s.definition_quote) + (s.source && s.source.url ? ' <a href="' + esc(s.source.url) + '" target="_blank" rel="noopener">' + esc(s.source.title || s.source.url) + '</a>' : '') + ' <span class="dim">' + esc((s.source && s.source.published) || '') + '</span></q>';
   const metaLine = st => [st.first ? T('firstSeen')(st.first) : null, T('sources')(st.sources), T('sightings')(st.sightings), st.quiet != null ? T('quiet')(st.quiet) : null].filter(Boolean).join(' · ');
 
+  /* 捲動進場：對齊 coreplay 2027 官網 main.js（stagger +70ms 封頂 420ms、
+     threshold .08、rootMargin -6%、reduced-motion 直接顯示）。
+     draw() 後呼叫一次；已掛過的不重掛。 */
+  const reveal = (selector = '.sec > .wrap > *') => {
+    const els = [...document.querySelectorAll(selector)].filter(el => !el.classList.contains('rv'));
+    if (!els.length) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      els.forEach(el => el.classList.add('rv', 'is-in')); return;
+    }
+    const idx = new Map();
+    els.forEach(el => {
+      el.classList.add('rv');
+      const parent = el.parentElement, i = idx.get(parent) ?? 0;
+      idx.set(parent, i + 1);
+      el.style.setProperty('--d', `${Math.min(i * 70, 420)}ms`);
+    });
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (!e.isIntersecting) return; e.target.classList.add('is-in'); io.unobserve(e.target); });
+    }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+    els.forEach(el => io.observe(el));
+  };
+
   const ago = t => { const h = Math.round((Date.now() - t) / 36e5); if (h < 1) return T('justNow'); if (h < 24) return T('hoursAgo')(h); const d = Math.round(h / 24); return d === 1 ? T('yesterday') : T('daysAgo')(d); };
-  return { esc, T, ago, lang: () => LANG, applyLang, toggleLang, loadLexicon, bySlug, lex: () => LEX, built: () => BUILT, loadTranslations, tq, tline, loadSightings, termKey, groupByTerm, stats, quoteHtml, metaLine };
+  return { esc, T, ago, reveal, lang: () => LANG, applyLang, toggleLang, loadLexicon, bySlug, lex: () => LEX, built: () => BUILT, loadTranslations, tq, tline, loadSightings, termKey, groupByTerm, stats, quoteHtml, metaLine };
 })();

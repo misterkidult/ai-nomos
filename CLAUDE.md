@@ -10,6 +10,18 @@ WebMCP 參賽作品。計畫與審查在 `context/`，產品原則見 README。*
 - 頁面資料來源：詞條＝`lexicon.json`；目擊＝`GET /api/sightings`（Matt，契約 §5），沒上線前讀過渡檔 `public/sightings.json`（Kidult 餵的 127 篇，8/29 Matt 匯進 Upstash 後刪），`?demo=1` 載 `fixtures/sightings-sample.json` 排練
 - 線上：https://ai-nomos.vercel.app
 
+## 設計 token
+
+`public/tokens.css` 是**唯一的 token 來源**，由 coreplay 2027 衍生（真值＝`~/GitHub/coreplay-2027/src/sass/style.sass`，說明書＝`ClaudeOS/design-library/SPEC-coreplay-2027.html`）。要用就 `<link>` 它，**不要在別的 CSS 裡另寫一份 `:root`**。
+
+- **不從既有 CSS 推斷 token** —— 專案已有定版 token 時，去讀那份實作，不要拿現行樣式反推
+- **不要只抄顏色**。這套視覺語言是「工程圖紙 × 編輯排版」，氣質來自三件事，缺一件顏色全對也不像：① 大級距 display 字（中階不能塌）② 白／果核藍／墨黑三段、墨黑收場 ③ 捲動進場 `.rv`（節奏的一部分，不是裝飾）
+- **兩份來源對不上以 style.sass 為準** —— SPEC 是快照會過期（實例：`--sec-pad` SPEC 寫 `56/7vw/92`、官網現值 `88/11vw/152`）
+- 檢查方式：改完量 `getComputedStyle(document.documentElement).getPropertyValue('--sec-pad')` 與 `.rv` 元素數，不要只看色碼
+- 通過條件：token 值與 style.sass 一致，且捲動進場有掛上。**Guardrail**
+
+> 2026-08-29 踩過：色票與字型全對、間距只有六成又完全沒有動態，被判「這整套風格就不是 coreplay 2027」。我的量測（顏色對不對）驗不出這件事。
+
 ## 規則
 
 - 繁體中文、全形標點；**agent 契約（規則、enum、拒絕碼）只用英文**，UI 字串 zh／en 兩套在 `read.html` 的 `I18N`
