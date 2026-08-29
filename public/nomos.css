@@ -292,3 +292,27 @@ body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px
   font:inherit;font-weight:700;cursor:pointer}
 .confirm button:not(.btn){border:1px solid var(--line);background:transparent;font:inherit;
   padding:10px 16px;cursor:pointer}
+
+/* ══ agent 抽到的詞（首頁）══ */
+.found{margin:clamp(28px,3.5vw,44px) 0 0}
+.found h3{display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:12px;
+  font-weight:500;letter-spacing:.1em;color:var(--muted);margin:0 0 6px}
+.found h3::after{content:"";flex:1;height:1px;background:var(--line)}
+.tf{padding:16px 0;border-top:1px solid var(--line)}
+.tf:first-of-type{border-top:1px solid var(--ink)}
+.fh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.fh b{font-family:var(--font-en);font-size:clamp(19px,2.2vw,24px);font-weight:800;letter-spacing:-.01em}
+.bg{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;padding:2px 7px;white-space:nowrap}
+.bg.k{background:var(--paper);color:var(--ink-soft);border:1px solid var(--line)}
+.bg.n{background:var(--accent-lime);color:var(--ink)}
+.bg.y{background:var(--brand);color:#fff}
+.bg.a{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.fm{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:6px}
+.tf q{display:block;margin:10px 0 0;padding-left:13px;border-left:2px solid var(--brand);
+  font-size:clamp(15px,1.7vw,17px);line-height:1.6}
+.tf q::before,.tf q::after{content:""}
+.tf .fq{margin:10px 0 0;font-size:14px}
+.fs{margin-top:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em}
+.fs a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
+.fs a:hover{color:var(--brand);border-color:var(--brand)}
+.fnf{margin:14px 0 0;font-size:13px;color:var(--muted);padding-top:12px;border-top:1px solid var(--line)}

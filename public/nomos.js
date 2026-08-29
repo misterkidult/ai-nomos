@@ -35,6 +35,10 @@ window.NOMOS = (() => {
       discarded:'已捨棄，沒有寫進字典', confirming:'寫入中…',
       stored:'已寫入字典', notStored:'沒有可收的（都被鎖擋下了）',
       storeFail:e=>'伺服器沒收：'+e, storeOff:e=>'連不到伺服器（'+e+'）',
+      foundTitle:'它在這篇裡看到的詞',
+      badgeKnown:'字典有', badgeNew:'新詞', badgeYours:'你點名的', badgeAdded:'它自己補的',
+      notAiTerm:'它判定這不是 AI 詞', noQuoteHere:'這篇沒有解釋它',
+      nfHere:n=>'你點名但這篇裡找不到：'+n.join('、'),
       stFed:'你的 AI 拿到題目了',
       stOpened:'你的 AI 打開了這篇', stChecking:'它在跟字典核對已經有的詞',
       stCheckingN:(q,k)=>'查了 '+q+' 個，字典裡已經有 '+k+' 個',
@@ -108,6 +112,10 @@ window.NOMOS = (() => {
       discarded:'discarded — nothing was written', confirming:'writing…',
       stored:'written to the dictionary', notStored:'nothing to add (the locks caught them all)',
       storeFail:e=>'server refused: '+e, storeOff:e=>'server unreachable ('+e+')',
+      foundTitle:'What it saw in this article',
+      badgeKnown:'in the dictionary', badgeNew:'new', badgeYours:'you named it', badgeAdded:'it added this',
+      notAiTerm:'it ruled this is not an AI term', noQuoteHere:'this article does not explain it',
+      nfHere:n=>'You named these but they are not in the article: '+n.join(', '),
       stFed:'Your AI has the assignment',
       stOpened:'Your AI opened this article', stChecking:'It is checking the dictionary for words it already has',
       stCheckingN:(q,k)=>'looked up '+q+', the dictionary already had '+k,
@@ -207,7 +215,7 @@ window.NOMOS = (() => {
   /* ⚠ 目標必須是小元素，不能是整段容器：容器比視窗高時它的頂端永遠跨不過
      threshold，整段就停在 opacity:0（2026-08-29 踩過，首頁四個色帶全空白）。
      官網 main.js 的 REVEAL_TARGETS 也是逐個小元件列出來的。 */
-  const reveal = (selector = '.sec h2, .sense, .hotl .h, .fr .f, .fd .i, .sr .row, .vs q, .b-qg .q, .refs div, .forms, .dens, .bar, .verdict, .foot, .cx, .sides') => {
+  const reveal = (selector = '.sec h2, .sense, .hotl .h, .fr .f, .tf, .fd .i, .sr .row, .vs q, .b-qg .q, .refs div, .forms, .dens, .bar, .verdict, .foot, .cx, .sides') => {
     const els = [...document.querySelectorAll(selector)].filter(el => !el.classList.contains('rv'));
     if (!els.length) return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) {

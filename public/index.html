@@ -42,6 +42,8 @@
 
   <!-- 逐段敘事：把工具呼叫翻成人話。不印 lookupTerm("Bias") ×11 -->
   <div class="steps" id="steps" hidden></div>
+  <!-- agent 抽到的詞：畫在頁面上，不是只留在 agent 的回話裡 -->
+  <div class="found" id="found" hidden></div>
   <div class="confirm" id="confirm" hidden></div>
 
   <div class="nums">
@@ -179,7 +181,7 @@ function draw() {
 
   N.applyLang();
   $('filter').oninput = e => renderHits(e.target.value);
-  wireSay(); renderSteps(); renderConfirm();
+  wireSay(); renderSteps(); renderFound(); renderConfirm();
   N.reveal();
 }
 
@@ -209,6 +211,36 @@ function renderSteps(){
     + '<b>' + esc(s.title) + '</b>'
     + (s.note ? '<span>' + esc(s.note) + '</span>' : '') + '</div>').join('');
 }
+/* agent 抽到的詞畫在頁面上。每一筆都攤開它的判斷：字典有沒有、你點名的還是它自己
+   補的、三個 enum、以及那句從文章裡逐字抄出來的定義句（那是唯一可查核的部分）。 */
+let FOUND = [], FOUND_NF = [];
+function renderFound(){
+  const box=$('found'); if(!box) return;
+  if(!FOUND.length && !FOUND_NF.length){ box.hidden=true; box.innerHTML=''; return; }
+  box.hidden=false;
+  const EN=T('enums');
+  const rows = FOUND.map(f=>{
+    const k=String(f.term_normalized||'').trim();
+    const e=k?N.lex().find(x=>x.term===k):null;
+    const src=f.source&&f.source.url
+      ? '<a href="'+esc(f.source.url)+'" target="_blank" rel="noopener">'
+        + esc(f.source.title||f.source.url.replace(/^https?:\/\//,'').slice(0,40))+'</a>' : '';
+    return '<div class="tf">'
+      + '<div class="fh"><b>'+esc(f.term_raw)+'</b>'
+      + (e?'<span class="bg k">'+esc(T('badgeKnown'))+'</span>':'<span class="bg n">'+esc(T('badgeNew'))+'</span>')
+      + (f.requested?'<span class="bg y">'+esc(T('badgeYours'))+'</span>':'<span class="bg a">'+esc(T('badgeAdded'))+'</span>')
+      + '</div>'
+      + '<div class="fm">'+esc([EN[f.explained],EN[f.intent],f.domain==='not'?T('notAiTerm'):EN[f.domain]].filter(Boolean).join(' · '))+'</div>'
+      + (f.definition_quote
+          ? '<q>'+esc(f.definition_quote)+'</q>'
+          : '<p class="fq dim">'+esc(T('noQuoteHere'))+'</p>')
+      + (src?'<div class="fs">'+src+'</div>':'')
+      + '</div>';
+  }).join('');
+  box.innerHTML = '<h3>'+esc(T('foundTitle'))+'</h3>' + rows
+    + (FOUND_NF.length?'<p class="fnf">'+esc(T('nfHere')(FOUND_NF))+'</p>':'');
+}
+
 function renderConfirm(){
   const box = $('confirm'); if(!box) return;
   if(!PENDING){ box.hidden = true; box.innerHTML=''; return; }
@@ -249,7 +281,7 @@ const TOOLS = [
    async execute(input){
      const url=String((input&&input.url)||'').trim();
      const req=((input&&input.requested_terms)||[]).map(String).filter(Boolean);
-     STEPS=[]; LOOKUPS=0; LOOKUP_KNOWN=0;
+     STEPS=[]; LOOKUPS=0; LOOKUP_KNOWN=0; FOUND=[]; FOUND_NF=[]; renderFound();
      pushStep('fed', T('stFed'), url);
      return {contract_version:CONTRACT_VERSION,
        next_step:'call reportDocument with what you see of the article, then submitFindings',
@@ -274,6 +306,7 @@ const TOOLS = [
      const acc=[], rej=[];
      list.forEach((f,i)=>{const why=check(f||{});
        if(why.length) rej.push({index:i,term_raw:(f&&f.term_raw)||'',reasons:why}); else acc.push(f)});
+     FOUND=acc; FOUND_NF=nf; renderFound();
      if(acc.length){ PENDING={list:acc,notFound:nf}; renderConfirm();
        pushStep('reported', T('stReporting'), T('stReportingN')(acc.length)); }
      else pushStep('reported', T('stReporting'), T('notStored'));
