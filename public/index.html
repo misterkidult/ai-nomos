@@ -14,6 +14,21 @@
   <p class="note" id="note" hidden></p>
   <h1>ai-nomos</h1>
   <p class="tag" data-i="heroTag"></p>
+
+  <!-- WebMCP 訊號：進站三秒內判定。只答「這個瀏覽器看得到 API 嗎」，
+       「agent 真的會叫工具嗎」要到 /read 才知道 —— 兩者會斷在不同地方。 -->
+  <div class="mcp" id="mcp" hidden></div>
+
+  <!-- 三步機制：放在數字上面。先講完怎麼運作，底下那些數字才是「這個機制跑過 341 篇」的證據 -->
+  <div class="how" id="how">
+    <h2 data-i="howTitle"></h2>
+    <ol>
+      <li><b data-i="how1t"></b><span data-i="how1b"></span></li>
+      <li><b data-i="how2t"></b><span data-i="how2b"></span></li>
+      <li><b data-i="how3t"></b><span data-i="how3b"></span></li>
+    </ol>
+  </div>
+
   <div class="nums">
     <div><b id="n-terms">—</b><span data-i="nTerms"></span></div>
     <div><b id="n-sightings">—</b><span><span data-i="nSightings"></span> <small id="n-sources"></small></span></div>
@@ -27,7 +42,7 @@
 <script src="/nomos.js"></script>
 <script>
 const N = NOMOS, $ = id => document.getElementById(id), esc = N.esc, T = N.T;
-$('lang').onclick = () => { N.toggleLang(); N.loadTranslations().then(draw); };
+$('lang').onclick = () => { N.toggleLang(); N.loadTranslations().then(() => { draw(); if (HAS_MCP !== null) renderMcp(HAS_MCP); }); };
 
 let SIGHT = { ok:false, sightings:[], contributors:0 };
 const when = s => new Date(s.submitted_at || (s.source && s.source.published) || 0);
@@ -150,6 +165,19 @@ function draw() {
   $('filter').oninput = e => renderHits(e.target.value);
   N.reveal();
 }
+
+/* 訊號與資料無關，先跑不等 API */
+function renderMcp(has){
+  const box = $('mcp'); if (!box) return;
+  box.hidden = false;
+  box.className = 'mcp ' + (has ? 'on' : 'off');
+  box.innerHTML = has
+    ? '<b>' + esc(T('mcpOn')) + '</b> <a class="btn" href="/read">' + esc(T('tryIt')) + '</a>'
+    : '<b>' + esc(T('mcpOff')) + '</b><p>' + esc(T('mcpOffHow')) + '</p>'
+      + '<a class="btn" href="/read">' + esc(T('tryIt')) + '</a>';
+}
+let HAS_MCP = null;
+N.onMcp(m => { HAS_MCP = !!m; renderMcp(HAS_MCP); });
 
 Promise.all([N.loadLexicon(), N.loadTranslations(), N.loadSightings('?days=365')])
   .then(([, , s]) => { SIGHT = s; draw(); });

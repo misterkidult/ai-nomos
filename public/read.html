@@ -10,6 +10,12 @@ h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 8px}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 code{background:#fff;border:1px solid #000;padding:1px 6px;font-size:13px}
 .box{background:#fff;border:1px solid #000;padding:16px;margin:16px 0}
+/* ② agent 連線訊號 */
+.link{margin-top:6px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.link b{font-weight:700;display:inline-flex;align-items:baseline;gap:8px;font-size:14px}
+.link b::before{content:"";width:8px;height:8px;border-radius:50%;background:#bbb;flex:0 0 auto}
+.link.on b::before{background:#2540d8;box-shadow:0 0 0 4px rgba(37,64,216,.16)}
+.link span{font-size:13px;color:#555;flex:1 1 22em}
 /* 第四關：人確認才寫入。用醒目的黃底 —— 這是唯一一個「不按就不會發生」的地方 */
 .confirm{border:1px solid #000;border-left-width:5px;padding:16px;margin:16px 0;background:#FFF7C2}
 .confirm h3{margin:0 0 4px;font-size:16px}
@@ -59,6 +65,9 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
   <div class="stat">
     <div><span data-i="lexLabel">字典</span>：<span id="lex">…</span></div>
     <div>agent：<span id="env">…</span></div>
+    <!-- ② agent 真的叫過工具了嗎。① 綠不代表 ② 會亮：Claude in Chrome 有 modelContext
+         卻不把頁面工具接進它的清單（2026-08-27 探針實測）。 -->
+    <div class="link" id="link"><b></b><span></span></div>
     <div><span data-i="toolsLabel">工具</span>：<span id="tools">—</span></div>
   </div>
 </div>
@@ -143,6 +152,8 @@ const I18N={
   nickNote:'署名會跟著你的目擊一起公開，可留空。字典不驗證這個名字，也不用它做任何排名',
   signedBy:n=>'—— '+n,unsigned:'未署名',
   storeFail:e=>'伺服器沒收：'+e+'，這批只留在畫面上',storeOff:e=>'連不到伺服器（'+e+'），這批只留在畫面上',
+  linkIdle:'還沒有 agent 叫過工具',linkOn:'agent 接上了',
+  linkHint:'跟你的 AI 說：「呼叫 feedDocument，讀那篇文章，照規則找詞，再用 submitFindings 送回來」',
   noAgent:'無（退化模式：只做本地比對）',noAgentLog:'無 modelContext，退化模式',fed:(u,r)=>'feedDocument 被呼叫（'+u+'，指定 '+r+' 個詞）',
   registered:n=>'已註冊 '+n+' 個工具',regFail:'registerTool 失敗',
   enums:{has_definition:'有定義句',mentioned:'順帶提到',assumed:'假設你懂',selling_point:'賣點',technical:'技術描述',risk_or_limit:'風險或限制',core:'AI 詞',edge:'邊緣',not:'非 AI 詞'},
@@ -176,6 +187,8 @@ const I18N={
   nickNote:'Your signature is published alongside your sightings and can be left empty. The dictionary does not verify the name, and nothing is ranked by it',
   signedBy:n=>'— '+n,unsigned:'unsigned',
   storeFail:e=>'server refused: '+e+' — this batch stays on screen only',storeOff:e=>'server unreachable ('+e+') — this batch stays on screen only',
+  linkIdle:'no agent has called a tool yet',linkOn:'agent connected',
+  linkHint:'Tell your AI: “call feedDocument, read the article, find the terms following the rules, then send them back with submitFindings”',
   noAgent:'none (fallback: local match only)',noAgentLog:'no modelContext, fallback mode',fed:(u,r)=>'feedDocument called ('+u+', '+r+' requested terms)',
   registered:n=>'registered '+n+' tools',regFail:'registerTool failed',
   enums:{has_definition:'has definition',mentioned:'mentioned',assumed:'assumed known',selling_point:'selling point',technical:'technical',risk_or_limit:'risk / limit',core:'AI term',edge:'edge',not:'not AI'},
@@ -194,7 +207,7 @@ function applyLang(){
     if(el.dataset.attr)el.setAttribute(el.dataset.attr,v);else if(el.dataset.html)el.innerHTML=v;else el.textContent=v;});
   $('lang').textContent=LANG==='zh'?'EN':'中文';
   localStorage.setItem('lang',LANG);
-  renderHits(HITS);renderFindings();
+  renderHits(HITS);renderFindings();renderLink();renderConfirm();
 }
 
 $('lang').onclick=()=>{LANG=LANG==='zh'?'en':'zh';applyLang()};
@@ -455,6 +468,16 @@ $('look').onclick=()=>{const q=$('q').value.trim();if(!q){log(T('qEmpty'),'no');
 $('trend').onclick=()=>{renderTrend(trending());log('trending()')};
 
 /* ---------- WebMCP tools ---------- */
+/* ② 訊號：agent 真的呼叫過工具了嗎。feedDocument 一被叫就點亮，之後不再變回去 */
+let LINKED=false;
+function renderLink(){
+  const box=$('link'); if(!box) return;
+  box.className='link'+(LINKED?' on':'');
+  box.querySelector('b').textContent=LINKED?T('linkOn'):T('linkIdle');
+  box.querySelector('span').textContent=LINKED?'':T('linkHint');
+}
+function linkUp(){ if(!LINKED){LINKED=true;renderLink();} }
+
 function pick(){return (typeof document.modelContext?.registerTool==='function')?document.modelContext:(navigator.modelContext&&typeof navigator.modelContext.registerTool==='function')?navigator.modelContext:null}
 let tries=0;
 const timer=setInterval(()=>{const mc=pick();tries++;
@@ -470,6 +493,7 @@ function setup(mc){
      async execute(){
        const url=$('url').value.trim(), text=$('doc').value.trim(), req=requestedTerms();
        const hits=text?matchKnown(text):[];if(text){$('hitn').dataset.ran='1';renderHits(hits);}
+       linkUp();
        log(T('fed')(url||(text.length+' chars'),req.length),'ok');
        return {contract_version:CONTRACT_VERSION,url,requested_terms:req,document:text,known_hits:hits.map(h=>({term:h.term,zh:h.zh,slug:h.slug,matched:h.matched})),
          lexicon:LEX.map(e=>({term:e.term,aka:e.aka,zh:e.zh})),rules:RULES,finding_schema:FINDING_SCHEMA};

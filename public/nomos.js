@@ -23,6 +23,15 @@ window.NOMOS = (() => {
       sell: '🟢 大家在賣什麼', risk: '🔴 大家在擔心什麼', feed: '動態牆', feedNote: '（最新目擊，每一條都有來源）', feedEmpty: '還沒有目擊。', seenIn: (src, term) => '有人在《' + src + '》看到' + term, allLink: n => '全部 ' + n + ' 則 →', noMatch: '沒有符合的詞。',
       justNow: '剛剛', hoursAgo: n => n + ' 小時前', yesterday: '昨天', daysAgo: n => n + ' 天前',
       /* term page (08-29): senses / spellings / sell-vs-worry / jargon density */
+      /* 首頁引導與 WebMCP 訊號（08-29） */
+      howTitle: '這本字典怎麼長大',
+      how1t: '你給一篇文章的連結', how1b: '還有你看不懂的那幾個詞。',
+      how2t: '你的 AI 自己去讀那篇', how2b: '文章不經過我們的伺服器 —— 是它用你的瀏覽器去讀的。',
+      how3t: '它讀到什麼，你決定要不要收', how3b: '每一則都附原句與來源連結，你可以自己去查。',
+      mcpOn: '你的瀏覽器可以用 —— 拿一篇文章來試',
+      mcpOff: '這個站是給 AI agent 用的',
+      mcpOffHow: 'Chrome 152 以上原生支援；ChatGPT 桌面版要在 Work 模式開「啟用網站工具」。沒有 agent 也能用，只是變成貼全文做本地比對。',
+      tryIt: '拿一篇文章來',
       /* 雙語詞條（08-29）：同一個 term_key 的兩側 */
       sideZh: '中文語料', sideEn: '英文語料',
       sideCount: n => n + ' 篇文章',
@@ -69,6 +78,15 @@ window.NOMOS = (() => {
       sell: '🟢 What people are selling', risk: '🔴 What people are worried about', feed: 'Activity', feedNote: '(latest sightings, each with its source)', feedEmpty: 'No sightings yet.', seenIn: (src, term) => 'someone saw ' + term + ' in “' + src + '”', allLink: n => 'all ' + n + ' entries →', noMatch: 'No matching term.',
       justNow: 'just now', hoursAgo: n => n + ' h ago', yesterday: 'yesterday', daysAgo: n => n + ' days ago',
       /* term page (08-29) */
+      /* home explainer + WebMCP signal (08-29) */
+      howTitle: 'How this dictionary grows',
+      how1t: 'You bring a link to an article', how1b: 'plus the words in it you could not follow.',
+      how2t: 'Your own AI goes and reads it', how2b: 'The article never touches our server — your agent reads it in your browser.',
+      how3t: 'You decide what gets kept', how3b: 'Every entry carries the sentence it came from and a link back, so you can check it yourself.',
+      mcpOn: 'Your browser can do this — bring an article',
+      mcpOff: 'This site is built for AI agents',
+      mcpOffHow: 'Chrome 152+ supports it natively; in the ChatGPT desktop app, turn on site tools in Work mode. It still works without an agent — you paste the text and the page matches known terms itself.',
+      tryIt: 'Bring an article',
       /* bilingual term page (08-29) */
       sideZh: 'Chinese sources', sideEn: 'English sources',
       sideCount: n => n + ' articles',
@@ -172,6 +190,25 @@ window.NOMOS = (() => {
     els.forEach(el => io.observe(el));
   };
 
+  /* WebMCP 偵測（與 read.html 的 pick() 同一個判準）。
+     ⚠ 這只回答「這個瀏覽器看得到 API 嗎」，不回答「agent 真的會叫我的工具嗎」——
+     兩者會斷在不同地方：Claude in Chrome 有 modelContext 卻不把頁面工具接進它的
+     清單（2026-08-27 探針實測），所以①綠②永遠不亮。第二個訊號只有 /read 上
+     feedDocument 真的被呼叫過才算數。
+     API 可能在載入後才注入，所以輪詢一小段時間才判定沒有。 */
+  const mcp = () =>
+    (typeof document.modelContext?.registerTool === 'function') ? document.modelContext
+    : (navigator.modelContext && typeof navigator.modelContext.registerTool === 'function') ? navigator.modelContext
+    : null;
+  const onMcp = (cb, ms = 3000) => {
+    const t0 = Date.now();
+    const tick = () => { const m = mcp();
+      if (m) return cb(m);
+      if (Date.now() - t0 > ms) return cb(null);
+      setTimeout(tick, 200); };
+    tick();
+  };
+
   const ago = t => { const h = Math.round((Date.now() - t) / 36e5); if (h < 1) return T('justNow'); if (h < 24) return T('hoursAgo')(h); const d = Math.round(h / 24); return d === 1 ? T('yesterday') : T('daysAgo')(d); };
-  return { esc, T, ago, reveal, lang: () => LANG, applyLang, toggleLang, loadLexicon, bySlug, lex: () => LEX, built: () => BUILT, loadTranslations, tq, tline, loadSightings, termKey, groupByTerm, stats, quoteHtml, metaLine };
+  return { esc, T, ago, reveal, mcp, onMcp, lang: () => LANG, applyLang, toggleLang, loadLexicon, bySlug, lex: () => LEX, built: () => BUILT, loadTranslations, tq, tline, loadSightings, termKey, groupByTerm, stats, quoteHtml, metaLine };
 })();
