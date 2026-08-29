@@ -2,6 +2,15 @@
 
 Single source of truth for everything that crosses a boundary: page ↔ agent (WebMCP tools), page ↔ server (`api/*`). **Change it here, not in chat.** The contract is English only; the agent never translates. UI copy is a separate concern (`public/read.html` carries zh-Hant and en string tables).
 
+**Translations are a display layer.** A sighting is evidence, and evidence is the words the author
+actually wrote — so `definition_quote`, `sentence`, `context` and `term_raw` are stored in the
+language of the source and are never rewritten, never normalised across languages, and never
+replaced by a translation. A translation may be shown beside the original, never instead of it:
+the reader has to be able to check the quote against the page it came from, which is the whole
+point of keeping the link. Translations therefore live in their own table, keyed by the sighting
+`id` — never by the source text, which would silently break every translation the moment a quote
+is corrected. Nothing in §1–§4 gains a translated field, and no agent ever produces one.
+
 Owners: page (`public/`) = Claude · `api/*` + storage = Matt · noise review = Addy · verdicts = Kidult.
 
 ---
