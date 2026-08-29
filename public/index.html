@@ -78,7 +78,8 @@ function draw(){
   render($('filter').value);
 }
 $('filter').oninput=e=>render(e.target.value);
-Promise.all([N.loadLexicon(),N.loadSightings()]).then(([,s])=>{SIGHT=s;draw()});
+/* ?days=365：無參數走契約 §5 的「latest 200」上限，首頁要的是總量不是最近 200 筆 */
+Promise.all([N.loadLexicon(),N.loadSightings('?days=365')]).then(([,s])=>{SIGHT=s;draw()});
 </script>
 </body>
 </html>
