@@ -4,7 +4,7 @@
 # ///
 """Reference implementation of context/contract.md §3 locks (PII_DETECTED is server-only, not here).
 
-Usage: uv run scripts/check-findings.py fixtures/seed-133.json
+Usage: uv run scripts/check-findings.py fixtures/locks-regression.json
 Prints one REJECT line per failing finding, then a summary. Exit 0 always.
 """
 import json

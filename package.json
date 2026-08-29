@@ -1,4 +1,8 @@
 {
   "type": "module",
-  "private": true
+  "private": true,
+  "scripts": {
+    "verify": "node scripts/verify.mjs",
+    "locks": "uv run scripts/check-findings.py fixtures/locks-regression.json"
+  }
 }

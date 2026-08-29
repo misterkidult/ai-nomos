@@ -5,6 +5,21 @@ const URL_ = process.env.KV_REST_API_URL;
 const TOKEN = process.env.KV_REST_API_READ_ONLY_TOKEN || process.env.KV_REST_API_TOKEN;
 const MAX = 200;
 
+/* Contract §4 marks the public fields with ★; everything else stays on the server. This is an
+   allowlist on purpose: stripping the private fields instead would publish every new field a
+   later writer adds, and sentence/context are the two that must never leave. `id` is not starred
+   in §4 but the pages use it — see context/loop-spec.md, open question for the contract owner. */
+const PUBLIC = ['id', 'term_key', 'term_raw', 'term_normalized', 'explained', 'intent', 'domain',
+  'definition_quote', 'origin', 'submitted_at'];
+
+const publish = s => {
+  const out = {};
+  for (const k of PUBLIC) if (s[k] !== undefined) out[k] = s[k];
+  // source.hash is the dedup key, not public; the url/title/published are what make a quote checkable
+  if (s.source) out.source = { url: s.source.url, title: s.source.title, published: s.source.published };
+  return out;
+};
+
 async function redis(commands) {
   const r = await fetch(`${URL_}/pipeline`, {
     method: 'POST',
@@ -38,11 +53,10 @@ export default async function handler(req, res) {
 
     const [contributors] = await redis([['SCARD', 'contributors']]);
     const blobs = ids.length ? await redis(ids.map(id => ['GET', `sighting:${id}`])) : [];
-    // source_hash is the dedup key, not a public field (contract §4 marks only ★ public)
     const sightings = blobs
       .filter(Boolean)
       .map(b => (typeof b === 'string' ? JSON.parse(b) : b))
-      .map(({ source_hash, ...pub }) => pub);
+      .map(publish);
 
     // 60s CDN cache: the feed changes only when an agent submits, and stale-while-revalidate
     // keeps the page fast without ever serving something more than a minute behind.

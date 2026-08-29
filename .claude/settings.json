@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run verify)",
+      "Bash(npm run locks)",
+      "Bash(node scripts/verify.mjs)",
+      "Bash(node scripts/verify.mjs --only:*)",
+      "Bash(uv run scripts/check-findings.py:*)",
+      "Bash(python3 scripts/check-findings.py:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)"
+    ]
+  }
+}
