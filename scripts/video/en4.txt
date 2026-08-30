@@ -1,0 +1,1 @@
+This article says MCP means one thing. Twelve other articles say something else. The dictionary never picks a winner. It lays out the evidence. Every definition must be a verbatim quote from the source. If the agent cannot produce one, the server rejects it.
