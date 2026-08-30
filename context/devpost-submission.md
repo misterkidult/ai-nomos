@@ -45,11 +45,11 @@ Three reasons this is a WebMCP problem and not a chatbot problem or a scraper pr
 
 ### What a person and an agent can do here that neither can do alone
 
-The person brings judgment about *which article matters* and *which words bothered them*. They cannot read 374 articles to see how a word is drifting.
+The person brings judgment about *which article matters* and *which words bothered them*. They cannot read 341 articles to see how a word is drifting.
 
 The agent reads the article closely and applies the same rules every time. It has no idea which article is worth reading, and left alone it will confidently define a term from memory instead of from the page.
 
-The dictionary holds the accumulation neither of them can: 924 sightings across 374 documents, so that when you bring article #375 the page can put its definition of "RAG" next to the twelve other ways twelve other authors used it — and mark the ones that contradict.
+The dictionary holds the accumulation neither of them can: 1,322 sightings across 341 documents, so that when you bring article #342 the page can put its definition of "RAG" next to the other ways other authors used it — and split them by the language the source was written in (1,217 Chinese, 98 English, 7 Japanese), because a word is not used the same way in two language communities.
 
 Two read-only tools (`lookupTerm`, `trending`) close the loop the other way: a second agent, on any other site, can ask this dictionary what a term currently looks like in the wild. It gets quotes and sources, never a ruling. The dictionary never says which definition is right.
 
@@ -59,8 +59,9 @@ WebMCP is not everywhere yet. With no `modelContext` present, the page degrades 
 
 ### Implementation
 
-- **Four tools**, dual-registered on `document.modelContext` (ChatGPT desktop, Chrome 152+) and `navigator.modelContext` (older spec drafts):
-  - `feedDocument` (read-only) → returns the URL, the user's requested terms, a thin lexicon index, the extraction rules verbatim, and the JSON Schema for a finding
+- **Five tools**, dual-registered on `document.modelContext` (ChatGPT desktop, Chrome 152+) and `navigator.modelContext` (older spec drafts). The page has no form: the agent brings the article.
+  - `feedDocument({url, requested_terms?})` (read-only) → takes the link the user gave their agent, returns the extraction rules verbatim, a thin lexicon index, and the JSON Schema for a finding
+  - `reportDocument` (read-only) → called after the agent opens the article and before it extracts anything: title, byline, date, length, one-sentence gist. **Nothing is stored.** It exists because one tool call that takes a minute leaves the screen blank for a minute — splitting the task into stages is what makes progress real rather than a fake spinner. The title doubles as proof the agent actually reached the page
   - `submitFindings` (`readOnlyHint: false`) → hands the findings to the page and answers `pending_review`; it does not write
   - `lookupTerm`, `trending` (read-only) → the public read side
 - **One data contract** (`context/contract.md`, English, versioned) is the single source of truth for page ↔ agent and page ↔ server. Changes go through a `contract:` commit, never through conversation.
@@ -82,8 +83,8 @@ Not available anywhere we tested: page-side write confirmation (`requestUserInte
 | 秒 | 畫面 | 旁白重點 |
 |---|---|---|
 | 0–25 | 一篇滿是術語的 AI 文章 | 「這篇文章有 12 個 AI 術語。哪幾個作者有解釋？哪幾個他假設你懂？哪幾個只是拿來賣東西？」 |
-| 25–70 | `/read` 貼連結 → agent 呼叫 feedDocument → 讀完 submitFindings | 「頁面沒有上傳這篇文章。是 agent 用你自己的瀏覽器去讀的。」 |
+| 25–70 | 首頁：對 agent 說一句話 → 說明整組讓位、圓點開始轉 → 「你的 AI 打開了這篇」＋標題浮出 | 「頁面沒有上傳這篇文章。是 agent 用你自己的瀏覽器去讀的 —— 標題出現就是它真的到過那一頁。」 |
 | 70–110 | 報告出來：假設你懂的 5 個詞 + 字典白話解釋 | 「它假設你懂的，我幫你查好了。」 |
 | 110–140 | 同一個詞的並列定義，標出說法不同的那筆 | 「這篇說 MCP 是這個。另外 12 篇說的是別的。字典不判誰對，只把證據擺出來。」 |
-| 140–165 | 關掉 agent，退化模式 | 「沒有 agent 也能用，只是迴路小一點。」 |
+| 140–165 | 按下「收進字典」，數字從 1,322 跳動；切到日文語料側 | 「agent 提議，人決定 —— 按下去之前什麼都沒寫。同一個詞，中文圈跟英文圈講的不是同一件事。」 |
 | 165–180 | 首頁 | 「想改字典，拿一篇文章來。」 |
