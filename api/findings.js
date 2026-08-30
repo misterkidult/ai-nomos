@@ -56,10 +56,17 @@ async function readBody(req) {
    English as soon as it quotes a few product names. Must stay identical to
    scripts/kv-backfill-lang.py. */
 const CJK_RE = /[\u4e00-\u9fff]/g, LATIN_RE = /[A-Za-z]/g;
+/* Kana first: Japanese prose is full of Han characters, so the CJK:Latin ratio alone reads it as
+   Chinese — 11 sightings from one Japanese site sat in the Chinese side until 2026-08-30.
+   Chinese never contains kana, so this test is safe to run before the ratio. */
+/* ⚠ 只收真正的假名字母，不含 ・(30FB) ー(30FC) ゠(30A0) 這些標點 —— 中文文章用 ・ 當
+   分隔符很常見，把整段判成日文（2026-08-30 實測誤判一篇繁中 SEO 百科）。 */
+const KANA_RE = /[\u3041-\u3096\u30a1-\u30fa]/;
 function docLang(findings) {
   let text = findings.map(f => f.definition_quote || '').join(' ');
   const t = findings[0] && findings[0].source && findings[0].source.title;
   if (t) text += ' ' + t;
+  if (KANA_RE.test(text)) return 'ja';
   const cjk = (text.match(CJK_RE) || []).length, latin = (text.match(LATIN_RE) || []).length;
   if (cjk + latin === 0) return 'zh';   // no evidence either way; the corpus is overwhelmingly zh
   return cjk * 3 > latin ? 'zh' : 'en';

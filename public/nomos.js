@@ -58,14 +58,14 @@ window.NOMOS = (() => {
       mcpOffHow: 'Chrome 152 以上原生支援；ChatGPT 桌面版要在 Work 模式開「啟用網站工具」。沒有 agent 也能用，只是變成貼全文做本地比對。',
       tryIt: '拿一篇文章來', copyBtn:'複製',
       /* 雙語詞條（08-29）：同一個 term_key 的兩側 */
-      sideZh: '中文語料', sideEn: '英文語料',
+      sideZh: '中文語料', sideEn: '英文語料', sideJa: '日文語料',
       sideCount: n => n + ' 篇文章',
       sideEmpty: l => '這個詞還沒有' + l + '目擊 —— 拿一篇來。',
       crossLead: '兩邊怎麼談它',
       crossSame: '兩邊的比重接近。',
       crossDiff: (a, b) => a + '那邊偏' + b,
       crossSell: '賣點', crossRisk: '風險', crossTech: '技術描述',
-      langOf: { zh: '中文', en: '英文' },
+      langOf: { zh: '中文', en: '英文', ja: '日文' },
       /* home (08-29 改版) */
       heroTag: '約定成俗 —— AI 的詞，由大家怎麼用決定。想改字典，拿一篇文章來。',
       hotLead: '詞，和最多人用的那句', hotNoQuote: '還沒有人給它定義句。',
@@ -138,14 +138,14 @@ window.NOMOS = (() => {
       mcpOffHow: 'Chrome 152+ supports it natively; in the ChatGPT desktop app, turn on site tools in Work mode. It still works without an agent — you paste the text and the page matches known terms itself.',
       tryIt: 'Bring an article', copyBtn:'copy',
       /* bilingual term page (08-29) */
-      sideZh: 'Chinese sources', sideEn: 'English sources',
+      sideZh: 'Chinese sources', sideEn: 'English sources', sideJa: 'Japanese sources',
       sideCount: n => n + ' articles',
       sideEmpty: l => 'No ' + l + ' sightings for this term yet — bring one.',
       crossLead: 'How the two sides talk about it',
       crossSame: 'The two sides lean about the same way.',
       crossDiff: (a, b) => a + ' leans ' + b,
       crossSell: 'selling', crossRisk: 'worried', crossTech: 'technical',
-      langOf: { zh: 'Chinese', en: 'English' },
+      langOf: { zh: 'Chinese', en: 'English', ja: 'Japanese' },
       /* home (08-29) */
       heroTag: 'Nomos — AI words mean what people use them to mean. To change the dictionary, bring an article.',
       hotLead: 'the term, and the line most people use', hotNoQuote: 'Nobody has defined it yet.',

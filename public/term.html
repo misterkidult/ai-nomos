@@ -40,10 +40,13 @@ function draw() {
      不是詞的語言 —— 英文詞名出現在中文文章裡仍算中文語料。舊資料缺 lang 時
      退回中文側（語料絕大多數是中文），不讓它整筆消失。 */
   const side = { zh: rows.filter(r => (r.lang || 'zh') === 'zh'),
-                 en: rows.filter(r => r.lang === 'en') };
+                 en: rows.filter(r => r.lang === 'en'),
+                 ja: rows.filter(r => r.lang === 'ja') };
+  const LANGS = ['zh','en','ja'];
+  const sideLabel = l => l === 'zh' ? T('sideZh') : l === 'en' ? T('sideEn') : T('sideJa');
   /* 預設開資料多的那一側，不跟介面語言走 —— 介面英文但英文語料只有 3 筆時，
      開英文側會讓人以為這個詞沒什麼人談。使用者點過就以他的選擇為準。 */
-  const cur = SIDE || (side.en.length > side.zh.length ? 'en' : 'zh');
+  const cur = SIDE || LANGS.slice().sort((a,b) => side[b].length - side[a].length)[0];
   const name = e ? e.term : (rows[0] ? rows[0].term_raw : slug);
   const ROWS = side[cur];   /* 當前語料側；底下所有分析都吃它 */
   document.title = name + ' · ai-nomos';
@@ -129,34 +132,40 @@ function draw() {
     + '<span class="dim">' + T('evidence') + '</span></div>';
 
   /* 語料側切換：兩側都有資料才出現 */
-  const tabs = (side.zh.length && side.en.length)
-    ? '<div class="sides">' + ['zh','en'].map(l =>
+  /* 只列有目擊的語料側；兩側以上才需要切換 */
+  const live = LANGS.filter(l => side[l].length);
+  const tabs = live.length > 1
+    ? '<div class="sides">' + live.map(l =>
         '<button class="s' + (l === cur ? ' on' : '') + '" data-side="' + l + '">'
-        + (l === 'zh' ? T('sideZh') : T('sideEn'))
+        + sideLabel(l)
         + '<b>' + new Set(side[l].map(r => r.source && r.source.url).filter(Boolean)).size + '</b></button>').join('')
       + '</div>'
     : '';
 
-  /* 跨語言對照：兩邊各自的 intent 比重，只有兩側都有料才算得出來 */
+  /* 跨語言對照：拿目擊最多的兩側比。三側都有料時只比前兩大 —— 三欄並排在
+     這個版面塞不下，而且「哪兩邊差最多」才是問題本身。 */
   const share = list => { const n = list.length || 1;
     return { sell: list.filter(x => x.intent === 'selling_point').length / n,
              risk: list.filter(x => x.intent === 'risk_or_limit').length / n }; };
   let CROSS = '';
-  if (side.zh.length >= 3 && side.en.length >= 3) {
-    const z = share(side.zh), e2 = share(side.en);
-    const dSell = z.sell - e2.sell, dRisk = z.risk - e2.risk;
+  const pair = live.filter(l => side[l].length >= 3)
+                   .sort((x, y) => side[y].length - side[x].length).slice(0, 2);
+  if (pair.length === 2) {
+    const [L1, L2] = pair;
+    const s1 = share(side[L1]), s2 = share(side[L2]);
+    const dSell = s1.sell - s2.sell, dRisk = s1.risk - s2.risk;
     const pick = Math.abs(dSell) >= Math.abs(dRisk) ? ['sell', dSell] : ['risk', dRisk];
     const label = pick[0] === 'sell' ? T('crossSell') : T('crossRisk');
     const verdict = Math.abs(pick[1]) < 0.15 ? T('crossSame')
-      : T('crossDiff')(pick[1] > 0 ? T('langOf').zh : T('langOf').en, label);
+      : T('crossDiff')(T('langOf')[pick[1] > 0 ? L1 : L2], label);
+    const docs = l => new Set(side[l].map(r => r.source && r.source.url).filter(Boolean)).size;
     const bar = (o, lbl, nDocs) => '<div class="cx"><h4>' + lbl + '<span>' + T('sideCount')(nDocs) + '</span></h4>'
       + '<div class="bar"><i class="s" style="flex:' + Math.round(o.sell*100) + '"></i>'
       + '<i class="t" style="flex:' + Math.round((1-o.sell-o.risk)*100) + '"></i>'
       + '<i class="r" style="flex:' + Math.round(o.risk*100) + '"></i></div>'
       + '<p><b>' + Math.round(o.sell*100) + '%</b> ' + T('crossSell')
       + ' · <b>' + Math.round(o.risk*100) + '%</b> ' + T('crossRisk') + '</p></div>';
-    CROSS = bar(z, T('sideZh'), new Set(side.zh.map(r => r.source && r.source.url).filter(Boolean)).size)
-          + bar(e2, T('sideEn'), new Set(side.en.map(r => r.source && r.source.url).filter(Boolean)).size)
+    CROSS = bar(s1, sideLabel(L1), docs(L1)) + bar(s2, sideLabel(L2), docs(L2))
           + '<p class="verdict">' + verdict + '</p>';
   }
 

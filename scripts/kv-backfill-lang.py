@@ -29,12 +29,17 @@ dry = "--dry-run" in sys.argv
 
 CJK = re.compile(r"[一-鿿]")
 LATIN = re.compile(r"[A-Za-z]")
+# Kana first — Japanese is full of Han characters and the ratio alone calls it Chinese.
+# Only real kana letters — not ・ ー ゠, which Chinese articles use as separators.
+KANA = re.compile(r"[ぁ-ゖァ-ヺ]")
 
 
 def doc_lang(rows: list[dict]) -> str:
     """One document's language. Same rule as the server."""
     text = " ".join((r.get("definition_quote") or "") for r in rows)
     text += " " + ((rows[0].get("source") or {}).get("title") or "")
+    if KANA.search(text):
+        return "ja"
     cjk, latin = len(CJK.findall(text)), len(LATIN.findall(text))
     if cjk + latin == 0:
         return "zh"          # no evidence either way; the corpus is overwhelmingly zh
