@@ -31,7 +31,7 @@ Existing AI glossaries are written top-down: an editor decides what a word means
 
 You give the page an article link and the terms you want pulled out. The agent fetches and reads the article itself — the page never uploads it — judges each term against a fixed rule set, adds terms you did not ask for, and reports back. The dictionary shows you what it found next to what every other article said about the same words.
 
-Nothing is seeded. All 133 existing entries entered through the same door.
+There is one write path and no editorial back door. Every sighting — including the 1,300 the dictionary opened with — is one term as it appeared in one document, carrying the quote and the link that let you check it. The agent proposes, a person confirms, and only then is anything stored. No entry can be edited into existence by hand.
 
 ### Why WebMCP is the right fit
 

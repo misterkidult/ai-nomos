@@ -34,4 +34,4 @@ WebMCP 參賽作品。計畫與審查在 `context/`，產品原則見 README。*
   ```
 - 目擊紀錄不回寫 `ai-dictionary` 的 `terms/`
 - `public/lexicon.json` 是 vendor 進來的產出，勿手改：字典 repo 是 private 且無線上站，瀏覽器抓不到，部署前跑 `scripts/sync-lexicon.sh`（＝字典 `build.py --index` ＋複製）
-- `public/fixtures/` 只放 `/read` 退化模式「載入範例目擊」用的檔；來源是根目錄 `fixtures/`。**沒有 seed**：既有 133 則由 Kidult 照 `fixtures/feed-list-133.md` 親自餵
+- `public/fixtures/` 只放 `/read` 退化模式「載入範例目擊」用的檔；來源是根目錄 `fixtures/`。**寫入只有一條路**（`POST /api/findings`，且要人確認）。⚠ 但字典開張的 1,314 筆是 `scripts/kv-load.py` 直接灌的，沒走過工具路徑 —— 契約 §6 寫明兩者的 id 形態不同、分得出來。餵食清單在 `fixtures/feed-list-*.md`

@@ -246,9 +246,13 @@ says a term is reported once per document, so re-feeding an article overwrites r
 
 Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?lang=zh|en|ja` for one language side; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"sightings":[…]}`. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint; until it exists the pages read the interim file `public/sightings.json` (same response shape; Matt imports it into Upstash on 8/29, then deletes it) and fall back to empty states (and `?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
 
-## 6. No seeding
+## 6. One write path
 
-There is no seed origin. The existing 133 entries enter the signal system the same way as anything else: Kidult pastes an article into `/read` and the agent submits findings. `fixtures/feed-list-133.md` is his queue of articles, not data. Fixtures under `fixtures/` are lock regression inputs only and are never loaded into storage.
+`POST /api/findings` (§5) is the only way a sighting reaches storage, and the page only calls it after a person confirms (the fourth gate). There is no editorial endpoint: an entry cannot be written or edited by hand, and every stored sighting carries the quote and the source link that make it checkable.
+
+**What the dictionary opened with.** The 1,314 sightings loaded before 2026-08-30 went in through `scripts/kv-load.py`, which writes Upstash directly — they were produced by the same extraction rules (§2) and passed the same locks (§3), but they did not travel the tool path. Their ids have the form `<doc-hash>-<index>`; everything written through the tools has `<doc-hash>-<term-hash>` or `p<timestamp>-…`, so the two are distinguishable in storage. `origin: agent` on those rows records how the findings were produced, not which door they came through.
+
+Fixtures under `fixtures/` are lock regression inputs and feeding queues; they are never loaded into storage.
 
 ## 7. Versioning
 
