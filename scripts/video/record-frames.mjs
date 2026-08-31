@@ -15,7 +15,10 @@ import { mkdirSync, renameSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const OUT = process.argv[2] || 'video-out';
-const SITE = 'https://ai-nomos.vercel.app/?lang=en&rec=1';
+/* 第三個參數＝介面語言（en／zh／ja），預設 en */
+const LANG = process.argv[3] || 'en';
+const LOCALE = { en:'en-US', zh:'zh-TW', ja:'ja-JP' }[LANG] || 'en-US';
+const SITE = `https://ai-nomos.vercel.app/?lang=${LANG}&rec=1`;
 const VIEW = { width: 1600, height: 900 };
 mkdirSync(OUT, { recursive: true });
 
@@ -54,7 +57,7 @@ const browser = await chromium.launch({ headless: false });
 async function frame(name, fn) {
   const ctx = await browser.newContext({
     viewport: VIEW, recordVideo: { dir: OUT, size: VIEW },
-    deviceScaleFactor: 2, locale: 'en-US',
+    deviceScaleFactor: 2, locale: LOCALE,
   });
   const page = await ctx.newPage();
   const t0 = Date.now();
@@ -90,7 +93,7 @@ console.log(`錄到 ${OUT}/ · ${VIEW.width}×${VIEW.height}\n`);
 {
   const ctx = await browser.newContext({
     viewport: VIEW, recordVideo: { dir: OUT, size: VIEW },
-    deviceScaleFactor: 2, locale: 'en-US',
+    deviceScaleFactor: 2, locale: LOCALE,
   });
   const page = await ctx.newPage();
   await page.goto(ARTICLE, { waitUntil: 'domcontentloaded' });
@@ -126,10 +129,10 @@ await frame('f3-report', async page => {
 {
   const ctx = await browser.newContext({
     viewport: VIEW, recordVideo: { dir: OUT, size: VIEW },
-    deviceScaleFactor: 2, locale: 'en-US',
+    deviceScaleFactor: 2, locale: LOCALE,
   });
   const page = await ctx.newPage();
-  await page.goto('https://ai-nomos.vercel.app/term/mcp?lang=en&rec=1');
+  await page.goto(`https://ai-nomos.vercel.app/term/mcp?lang=${LANG}&rec=1`);
   await page.waitForTimeout(4500);
   /* ⚠ 一區一停，等 .rv 進場完成才繼續。捲太快會拍到還沒浮出的空白區塊 ——
      .rv 起手 opacity:0、900ms 才浮出，那是設計的一部分不為錄影拿掉。 */

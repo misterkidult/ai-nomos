@@ -36,13 +36,23 @@ REGION = load_val("AZURE_SPEECH_REGION")
 if not KEY or not REGION:
     sys.exit(f"✗ 缺 AZURE_SPEECH_KEY 或 AZURE_SPEECH_REGION\n  找過：環境變數、{SECRETS}")
 
-VOICE = "en-US-GuyNeural"
-RATE = sys.argv[1] if len(sys.argv) > 1 else "+0%"
+# 語言 → (稿子前綴, 輸出前綴, 聲音, xml:lang)
+LANGS = {
+    "en": ("en", "az", "en-US-GuyNeural",     "en-US"),
+    "zh": ("zh", "zh", "zh-TW-YunJheNeural",  "zh-TW"),
+    "ja": ("ja", "ja", "ja-JP-KeitaNeural",   "ja-JP"),
+}
+LANG = "en"
+RATE = "+0%"
+for a in sys.argv[1:]:
+    if a in LANGS: LANG = a
+    else: RATE = a
+SRC_PREFIX, OUT_PREFIX, VOICE, XML_LANG = LANGS[LANG]
 
 ENDPOINT = f"https://{REGION}.tts.speech.microsoft.com/cognitiveservices/v1"
 
 def synth(idx, text):
-    ssml = (f'<speak version="1.0" xml:lang="en-US">'
+    ssml = (f'<speak version="1.0" xml:lang="{XML_LANG}">'
             f'<voice name="{VOICE}">'
             f'<prosody rate="{RATE}">{text}</prosody>'
             f'</voice></speak>')
@@ -53,9 +63,9 @@ def synth(idx, text):
                  "User-Agent": "ai-nomos-vo"},
         data=ssml.encode("utf-8"), timeout=60)
     if r.status_code != 200:
-        print(f"  ✗ en{idx}: {r.status_code} {r.text[:200]}")
+        print(f"  ✗ {SRC_PREFIX}{idx}: {r.status_code} {r.text[:200]}")
         return None
-    p = HERE / f"az{idx}.mp3"
+    p = HERE / f"{OUT_PREFIX}{idx}.mp3"
     p.write_bytes(r.content)
     return p
 
@@ -72,10 +82,10 @@ FRAMES = [25, 45, 40, 30, 32, 15]   # 分鏡各格秒數（az5 於 2026-08-31 �
 print(f"Azure TTS · {VOICE} · rate={RATE} · region={REGION}\n")
 total = 0.0
 for i in range(1, 7):
-    text = (HERE / f"en{i}.txt").read_text(encoding="utf-8").strip()
+    text = (HERE / f"{SRC_PREFIX}{i}.txt").read_text(encoding="utf-8").strip()
     p = synth(i, text)
     if p:
         d = duration(p); total += d
         slack = FRAMES[i-1] - d
-        print(f"  ✓ az{i}.mp3  {d:6.2f}s / 分鏡 {FRAMES[i-1]:2d}s   餘裕 {slack:+6.2f}s")
+        print(f"  ✓ {OUT_PREFIX}{i}.mp3  {d:6.2f}s / 分鏡 {FRAMES[i-1]:2d}s   餘裕 {slack:+6.2f}s")
 print(f"\n總長 {total:.2f}s / 分鏡 180s（Devpost 上限 180s）")

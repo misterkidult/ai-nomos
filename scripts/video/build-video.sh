@@ -8,9 +8,14 @@
 set -euo pipefail
 
 ALLOW_PH=0
+LANG_CODE=en
 args=()
 for a in "$@"; do
-  case "$a" in --allow-placeholder) ALLOW_PH=1;; *) args+=("$a");; esac
+  case "$a" in
+    --allow-placeholder) ALLOW_PH=1;;
+    --lang=*) LANG_CODE="${a#--lang=}";;
+    *) args+=("$a");;
+  esac
 done
 set -- "${args[@]}"
 
@@ -50,7 +55,7 @@ work="$SRC/.build"; rm -rf "$work"; mkdir -p "$work"
 # 每格：畫面裁到配音長度 +1.2s 尾巴，配上該段旁白
 for i in "${!FRAMES[@]}"; do
   n=$((i+1)); name="${FRAMES[$i]}"
-  a="$VO/az$n.mp3"
+  a="$VO/$( [ "$LANG_CODE" = en ] && echo az || echo "$LANG_CODE" )$n.mp3"
   [ -f "$a" ] || { echo "缺配音：$a" >&2; exit 1; }
   adur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$a")
   seg=$(python3 -c "import sys; print(f'{float(sys.argv[1])+1.2:.3f}')" "$adur")
@@ -69,13 +74,13 @@ for i in "${!FRAMES[@]}"; do echo "file 'seg$((i+1)).mp4'" >> "$work/list.txt"; 
 ffmpeg -y -v error -f concat -safe 0 -i "$work/list.txt" -c copy "$work/joined.mp4"
 
 # 字幕：從 en*.txt 逐段對齊
-python3 "$VO/make-subs.py" "$work" "$VO"
+python3 "$VO/make-subs.py" "$work" "$VO" "$LANG_CODE"
 
 # 字幕燒進畫面。
 # ⚠ 本機 ffmpeg 9.0 沒編 libass（configuration 無 --enable-libass），subtitles 濾鏡
 #   不存在。改走 Pillow 把每張字幕畫成 PNG、用內建的 overlay 濾鏡疊上去。
 #   同時留一份外掛 .srt 給 YouTube 上傳用（評審可以關掉字幕）。
-python3 "$VO/burn-subs.py" "$work/joined.mp4" "$work/subs.srt" "$OUT"
+python3 "$VO/burn-subs.py" "$work/joined.mp4" "$work/subs.srt" "$OUT" "$LANG_CODE"
 cp "$work/subs.srt" "${OUT%.mp4}.srt"
 
 d=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")

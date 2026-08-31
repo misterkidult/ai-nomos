@@ -14,8 +14,11 @@ import sys
 from pathlib import Path
 
 work, vo = Path(sys.argv[1]), Path(sys.argv[2])
+LANG = sys.argv[3] if len(sys.argv) > 3 else 'en'
+SRC = {'en': 'en', 'zh': 'zh', 'ja': 'ja'}[LANG]
 
-MAX_CHARS = 62        # 一張字幕的字元上限（1600px 寬、19pt，兩行內讀得完）
+# 一張字幕的字元上限。CJK 一個字約佔兩個拉丁字寬，所以上限要低一半。
+MAX_CHARS = 62 if LANG == 'en' else 34
 MIN_SECS = 1.6        # 一張字幕最短停留，太短會閃
 
 
@@ -34,9 +37,13 @@ def ts(s):
 
 
 def split_sentences(text):
-    """切成句子。句號後接空白才算句尾，避免切壞 'ai-nomos.' 這種。"""
-    parts = re.split(r'(?<=[.!?])\s+', text.strip())
-    return [p.strip() for p in parts if p.strip()]
+    """切成句子。
+
+    英文：句號後要接空白才算句尾，避免切壞 'ai-nomos.' 這種。
+    中日文：全形句號／問號／驚嘆號後面沒有空白，直接切。
+    """
+    parts = re.split(r'(?<=[。！？])|(?<=[.!?])\s+', text.strip())
+    return [p.strip() for p in parts if p and p.strip()]
 
 
 def split_long(sent):
@@ -44,8 +51,11 @@ def split_long(sent):
     if len(sent) <= MAX_CHARS:
         return [sent]
     out, buf = [], ''
-    for chunk in re.split(r'(?<=,)\s+', sent):
-        cand = (buf + ' ' + chunk).strip() if buf else chunk
+    for chunk in re.split(r'(?<=[，、])|(?<=,)\s+', sent):
+        if not chunk:
+            continue
+        sep = '' if LANG != 'en' else ' '
+        cand = (buf + sep + chunk).strip() if buf else chunk
         if len(cand) <= MAX_CHARS:
             buf = cand
         else:
@@ -69,7 +79,8 @@ def to_cards(text):
     cards, buf = [], ''
     for sent in split_sentences(text):
         for piece in split_long(sent):
-            cand = (buf + ' ' + piece).strip() if buf else piece
+            sep = '' if LANG != 'en' else ' '
+            cand = (buf + sep + piece).strip() if buf else piece
             if len(cand) <= MAX_CHARS:
                 buf = cand
             else:
@@ -84,7 +95,7 @@ def to_cards(text):
 t, rows = 0.0, []
 for n in range(1, 7):
     seg = dur(work / f'seg{n}.mp4')
-    text = (vo / f'en{n}.txt').read_text(encoding='utf-8').strip()
+    text = (vo / f'{SRC}{n}.txt').read_text(encoding='utf-8').strip()
     cards = to_cards(text)
     # 依字數比例分配時間（長句停久一點），並保住最短停留
     total = sum(len(c) for c in cards)

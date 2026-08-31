@@ -17,14 +17,22 @@ import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
 const OUT = process.argv[2] || 'video-out';
+/* 第三個參數＝介面語言（en／zh／ja），預設 en */
+const LANG = process.argv[3] || 'en';
+const LOCALE = { en:'en-US', zh:'zh-TW', ja:'ja-JP' }[LANG] || 'en-US';
 mkdirSync(OUT, { recursive: true });
 
-const SITE = 'https://ai-nomos.vercel.app/?lang=en&rec=1';
-const AGENT = 'https://ai-nomos.vercel.app/agent-view';
+const SITE = `https://ai-nomos.vercel.app/?lang=${LANG}&rec=1`;
+const AGENT = `https://ai-nomos.vercel.app/agent-view?lang=${LANG}`;
 const LW = 480, RW = 1120, H = 900;
 
 const ARTICLE = 'https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/';
-const ASK = `Read ${ARTICLE} and use ai-nomos's feedDocument to find the AI jargon in it.`;
+/* 使用者對 agent 說的那句話，跟著介面語言走。⚠ 工具名不翻譯（契約是英文的） */
+const ASK = {
+  en: `Read ${ARTICLE} and use ai-nomos's feedDocument to find the AI jargon in it.`,
+  zh: `讀 ${ARTICLE} 這篇，用 ai-nomos 的 feedDocument 找出裡面的 AI 術語。`,
+  ja: `${ARTICLE} を読んで、ai-nomos の feedDocument で AI 用語を拾って。`,
+}[LANG];
 const DOC = { title: 'The lethal trifecta for AI agents', byline: 'Simon Willison',
               published: '2025-06-16', words: 1622,
               gist: 'Three capabilities that are dangerous when combined.' };
@@ -59,9 +67,9 @@ async function split(name, fn) {
      Playwright 會把畫面等比縮進那個框裡、旁邊補灰邊。改成一個 context 一個寬度，
      錄影尺寸＝viewport 尺寸，兩支各自原尺寸錄好再 hstack。 */
   const ctxA = await browser.newContext({ viewport: { width: LW, height: H },
-    recordVideo: { dir: OUT, size: { width: LW, height: H } }, locale: 'en-US' });
+    recordVideo: { dir: OUT, size: { width: LW, height: H } }, locale: LOCALE });
   const ctxS = await browser.newContext({ viewport: { width: RW, height: H },
-    recordVideo: { dir: OUT, size: { width: RW, height: H } }, locale: 'en-US' });
+    recordVideo: { dir: OUT, size: { width: RW, height: H } }, locale: LOCALE });
   const agent = await ctxA.newPage();
   const site  = await ctxS.newPage();
 

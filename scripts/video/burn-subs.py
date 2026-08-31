@@ -6,7 +6,7 @@
    Pillow 把每張字幕畫成 PNG，再用 overlay 濾鏡按時間疊上去 ——
    overlay 是內建的，不吃額外編譯選項。
 
-用法：burn-subs.py <輸入 mp4> <subs.srt> <輸出 mp4>
+用法：burn-subs.py <輸入 mp4> <subs.srt> <輸出 mp4> [字型路徑或 zh/ja/en]
 """
 import re
 import subprocess
@@ -25,12 +25,23 @@ PAD_X, PAD_Y = 20, 12
 BOTTOM = 52          # 字幕底部離畫面下緣
 MAX_W = int(W * 0.82)  # 一行最寬
 
-# macOS 內建字型；Helvetica 在 .ttc 裡，取第 0 個 face
-FONT_CANDIDATES = [
-    ('/System/Library/Fonts/Helvetica.ttc', 0),
-    ('/System/Library/Fonts/Supplemental/Arial.ttf', 0),
-    ('/Library/Fonts/Arial.ttf', 0),
-]
+# 字型：第四個參數可給路徑，或給語言代號用預設。
+# ⚠ 臺北黑體在 ~/Fonts-Library/（沒裝進系統 —— 全域規則要求 ~/Library/Fonts 保持清空），
+#   Pillow 直接吃檔案路徑，不需要安裝。
+TAIPEI = str(Path.home() / 'Fonts-Library' / 'TaipeiSansTCBeta-Regular.ttf')
+# Inter 隨腳本走（scripts/video/fonts/）—— 本機沒裝，網站是從 Google Fonts CDN 載的，
+# 錄影要燒進畫面就得有實體檔。與網頁 --font-en 同一套字型。
+INTER = str(Path(__file__).resolve().parent / 'fonts' / 'Inter-Regular.ttf')
+FONT_BY_LANG = {
+    'zh': [(TAIPEI, 0)],
+    'ja': [('/System/Library/Fonts/ヒラギノ角ゴシック W4.ttc', 0),
+           ('/System/Library/Fonts/Hiragino Sans GB.ttc', 0), (TAIPEI, 0)],
+    'en': [(INTER, 0),
+           ('/System/Library/Fonts/Helvetica.ttc', 0),
+           ('/System/Library/Fonts/Supplemental/Arial.ttf', 0)],
+}
+ARG = sys.argv[4] if len(sys.argv) > 4 else 'en'
+FONT_CANDIDATES = FONT_BY_LANG.get(ARG, [(ARG, 0)]) + FONT_BY_LANG['en']
 
 
 def load_font():
@@ -65,19 +76,37 @@ def parse_srt(p):
 
 
 def wrap(text, draw):
-    """照實際像素寬折行，不照字數。"""
-    words, lines, cur = text.split(), [], ''
-    for w in words:
-        cand = (cur + ' ' + w).strip()
+    """照實際像素寬折行，不照字數。
+
+    ⚠ 中日文沒有空白斷詞，用空白切會整句擠成一個「詞」而永遠折不了行。
+       所以先按空白切，再把過長的片段逐字切開。
+    """
+    units = []
+    for w in text.split():
+        if draw.textlength(w, font=FONT) <= MAX_W:
+            units.append(w)
+        else:
+            units.extend(list(w))          # CJK 長串 → 逐字
+    lines, cur = [], ''
+    for u in units:
+        # 純 CJK 的字之間不加空白
+        sep = '' if (cur and _cjk(cur[-1]) and _cjk(u[0])) else ' '
+        cand = (cur + sep + u) if cur else u
         if draw.textlength(cand, font=FONT) <= MAX_W:
             cur = cand
         else:
             if cur:
                 lines.append(cur)
-            cur = w
+            cur = u
     if cur:
         lines.append(cur)
     return lines
+
+
+def _cjk(ch):
+    o = ord(ch)
+    return (0x3000 <= o <= 0x303f or 0x3040 <= o <= 0x30ff
+            or 0x4e00 <= o <= 0x9fff or 0xff00 <= o <= 0xffef)
 
 
 def render(text, path):
