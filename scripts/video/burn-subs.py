@@ -28,14 +28,17 @@ MAX_W = int(W * 0.82)  # 一行最寬
 # 字型：第四個參數可給路徑，或給語言代號用預設。
 # ⚠ 臺北黑體在 ~/Fonts-Library/（沒裝進系統 —— 全域規則要求 ~/Library/Fonts 保持清空），
 #   Pillow 直接吃檔案路徑，不需要安裝。
+# 中文字幕用思源黑體 Medium（500）—— 臺北黑體燒進影片後筆畫太細看不清楚。
+# Medium 在中文字重上限 700 之內，Bold 以上螢幕上筆畫會糊。
+NOTO_TC = str(Path.home() / 'Fonts-Library' / 'NotoSansCJKtc-Medium.otf')
 TAIPEI = str(Path.home() / 'Fonts-Library' / 'TaipeiSansTCBeta-Regular.ttf')
 # Inter 隨腳本走（scripts/video/fonts/）—— 本機沒裝，網站是從 Google Fonts CDN 載的，
 # 錄影要燒進畫面就得有實體檔。與網頁 --font-en 同一套字型。
 INTER = str(Path(__file__).resolve().parent / 'fonts' / 'Inter-Regular.ttf')
 FONT_BY_LANG = {
-    'zh': [(TAIPEI, 0)],
+    'zh': [(NOTO_TC, 0), (TAIPEI, 0)],
     'ja': [('/System/Library/Fonts/ヒラギノ角ゴシック W4.ttc', 0),
-           ('/System/Library/Fonts/Hiragino Sans GB.ttc', 0), (TAIPEI, 0)],
+           ('/System/Library/Fonts/Hiragino Sans GB.ttc', 0), (NOTO_TC, 0)],
     'en': [(INTER, 0),
            ('/System/Library/Fonts/Helvetica.ttc', 0),
            ('/System/Library/Fonts/Supplemental/Arial.ttf', 0)],
@@ -120,7 +123,8 @@ def render(text, path):
     img = Image.new('RGBA', (box_w, box_h), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     # 半透明黑底：字在任何底色上都讀得到
-    d.rounded_rectangle([0, 0, box_w - 1, box_h - 1], radius=4, fill=(0, 0, 0, 189))
+    # 底色要夠不透明 —— 189 時後面頁面的大字會透出來干擾閱讀（實測看得出來）
+    d.rounded_rectangle([0, 0, box_w - 1, box_h - 1], radius=4, fill=(0, 0, 0, 224))
     y = PAD_Y
     for l, lw in zip(lines, widths):
         d.text(((box_w - lw) / 2, y), l, font=FONT, fill=(255, 255, 255, 255))

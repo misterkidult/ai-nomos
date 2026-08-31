@@ -96,6 +96,9 @@ t, rows = 0.0, []
 for n in range(1, 7):
     seg = dur(work / f'seg{n}.mp4')
     text = (vo / f'{SRC}{n}.txt').read_text(encoding='utf-8').strip()
+    # ⚠ 稿子裡的 SSML 標籤（<break time="..."/>）是給 TTS 的停頓指令，
+    #   不是字幕內容。留著會被當成一個「詞」而把句子切在奇怪的地方。
+    text = re.sub(r'<[^>]+>', '', text).strip()
     cards = to_cards(text)
     # 依字數比例分配時間（長句停久一點），並保住最短停留
     total = sum(len(c) for c in cards)

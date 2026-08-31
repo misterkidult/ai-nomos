@@ -53,14 +53,19 @@ fi
 work="$SRC/.build"; rm -rf "$work"; mkdir -p "$work"
 
 # 每格：畫面裁到配音長度 +1.2s 尾巴，配上該段旁白
+# 各格開頭要切掉幾秒（頁面載入中的空白畫面）。量法：每秒抽一幀看檔案大小，
+# 空白約 6KB、有內容十萬起跳。⚠ 換素材要重量，不要沿用舊數字。
+declare -a TRIM=(1 5 1 3 1 1)
+
 for i in "${!FRAMES[@]}"; do
   n=$((i+1)); name="${FRAMES[$i]}"
   a="$VO/$( [ "$LANG_CODE" = en ] && echo az || echo "$LANG_CODE" )$n.mp3"
   [ -f "$a" ] || { echo "缺配音：$a" >&2; exit 1; }
   adur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$a")
   seg=$(python3 -c "import sys; print(f'{float(sys.argv[1])+1.2:.3f}')" "$adur")
-  echo "  [$n] ${name}  旁白 ${adur}s → 片段 ${seg}s"
-  ffmpeg -y -v error -i "$SRC/$name.webm" -i "$a" \
+  ss="${TRIM[$i]:-0}"
+  echo "  [$n] ${name}  旁白 ${adur}s → 片段 ${seg}s（切掉開頭 ${ss}s）"
+  ffmpeg -y -v error -ss "$ss" -i "$SRC/$name.webm" -i "$a" \
     -t "$seg" -r $FPS -s ${W}x${H} \
     -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p \
     -c:a aac -b:a 192k -ar 48000 -ac 2 \
