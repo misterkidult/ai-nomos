@@ -410,7 +410,10 @@ function traceTool(t){
   const orig = t.execute;
   if (typeof orig !== 'function') return t;
   t.execute = async function(input, client){
-    const c = { name: t.name, ts: new Date().toLocaleTimeString(), t0: performance.now(),
+    /* 時間戳固定 24 小時制，不跟介面語言走 —— 這是機器日誌的格式，
+       中文 locale 會印出「上午10:54:07」，混在英文面板裡是噪音。
+       ⚠ 定義句引文則相反：永遠留來源語言，那是證據不是介面（契約 §1）。 */
+    const c = { name: t.name, ts: new Date().toLocaleTimeString('en-GB', { hour12: false }), t0: performance.now(),
                 args: input, running: true, secs: 0 };
     CALL_TOTAL++;
     /* 只留最新三筆：一輪完整的呼叫正好是 feedDocument→reportDocument→submitFindings，

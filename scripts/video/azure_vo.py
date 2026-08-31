@@ -66,7 +66,8 @@ def duration(p):
     try: return float(out.stdout.strip())
     except ValueError: return 0.0
 
-FRAMES = [25, 45, 40, 30, 25, 15]   # 分鏡各格秒數
+FRAMES = [25, 45, 40, 30, 32, 15]   # 分鏡各格秒數（az5 於 2026-08-31 從 25 拉到 32：
+                                    # 該格改講語言分佈數字後長 28.2s，且畫面本來就有三個動作）
 
 print(f"Azure TTS · {VOICE} · rate={RATE} · region={REGION}\n")
 total = 0.0
