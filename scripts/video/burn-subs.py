@@ -115,10 +115,17 @@ def _cjk(ch):
 
 
 def render(text, path):
+    """畫一張字幕 PNG。
+
+    ⚠ 框高要用字型的實際 ascent/descent 算，不能用字級猜。
+       思源黑體 CJK 的 ascent 是 32 而字級只有 27（拉丁字型通常 ascent < 字級），
+       用 FONT_SIZE 當高度會讓字底部超出框，看起來整段偏下。
+    """
     probe = ImageDraw.Draw(Image.new('RGBA', (1, 1)))
     lines = wrap(text, probe)
     widths = [probe.textlength(l, font=FONT) for l in lines]
-    lh = FONT_SIZE + LINE_GAP
+    asc, desc = FONT.getmetrics()
+    lh = asc + desc + LINE_GAP           # 一行實際佔的高度
     box_w = int(max(widths)) + PAD_X * 2
     box_h = lh * len(lines) - LINE_GAP + PAD_Y * 2
 
