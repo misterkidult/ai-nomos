@@ -71,6 +71,10 @@ def split_long(sent):
         if rest:
             out.append(rest)
         return out
+    # ⚠ 逗號切完的片段可能自己就超長（實測「It shows you the eleven articles…」
+    #   一個逗號片段就 76 字元），要先各自照空白／逐字切到上限內，
+    #   否則後面合併時第一個片段會直接放行。
+    parts = [p for c in parts for p in _hard_split(c)]
     # 目標張數＝剛好裝得下的最少張數，讓每張長度平均，不會一長一短
     n = -(-len(sent) // MAX_CHARS)
     target = -(-len(sent) // n)
@@ -78,14 +82,56 @@ def split_long(sent):
     sep = '' if LANG != 'en' else ' '
     for chunk in parts:
         cand = (buf + sep + chunk).strip() if buf else chunk
-        if not buf or len(cand) <= max(target, len(chunk)):
+        if not buf or (len(cand) <= max(target, MIN_CHUNK) and len(cand) <= MAX_CHARS):
             buf = cand
         else:
             out.append(buf)
             buf = chunk
     if buf:
         out.append(buf)
+    # 收尾：太短的碎片往前併（「So,」「contributed.」這種孤字）
+    return _glue(out)
+
+
+def _hard_split(text):
+    """單一片段超過上限時，英文照空白切、中日文逐字切。"""
+    if len(text) <= MAX_CHARS:
+        return [text]
+    out, rest = [], text
+    while len(rest) > MAX_CHARS:
+        cut = rest.rfind(' ', 0, MAX_CHARS) if LANG == 'en' else MAX_CHARS
+        if cut <= 0:
+            cut = MAX_CHARS
+        out.append(rest[:cut].strip())
+        rest = rest[cut:].strip()
+    if rest:
+        out.append(rest)
     return out
+
+
+MIN_CHUNK = 14        # 低於這個長度的片段不該單獨成一張
+
+
+def _glue(cards):
+    """把過短的碎片併進鄰居。一張字幕只有兩三個字時，讀的人還沒對焦就跳掉了。
+
+    ⚠ 併的時候允許超過 MAX_CHARS 一點（GLUE_SLACK）。實測「So,」只有 3 字元、
+       停 1.4 秒，但併進下一句會變 64 字元、剛好超標 2 個字 —— 兩害相權，
+       稍長的一張比孤零零的三個字好讀。
+    """
+    sep = '' if LANG != 'en' else ' '
+    limit = MAX_CHARS + GLUE_SLACK
+    out = []
+    for c in cards:
+        if out and (len(c) < MIN_CHUNK or len(out[-1]) < MIN_CHUNK) \
+                and len(out[-1]) + len(c) + len(sep) <= limit:
+            out[-1] = (out[-1] + sep + c).strip()
+        else:
+            out.append(c)
+    return out
+
+
+GLUE_SLACK = 12 if LANG == 'en' else 6
 
 
 def to_cards(text):
@@ -98,7 +144,7 @@ def to_cards(text):
     cards = []
     for sent in split_sentences(text):
         cards.extend(split_long(sent))
-    return cards or [text]
+    return _glue(cards) or [text]
 
 
 t, rows = 0.0, []

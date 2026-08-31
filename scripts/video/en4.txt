@@ -1,1 +1,1 @@
-This article says MCP means one thing. Twelve other articles say something else. The dictionary never picks a winner. It lays out the evidence. Every definition must be a verbatim quote from the source. If the agent cannot produce one, the server rejects it.
+So what does MCP actually mean? <break time="1500ms"/>It shows you the eleven articles in this dictionary that have explained MCP, and all eleven ways they said it, <break time="800ms"/>laid out side by side. <break time="2500ms"/>Every line carries its source, so you can check it yourself.

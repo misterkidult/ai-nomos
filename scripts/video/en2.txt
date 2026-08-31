@@ -1,1 +1,1 @@
-ai-nomos registers five tools through WebMCP. I hand the link to my agent. It calls feedDocument, takes the extraction rules, and reads the article using my own browser. The page never uploads anything. Then reportDocument sends back the title it read. The title appearing is proof the agent actually reached that page.
+This dictionary has no input box. You don't type. You send your AI to play with it. Hand it a link, and it goes and reads the article itself.

@@ -1,1 +1,1 @@
-Every article about AI hits you with words nobody defined. Some the author explains. Some they assume you already know. Some are just there to sell you something. You cannot tell which is which.
+When you read about AI, you keep hitting words nobody has explained. You ask your AI, it tells you, and then it's gone. I still don't know what that word actually means. So I used AI to build a dictionary for the world of AI.

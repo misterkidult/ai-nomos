@@ -1,1 +1,1 @@
-The terms it assumed you knew are now looked up for you. And the agent does not just find the words I asked for. It adds the ones I missed, and it rules that some words I asked for are not AI terms at all. That is its judgment, not mine.
+Your agent analyses the article using the rules this site gives it, finds the words you named, and picks up others that might be describing AI.
