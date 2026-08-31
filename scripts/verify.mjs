@@ -6,7 +6,7 @@
  * fixtures/*.json. Neither was checkable before this file existed. Every assertion here pins one
  * sentence of the contract to the code that implements it.
  *
- * The page's lock implementation is EXTRACTED from public/read.html rather than copied — a copy
+ * The page's lock implementation is EXTRACTED from public/contract.js rather than copied — a copy
  * would drift silently, which is the exact failure this is meant to catch.
  *
  * Usage: node scripts/verify.mjs [--only <substring>]
@@ -39,18 +39,18 @@ const is = (what, actual, expected) =>
     : fail(what, `expected ${JSON.stringify(expected)}\n     actual   ${JSON.stringify(actual)}`);
 
 /* ------------------------------------------------------------------ *
- * Extract the page's contract objects from public/read.html.
+ * Extract the page's contract objects from public/contract.js.
  * STOPLIST → RULES → FINDING_SCHEMA → ENUMS → check() are contiguous there; take the whole span
  * and evaluate it, so the page stays the single definition of its own locks.
  * ------------------------------------------------------------------ */
 function extractPageContract() {
-  const html = read('public', 'read.html');
-  /* 2026-08-30：契約層抽成 public/contract.js，/read 與首頁共載一份。
-     這裡改讀那個檔 —— 它現在是頁面這一側的唯一定義。 */
+  /* 2026-08-30：契約層抽成 public/contract.js —— 它是頁面這一側的唯一定義。
+     2026-08-31：/read 刪除（那頁是表單，與「只有 agent 入口」的設計相斥），
+     現在只有首頁載它。 */
   const src = read('public', 'contract.js');
   const version = /const CONTRACT_VERSION=(\d+)/.exec(src)?.[1];
   const page = new Function(`${src}; return {STOPLIST, RULES, FINDING_SCHEMA, ENUMS, check};`)();
-  for (const f of ['read.html', 'index.html'])
+  for (const f of ['index.html'])
     if (!read('public', f).includes('src="/contract.js"'))
       throw new Error(`public/${f} does not load /contract.js`);
   return { ...page, CONTRACT_VERSION: version ? Number(version) : null };

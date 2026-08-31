@@ -114,19 +114,20 @@ ChatGPT 桌面版不在文件列出的警告表上，**推測是 full control，
 在 ChatGPT 桌面版裡，開一個新對話，貼上這段話並送出：
 
 讀 https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/ 這篇，
-用 https://ai-nomos.vercel.app/read 的 feedDocument 找出裡面的 AI 術語。
+用 https://ai-nomos.vercel.app 的 feedDocument 找出裡面的 AI 術語。
 
 送出後不要再操作，讓它自己跑完。
 ```
 
-⚠ **`/read` 頁面要先開好**（在 ChatGPT 桌面版的瀏覽器分頁裡），工具才註冊得上。
+⚠ **首頁要先開好**（在 ChatGPT 桌面版的瀏覽器分頁裡），工具才註冊得上。
+（2026-08-31 起 `/read` 已刪除 —— 那頁有輸入表單，與「只有 agent 入口」的設計相斥）
 不確定有沒有註冊成功，先開 https://ai-nomos.vercel.app/probe 對 agent 說「呼叫 ping 工具」，
 回 `pong` 就代表這個瀏覽器的 agent 叫得到頁面工具。
 
 **看什麼**
 
 - [ ] 那句話真的被送出
-- [ ] agent 呼叫了 `feedDocument`（`/read` 頁面的圓點開始轉）
+- [ ] agent 呼叫了 `feedDocument`（首頁的圓點開始轉、右下角面板出現那一行）
 - [ ] agent 呼叫了 `reportDocument`（**文章標題浮出來** —— 這是那格唯一要拍的東西）
 - [ ] agent 呼叫了 `submitFindings`（轉圈停止、詞條列出來）
 - [ ] **從送出到標題浮出，花了幾秒**：______ 秒（記下來，這個數字決定那格要留多長）

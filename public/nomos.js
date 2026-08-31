@@ -47,6 +47,12 @@ window.NOMOS = (() => {
       stCheckingN:(q,k)=>'查了 '+q+' 個，字典裡已經有 '+k+' 個',
       stReporting:'它交回目擊紀錄了', stReportingN:n=>n+' 筆，等你決定要不要收',
       stWaiting:'等你的 AI 開口', stWaitingNote:'工具已經備妥，還沒有 agent 來叫。',
+      /* 伺服器擋下的原因（契約 §3）。頁面自己也跑同一組鎖，但 PII_DETECTED 只有伺服器有 ——
+         所以「伺服器才是最後一關」這件事，得靠這張表講出來。 */
+      codes:{MISSING_FIELD:'缺欄位',ENUM_INVALID:'選項不在 enum 內',SENTENCE_LACKS_TERM:'sentence 不含 term_raw',SENTENCE_TOO_LONG:'sentence 超過 120 字',QUOTE_NOT_IN_CONTEXT:'definition_quote 不在 context 裡',EDGE_WITHOUT_QUOTE:'domain=edge 且無定義句',STOPLISTED:'停用清單',NOT_AI_TERM:'agent 自己加的非 AI 詞',PII_DETECTED:'貼上的文件含個資或金額'},
+      rejectedBy:n=>'伺服器擋下 '+n+' 筆',
+      callsTitle:'WebMCP 工具呼叫', callsEmpty:'尚無呼叫。agent 叫工具時這裡會出現。',
+      callsRunning:'執行中', callsN:n=>n+' 次呼叫',
       seeDict:'看字典 →', theDict:'字典本體',
       /* 首頁引導與 WebMCP 訊號（08-29） */
       howTitle: '這本字典怎麼長大',
@@ -127,6 +133,10 @@ window.NOMOS = (() => {
       stCheckingN:(q,k)=>'looked up '+q+', the dictionary already had '+k,
       stReporting:'It sent the sightings back', stReportingN:n=>n+' of them, waiting on you',
       stWaiting:'Waiting for you to ask your AI', stWaitingNote:'The tools are ready; no agent has called them yet.',
+      codes:{MISSING_FIELD:'missing field',ENUM_INVALID:'value not in enum',SENTENCE_LACKS_TERM:'sentence lacks term_raw',SENTENCE_TOO_LONG:'sentence over 120 chars',QUOTE_NOT_IN_CONTEXT:'definition_quote not in context',EDGE_WITHOUT_QUOTE:'domain=edge without quote',STOPLISTED:'stoplisted',NOT_AI_TERM:'non-AI term volunteered by the agent',PII_DETECTED:'pasted document carries PII or an amount'},
+      rejectedBy:n=>'the server rejected '+n,
+      callsTitle:'WebMCP tool calls', callsEmpty:'No calls yet. Tool calls from an agent appear here.',
+      callsRunning:'running', callsN:n=>n+' call'+(n===1?'':'s'),
       seeDict:'See the dictionary →', theDict:'The dictionary',
       /* home explainer + WebMCP signal (08-29) */
       howTitle: 'How this dictionary grows',
@@ -240,10 +250,10 @@ window.NOMOS = (() => {
     els.forEach(el => io.observe(el));
   };
 
-  /* WebMCP 偵測（與 read.html 的 pick() 同一個判準）。
+  /* WebMCP 偵測。
      ⚠ 這只回答「這個瀏覽器看得到 API 嗎」，不回答「agent 真的會叫我的工具嗎」——
      兩者會斷在不同地方：Claude in Chrome 有 modelContext 卻不把頁面工具接進它的
-     清單（2026-08-27 探針實測），所以①綠②永遠不亮。第二個訊號只有 /read 上
+     清單（2026-08-27 探針實測），所以①綠②永遠不亮。第二個訊號只有首頁上
      feedDocument 真的被呼叫過才算數。
      API 可能在載入後才注入，所以輪詢一小段時間才判定沒有。 */
   const mcp = () =>

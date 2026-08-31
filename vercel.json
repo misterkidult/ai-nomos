@@ -1,1 +1,1 @@
-{"rewrites":[{"source":"/probe","destination":"/probe.html"},{"source":"/read","destination":"/read.html"},{"source":"/terms","destination":"/terms.html"},{"source":"/term/:slug","destination":"/term.html"}]}
+{"rewrites":[{"source":"/probe","destination":"/probe.html"},{"source":"/terms","destination":"/terms.html"},{"source":"/term/:slug","destination":"/term.html"}]}

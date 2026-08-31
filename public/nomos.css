@@ -345,3 +345,40 @@ body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px
 .busy.done .spin{animation:none;opacity:.3;-webkit-mask:none;mask:none}
 .busy.done b{color:var(--muted);font-weight:400}
 @media (prefers-reduced-motion:reduce){.spin{animation:none}}
+
+/* ═══ WebMCP 工具呼叫面板（2026-08-31，從 /read 搬進首頁）═══
+   agent 呼叫工具時，把「真的發生了什麼」攤在畫面上。每一行都由 execute()
+   真實觸發，帶的是它實際收到的參數與實際回傳的結果 —— 沒有預錄時間軸、
+   沒有假進度條。沒有呼叫就沒有行，那正是重點：畫面上有東西，等於 agent
+   真的來過。逐段敘事（.steps）把呼叫翻成人話，這裡給的是原始事實。 */
+#calls{position:fixed;right:16px;bottom:16px;width:340px;z-index:50;
+  background:var(--ink);color:#e8e8e8;border:1px solid var(--ink);
+  font-family:var(--font-mono);font-size:12px;line-height:1.5;
+  display:flex;flex-direction:column}
+#calls[hidden]{display:none}
+#calls .chd{display:flex;align-items:center;gap:8px;padding:7px 10px;
+  border-bottom:1px solid rgba(255,255,255,.12);flex:0 0 auto}
+#calls .chd b{font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  font-weight:600;color:var(--accent-lime)}
+#calls .chd .n{margin-left:auto;color:#8b8b93;font-variant-numeric:tabular-nums}
+#calls .chd button{margin:0;padding:0 6px;font-size:12px;font-weight:400;line-height:1.4;
+  background:transparent;border:1px solid rgba(255,255,255,.2);color:#a5a5ad;cursor:pointer}
+#calls .cbody{padding:6px 10px 10px;flex:1 1 auto}
+#calls .cempty{color:#8b8b93;padding:6px 0}
+.cl{padding:6px 0;border-top:1px solid rgba(255,255,255,.08)}
+.cl:first-child{border-top:0}
+.cl .h{display:flex;align-items:baseline;gap:8px}
+.cl .ts{color:#8b8b93;font-variant-numeric:tabular-nums;flex:0 0 auto}
+.cl .nm{color:var(--accent-lime);font-weight:600;word-break:break-all}
+.cl.in .nm{color:#7fd1ff}
+.cl .kv{color:#c7c7cd;padding-left:2px;word-break:break-all}
+.cl .kv i{color:#8b8b93;font-style:normal}
+.cl.err .nm{color:#ff9b91}
+/* 執行中：呼叫進來、還沒回應。秒數真的在跑，不是動畫 */
+.cl .run{color:var(--warning)}
+.cl .run::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--warning);margin-right:6px;vertical-align:middle;
+  animation:cpulse 1.4s ease-in-out infinite}
+@keyframes cpulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.cl .run::before{animation:none}}
+@media (max-width:900px){#calls{position:static;width:auto;margin:16px 0}}
