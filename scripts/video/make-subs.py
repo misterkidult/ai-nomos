@@ -18,7 +18,9 @@ LANG = sys.argv[3] if len(sys.argv) > 3 else 'en'
 SRC = {'en': 'en', 'zh': 'zh', 'ja': 'ja'}[LANG]
 
 # 一張字幕的字元上限。CJK 一個字約佔兩個拉丁字寬，所以上限要低一半。
-MAX_CHARS = 62 if LANG == 'en' else 34
+# 上限的依據是「讀得完」不是「放得下」——中文 33 字實測只佔 52% 畫面寬，
+# 版面沒問題；但一張停 3–4 秒，超過 30 字就跟不上聲音。
+MAX_CHARS = 62 if LANG == 'en' else 30
 MIN_SECS = 1.6        # 一張字幕最短停留，太短會閃
 
 
@@ -47,27 +49,39 @@ def split_sentences(text):
 
 
 def split_long(sent):
-    """單句超過上限：在逗號處切；還是太長就在空白處切，但絕不切在字中間。"""
+    """單句超過上限就在逗號處切，切完把碎片併回接近上限的長度。
+
+    ⚠ 只切「超過上限」的句子。而且切完要併 —— 25 字的句子只超標 1 個字，
+       若直接照逗號切會變成 6 + 19 兩張，第一張「讀 AI 的文章，」只有 1.7 秒
+       且是半句話，讀的人還沒看完就跳掉了（實測看得出來）。
+       併回去之後是 12 + 13，兩張都是完整的意群。
+    """
     if len(sent) <= MAX_CHARS:
         return [sent]
+    parts = [c for c in re.split(r'(?<=[，、])|(?<=,)\s+', sent) if c and c.strip()]
+    # 逗號切不開（單一長句無標點）→ 照字硬切
+    if len(parts) <= 1:
+        out, rest = [], sent
+        while len(rest) > MAX_CHARS:
+            cut = rest.rfind(' ', 0, MAX_CHARS) if LANG == 'en' else MAX_CHARS
+            if cut <= 0:
+                cut = MAX_CHARS
+            out.append(rest[:cut].strip())
+            rest = rest[cut:].strip()
+        if rest:
+            out.append(rest)
+        return out
+    # 目標張數＝剛好裝得下的最少張數，讓每張長度平均，不會一長一短
+    n = -(-len(sent) // MAX_CHARS)
+    target = -(-len(sent) // n)
     out, buf = [], ''
-    for chunk in re.split(r'(?<=[，、])|(?<=,)\s+', sent):
-        if not chunk:
-            continue
-        sep = '' if LANG != 'en' else ' '
+    sep = '' if LANG != 'en' else ' '
+    for chunk in parts:
         cand = (buf + sep + chunk).strip() if buf else chunk
-        if len(cand) <= MAX_CHARS:
+        if not buf or len(cand) <= max(target, len(chunk)):
             buf = cand
         else:
-            if buf:
-                out.append(buf)
-            # chunk 自己還是太長 → 照字切
-            while len(chunk) > MAX_CHARS:
-                cut = chunk.rfind(' ', 0, MAX_CHARS)
-                if cut <= 0:
-                    cut = MAX_CHARS
-                out.append(chunk[:cut].strip())
-                chunk = chunk[cut:].strip()
+            out.append(buf)
             buf = chunk
     if buf:
         out.append(buf)
@@ -75,20 +89,15 @@ def split_long(sent):
 
 
 def to_cards(text):
-    """句子 → 字幕卡。短句往前合併，長句拆開，一句不從中間斷。"""
-    cards, buf = [], ''
+    """句子 → 字幕卡。
+
+    ⚠ 一張卡最多一個完整句子。原本會把兩個短句併成一張（只要總長沒超過上限），
+       結果是「全部都攤給你看。每一句都標著出處，你可以自己去確認。」擠在一起 ——
+       唸完第一句時第二句已經在畫面上，讀的人跟不上聲音。
+    """
+    cards = []
     for sent in split_sentences(text):
-        for piece in split_long(sent):
-            sep = '' if LANG != 'en' else ' '
-            cand = (buf + sep + piece).strip() if buf else piece
-            if len(cand) <= MAX_CHARS:
-                buf = cand
-            else:
-                if buf:
-                    cards.append(buf)
-                buf = piece
-    if buf:
-        cards.append(buf)
+        cards.extend(split_long(sent))
     return cards or [text]
 
 
