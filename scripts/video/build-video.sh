@@ -7,21 +7,43 @@
 # 用法：bash scripts/video/build-video.sh <素材目錄> [輸出檔]
 set -euo pipefail
 
-SRC="${1:?用法: build-video.sh <素材目錄> [輸出檔]}"
+ALLOW_PH=0
+args=()
+for a in "$@"; do
+  case "$a" in --allow-placeholder) ALLOW_PH=1;; *) args+=("$a");; esac
+done
+set -- "${args[@]}"
+
+SRC="${1:?用法: build-video.sh <素材目錄> [輸出檔] [--allow-placeholder]}"
 OUT="${2:-$SRC/ai-nomos-demo.mp4}"
 VO="$(cd "$(dirname "$0")" && pwd)"
 W=1600; H=900; FPS=30
 
-FRAMES=(f1-article f2-PLACEHOLDER-agent f3-report f4-term-mcp f5-confirm f6-home)
-[ -f "$SRC/f2-agent.webm" ] && FRAMES[1]=f2-agent   # 真錄版優先
-
+# f2 是 25–70 秒那格：真 agent 自己決定呼叫工具。有真錄版就用真錄版。
+FRAMES=(f1-article f2-agent f3-report f4-term-mcp f5-confirm f6-home)
 warn=0
+if [ ! -f "$SRC/f2-agent.webm" ]; then
+  FRAMES[1]=f2-PLACEHOLDER-agent
+  warn=1
+fi
+
 for i in "${!FRAMES[@]}"; do
   f="$SRC/${FRAMES[$i]}.webm"
   [ -f "$f" ] || { echo "缺素材：$f" >&2; exit 1; }
-  case "${FRAMES[$i]}" in *PLACEHOLDER*) warn=1;; esac
 done
-if [ $warn = 1 ]; then echo "⚠⚠ 用到 PLACEHOLDER 那格 —— 這支片子不可送 Devpost ⚠⚠"; fi
+
+if [ $warn = 1 ]; then
+  echo "⚠⚠ 25–70 秒用的是 PLACEHOLDER：那格的工具呼叫是腳本觸發，不是 agent 自己決定的。"
+  echo "   Devpost 評分第一項是 WebMCP Leverage，那格是唯一的證據。"
+  if [ $ALLOW_PH = 0 ]; then
+    echo ""
+    echo "   要補真的那格：見 <素材目錄>/README.md（約 5 分鐘）"
+    echo "   確定要用假的那格出片，加上 --allow-placeholder 再跑一次。"
+    exit 2
+  fi
+  echo "   （--allow-placeholder：你已明確選擇用它出片）"
+  OUT="${OUT%.mp4}-PLACEHOLDER.mp4"
+fi
 
 work="$SRC/.build"; rm -rf "$work"; mkdir -p "$work"
 
