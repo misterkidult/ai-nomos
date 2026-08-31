@@ -1,6 +1,6 @@
 # ai-nomos data contract · v1 (2026-08-27)
 
-Single source of truth for everything that crosses a boundary: page ↔ agent (WebMCP tools), page ↔ server (`api/*`). **Change it here, not in chat.** The contract is English only; the agent never translates. UI copy is a separate concern (`public/read.html` carries zh-Hant and en string tables).
+Single source of truth for everything that crosses a boundary: page ↔ agent (WebMCP tools), page ↔ server (`api/*`). **Change it here, not in chat.** The contract is English only; the agent never translates. UI copy is a separate concern (`public/nomos.js` carries zh-Hant and en string tables).
 
 **Translations are a display layer.** A sighting is evidence, and evidence is the words the author
 actually wrote — so `definition_quote`, `sentence`, `context` and `term_raw` are stored in the
@@ -116,7 +116,7 @@ What the server keeps after a finding passes the locks. Public read surfaces onl
 | ★ `lang` | `zh` · `en` · `ja` — **the language of the source document, not of the term**. Server-derived per document, in this order: **any kana letter (hiragana ぁ-ゖ or katakana ァ-ヺ) ⇒ `ja`** — letters only, never the punctuation ・ ー ゠ that Chinese articles use as separators, otherwise CJK×3 > Latin ⇒ `zh`, otherwise `en`. Kana is checked first because Japanese prose is full of Han characters and the ratio alone reads it as Chinese — 11 sightings from one Japanese site sat in the Chinese side until 2026-08-30. Every sighting from one URL gets the same value, so an English term quoted in a Japanese article is `ja`. A term's language sides are the same `term_key` split by this field; nothing else relates them |
 | ★ `term_raw`, ★ `term_normalized`, ★ `explained`, ★ `intent`, ★ `domain`, ★ `definition_quote` | from the finding |
 | `sentence`, `context` | **never public** (plan v2 §2) |
-| ★ `origin` | `agent` (via `submitFindings` — the only write path, including the existing 133 entries, which Kidult feeds through `/read` himself) · `editorial` (the 133 hand-written definitions; not in the signal system) |
+| ★ `origin` | `agent` (via `submitFindings` — the only write path, including the existing 133 entries, which Kidult feeds through the home page himself) · `editorial` (the 133 hand-written definitions; not in the signal system) |
 | `source.hash` | salted hash of the document text, computed client-side; dedup key and the "N documents" counter |
 | ★ `source.url`, ★ `source.title`, ★ `source.published` | **always public when present.** A sighting without a source is just a quote; the link is what lets a reader check it. The agent reads the article at `url` and copies it into `source.url`; only a pasted document (fallback mode) has no URL. |
 | ★ `submitted_at` | server time, ISO 8601 |
@@ -137,7 +137,7 @@ Public via `lookupTerm`／`trending` (§5), never stored: `first_seen` = min `su
 | `url` | the article the user gave their agent. Required |
 | `requested_terms` | words the user said they wanted looked up, if any. Omit or `[]` when they did not name any — then the agent decides what is worth reporting, which in the 2026-08-30 live run produced five findings from a user who named nothing |
 
-The agent fetches the article itself; the page never sees its text. `document` in the response is empty and exists only for the no-agent fallback, where a person pastes text into `/read`.
+The agent fetches the article itself; the page never sees its text. `document` in the response is always empty: the site has no text input at all — the only way in is an agent calling these tools.
 
 `next_step` restates the order of work in the response body. It duplicates §2 rule 0 on purpose: an agent that skimmed the long rules blob still sees it here, and it was skipped in a live run on 2026-08-30 when it existed only in the rules.
 
