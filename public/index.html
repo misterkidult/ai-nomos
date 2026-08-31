@@ -10,7 +10,7 @@
 </head>
 <body class="doc">
 <div class="wrap hero">
-  <div class="top"><p class="dim" style="margin:0"></p><button class="lang" id="lang">EN</button></div>
+  <div class="top"><p class="dim" style="margin:0"></p><div class="langs" id="langs"></div></div>
   <p class="note" id="note" hidden></p>
   <h1>ai-nomos</h1>
   <p class="tag" data-i="heroTag"></p>
@@ -74,7 +74,7 @@
 <script src="/contract.js"></script>
 <script>
 const N = NOMOS, $ = id => document.getElementById(id), esc = N.esc, T = N.T;
-$('lang').onclick = () => { N.toggleLang(); N.loadTranslations().then(() => { draw(); if (HAS_MCP !== null) renderMcp(HAS_MCP); }); };
+N.onLangChange(() => N.loadTranslations().then(() => { draw(); if (HAS_MCP !== null) renderMcp(HAS_MCP); }));
 
 let SIGHT = { ok:false, sightings:[], contributors:0 };
 const when = s => new Date(s.submitted_at || (s.source && s.source.published) || 0);
@@ -106,7 +106,7 @@ function renderHits(q) {
 }
 
 function draw() {
-  N.applyLang(); $('lang').textContent = T('lang');
+  N.applyLang();
   const S = SIGHT.sightings, groups = N.groupByTerm(S), now = Date.now(), d7 = now-7*864e5, d14 = now-14*864e5, d30 = now-30*864e5;
 
   $('n-terms').textContent = N.lex().length;
@@ -333,7 +333,10 @@ async function confirmPending(){
    ⚠ 每一行都由 execute() 包裝器真實觸發。沒有預錄時間軸、沒有假進度條。
    計時用 performance.now()（單調時鐘，不受系統校時影響）。 */
 const CALLS = [];                     /* 只留最新三筆給畫面看 */
-let CALL_TOTAL = 0, CALLS_HIDDEN = false;   /* 計數是真的總數，不受畫面上限影響 */
+/* ?rec=1 隱藏面板 —— 錄影時 agent 端在左邊分屏，首頁不該再浮一個框。
+   這是網址參數不是腳本注入：分屏錄影有多個 page／context，逐一注入會漏掉。 */
+let CALL_TOTAL = 0,
+    CALLS_HIDDEN = new URLSearchParams(location.search).get('rec') === '1';
 
 const cshort = (v, n) => { const t = String(v == null ? '' : v); return t.length > n ? t.slice(0, n-1) + '…' : t; };
 
@@ -372,6 +375,9 @@ function callOut(name, out){
   return o && o.ok ? [['ok', 'true']] : [];
 }
 
+/* 一次呼叫畫成兩段：agent 送出的請求、頁面回的答案。
+   ⚠ 只是排版 —— 兩段的每個值都還是 execute() 實際收到／實際回傳的東西。
+      這裡沒有任何一句是 agent 的「台詞」，agent 不會對頁面說話，它只呼叫工具。 */
 function renderCalls(){
   const box = $('calls'); if (!box) return;
   if (CALLS_HIDDEN){ box.hidden = true; return; }
@@ -379,16 +385,28 @@ function renderCalls(){
   $('calls-n').textContent = CALL_TOTAL ? T('callsN')(CALL_TOTAL) : '';
   const body = $('calls-body');
   if (!CALLS.length){ body.innerHTML = '<div class="cempty">' + esc(T('callsEmpty')) + '</div>'; return; }
+
+  const kv = rows => rows.map(r =>
+    '<div class="kv"><i>' + esc(r[0]) + ':</i>' + esc(r[1]) + '</div>').join('');
+
   body.innerHTML = CALLS.map(c => {
-    const rows = c.running ? callArgs(c.name, c.args)
-      : callArgs(c.name, c.args).concat(c.err ? [['error', cshort(c.err, 60)]] : callOut(c.name, c.out));
-    const tail = c.running
-      ? '<div class="kv run">' + esc(T('callsRunning')) + ' · ' + c.secs + 's</div>'
-      : '<div class="kv"><i>→</i> ' + c.ms + 'ms</div>';
-    return '<div class="cl' + (c.err ? ' err' : '') + (c.running ? ' in' : '') + '">'
-      + '<div class="h"><span class="ts">' + esc(c.ts) + '</span><span class="nm">' + esc(c.name) + '</span></div>'
-      + rows.map(r => '<div class="kv"><i>' + esc(r[0]) + ':</i> ' + esc(r[1]) + '</div>').join('')
-      + tail + '</div>';
+    /* ① agent → 頁面：它呼叫了哪個工具、帶了什麼 */
+    const req = '<div class="turn out">'
+      + '<div class="who">' + esc(T('callsFromAgent')) + '<span class="ts">' + esc(c.ts) + '</span></div>'
+      + '<div class="bub"><b>' + esc(c.name) + '</b>' + kv(callArgs(c.name, c.args)) + '</div>'
+      + '</div>';
+
+    /* ② 頁面 → agent：還在跑就顯示真實秒數，回來了就顯示它實際回傳的欄位 */
+    const res = c.running
+      ? '<div class="turn in pend"><div class="who">' + esc(T('callsToAgent')) + '</div>'
+        + '<div class="bub run">' + esc(T('callsRunning')) + ' · ' + c.secs + 's</div></div>'
+      : '<div class="turn in' + (c.err ? ' err' : '') + '">'
+        + '<div class="who">' + esc(T('callsToAgent')) + '<span class="ts">' + c.ms + 'ms</span></div>'
+        + '<div class="bub">'
+        + kv(c.err ? [['error', cshort(c.err, 60)]] : callOut(c.name, c.out))
+        + '</div></div>';
+
+    return '<div class="ex">' + req + res + '</div>';
   }).join('');
 }
 
@@ -406,6 +424,11 @@ setInterval(() => { let live = false;
 
 /* 把工具的 execute 包起來：呼叫進來記一筆、回應回來補結果。
    ⚠ 只做觀測，不改變回傳值，也不吞例外 —— 契約行為完全不動。 */
+/* 錄影用：另開一個 agent 端視圖（/agent-view）時，把每次呼叫的實際參數與
+   實際回傳廣播過去。⚠ 只轉發已經發生的事實，不產生任何內容。
+   沒有人開那一頁時 BroadcastChannel 沒有接收者，等於不存在。 */
+const AGENT_CH = (() => { try { return new BroadcastChannel('ai-nomos-agent'); } catch(e){ return null; } })();
+
 function traceTool(t){
   const orig = t.execute;
   if (typeof orig !== 'function') return t;
@@ -420,9 +443,15 @@ function traceTool(t){
        面板要能一眼看完，不必捲 */
     CALLS.unshift(c); if (CALLS.length > 3) CALLS.length = 3;
     renderCalls();
-    try { const out = await orig.call(this, input, client); c.out = out; return out; }
-    catch(e){ c.err = (e && e.message) || String(e); throw e; }
-    finally { c.running = false; c.ms = Math.round(performance.now() - c.t0); renderCalls(); }
+    AGENT_CH?.postMessage({ type:'call', name:t.name, ts:c.ts, args: callArgs(t.name, input) });
+    try {
+      const out = await orig.call(this, input, client); c.out = out; return out;
+    } catch(e){ c.err = (e && e.message) || String(e); throw e; }
+    finally {
+      c.running = false; c.ms = Math.round(performance.now() - c.t0); renderCalls();
+      AGENT_CH?.postMessage({ type:'done', name:t.name, ms:c.ms,
+        out: c.err ? null : callOut(t.name, c.out), err: c.err || null });
+    }
   };
   return t;
 }

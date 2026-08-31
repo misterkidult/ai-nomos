@@ -71,13 +71,11 @@ ffmpeg -y -v error -f concat -safe 0 -i "$work/list.txt" -c copy "$work/joined.m
 # 字幕：從 en*.txt 逐段對齊
 python3 "$VO/make-subs.py" "$work" "$VO"
 
-# 字幕走外掛 .srt，不燒進畫面。
+# 字幕燒進畫面。
 # ⚠ 本機 ffmpeg 9.0 沒編 libass（configuration 無 --enable-libass），subtitles 濾鏡
-#   不存在，燒不了。外掛 srt 是 YouTube 的標準做法：上傳影片時一起傳字幕檔，
-#   評審一樣看得到，而且可以關掉。同時嵌一份 mov_text 進 mp4 當備份。
-ffmpeg -y -v error -i "$work/joined.mp4" -i "$work/subs.srt" \
-  -map 0:v -map 0:a -map 1 -c:v copy -c:a copy -c:s mov_text \
-  -metadata:s:s:0 language=eng "$OUT"
+#   不存在。改走 Pillow 把每張字幕畫成 PNG、用內建的 overlay 濾鏡疊上去。
+#   同時留一份外掛 .srt 給 YouTube 上傳用（評審可以關掉字幕）。
+python3 "$VO/burn-subs.py" "$work/joined.mp4" "$work/subs.srt" "$OUT"
 cp "$work/subs.srt" "${OUT%.mp4}.srt"
 
 d=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")

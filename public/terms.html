@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="/nomos.css">
 </head>
 <body>
-<div class="top"><div><p class="dim" style="margin:0"><a href="/" data-i="back"></a></p><h1><span data-i="all"></span> <span class="dim" id="cnt"></span></h1></div><button class="lang" id="lang">EN</button></div>
+<div class="top"><div><p class="dim" style="margin:0"><a href="/" data-i="back"></a></p><h1><span data-i="all"></span> <span class="dim" id="cnt"></span></h1></div><div class="langs" id="langs"></div></div>
 <div class="box">
   <input id="filter" data-i="filterPh" data-attr="placeholder">
   <div class="list" id="list"></div>
@@ -16,11 +16,11 @@
 <script src="/nomos.js"></script>
 <script>
 const N=NOMOS,$=id=>document.getElementById(id),esc=N.esc,T=N.T;
-$('lang').onclick=()=>{N.toggleLang();draw()};
+N.onLangChange(()=>draw());
 function render(q){q=(q||'').toLowerCase();const rows=N.lex().filter(e=>!q||[e.term,e.zh,...(e.aka||[])].some(k=>k&&k.toLowerCase().includes(q)));
   $('cnt').textContent=T('count')(rows.length);
   $('list').innerHTML=rows.map(e=>'<div class="e"><a href="/term/'+esc(e.slug)+'">'+esc(e.term)+'</a>'+(e.zh&&e.zh!==e.term?'<small>'+esc(e.zh)+'</small>':'')+'<span class="line">'+esc(e.line)+'</span></div>').join('')}
-function draw(){N.applyLang();$('lang').textContent=T('lang');render($('filter').value)}
+function draw(){N.applyLang();render($('filter').value)}
 $('filter').oninput=e=>render(e.target.value);
 N.loadLexicon().then(draw);
 </script>

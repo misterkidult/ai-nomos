@@ -100,7 +100,8 @@ ok('submitter_name is empty (the signature field is gone)', posted && posted.sub
    ① 呼叫過就有行 ② 顯示的工具名是真的被叫過的那些 ③ 計數是累計總數不是畫面上的三筆 */
 const panel = await page.evaluate(() => ({
   total: typeof CALL_TOTAL === 'undefined' ? null : CALL_TOTAL,
-  shown: [...document.querySelectorAll('#calls .cl .nm')].map(e => e.textContent),
+  /* 面板 2026-08-31 改成對話樣式：工具名在 agent→page 那半的 <b> 裡 */
+  shown: [...document.querySelectorAll('#calls .turn.out .bub b')].map(e => e.textContent),
   hidden: document.getElementById('calls').hidden,
 }));
 ok('call panel logged the real calls', !panel.hidden && panel.shown.includes('submitFindings'), JSON.stringify(panel.shown));

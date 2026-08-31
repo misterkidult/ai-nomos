@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400..700&display=swap">
+<link rel="stylesheet" href="/tokens.css">
+<style>
+/* ═══ agent 端視圖（2026-08-31）═══
+   錄影用的「另一半畫面」：左邊是 agent，右邊是 ai-nomos 這一頁。
+   ⚠ 這一頁不編造 agent 的話。它顯示的只有兩種東西：
+     ① 使用者實際輸入的那句話（錄影時真的打進去）
+     ② 工具呼叫的實際參數與實際回傳值（由主頁廣播過來）
+   agent 不會對頁面「說話」—— 它只呼叫工具，所以這裡沒有台詞、沒有旁白。 */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#0b0b0d;color:#e8e8e8;
+  font-family:var(--font-mono);font-size:13px;line-height:1.55;
+  display:flex;flex-direction:column;overflow:hidden}
+
+.hd{flex:0 0 auto;padding:16px 20px 13px;border-bottom:1px solid rgba(255,255,255,.11)}
+.hd b{font-size:11px;letter-spacing:.14em;color:var(--accent-lime);font-weight:600}
+.hd .sub{margin-top:5px;font-size:10.5px;letter-spacing:.03em;color:#6e6e77}
+
+/* 使用者輸入的那句話 —— 錄影時真的打進去，不是預錄 */
+.ask{flex:0 0 auto;margin:16px 20px 0;padding:12px 14px;
+  background:rgba(255,255,255,.05);border-left:2px solid #5aa9e6}
+.ask .who{font-size:9.5px;letter-spacing:.09em;color:#7c7c85;margin-bottom:6px}
+.ask p{margin:0;color:#dcdce2;font-size:12.5px;line-height:1.65;
+  font-family:var(--font-en);white-space:pre-wrap;word-break:break-word}
+.ask .cur{display:inline-block;width:7px;height:15px;background:var(--accent-lime);
+  vertical-align:-2px;margin-left:2px;animation:blink 1.05s steps(1) infinite}
+@keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+.ask.sent .cur{display:none}
+
+.body{flex:1 1 auto;overflow:hidden;padding:14px 20px 20px}
+.empty{color:#5f5f68;padding:10px 0;line-height:1.8;font-size:12px}
+
+/* 一次往返：agent 送出的請求 ＋ 頁面回的答案 */
+.ex{padding:11px 0;border-top:1px solid rgba(255,255,255,.075)}
+.ex:first-child{border-top:0;padding-top:2px}
+.turn{margin-top:8px}
+.turn:first-child{margin-top:0}
+.turn .who{font-size:9.5px;letter-spacing:.09em;color:#7c7c85;
+  display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+.turn .who .ts{margin-left:auto;color:#5c5c64;font-variant-numeric:tabular-nums}
+.turn .bub{padding:8px 11px;border-left:2px solid transparent;background:rgba(255,255,255,.035)}
+.turn.out .bub{border-left-color:var(--accent-lime)}
+.turn.out .bub b{color:var(--accent-lime);font-weight:600;display:block;margin-bottom:4px}
+.turn.in{margin-left:16px}
+.turn.in .bub{border-left-color:#5aa9e6;background:rgba(90,169,230,.075)}
+.turn.in.err .bub{border-left-color:#ff9b91;background:rgba(255,155,145,.08)}
+.turn .kv{color:#c4c4ca;word-break:break-all;font-size:12px}
+.turn .kv i{color:#7e7e87;font-style:normal;margin-right:6px}
+
+.turn.pend .bub{color:var(--warning);border-left-color:var(--warning);
+  background:rgba(229,164,0,.07)}
+.turn.pend .bub::before{content:"";display:inline-block;width:6px;height:6px;
+  border-radius:50%;background:var(--warning);margin-right:8px;vertical-align:middle;
+  animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.turn.pend .bub::before,.ask .cur{animation:none}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <b>AGENT</b>
+  <div class="sub">calling tools on ai-nomos over WebMCP</div>
+</div>
+
+<div class="ask" id="ask" hidden>
+  <div class="who">you → agent</div>
+  <p id="ask-text"></p>
+</div>
+
+<div class="body" id="body">
+  <div class="empty" id="empty">Waiting for the agent to call a tool.</div>
+</div>
+
+<script>
+/* 事件從主頁經 BroadcastChannel 過來。主頁的 traceTool 廣播每次呼叫的
+   實際參數與實際回傳值 —— 這一頁只負責顯示，不產生任何內容。 */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CALLS = [];
+
+function render(){
+  const body = $('body');
+  if (!CALLS.length){ return; }
+  $('empty')?.remove();
+  const kv = rows => rows.map(r =>
+    '<div class="kv"><i>' + esc(r[0]) + ':</i>' + esc(r[1]) + '</div>').join('');
+  body.innerHTML = CALLS.map(c => {
+    const req = '<div class="turn out">'
+      + '<div class="who">agent → page<span class="ts">' + esc(c.ts) + '</span></div>'
+      + '<div class="bub"><b>' + esc(c.name) + '</b>' + kv(c.args || []) + '</div></div>';
+    const res = c.running
+      ? '<div class="turn in pend"><div class="who">page → agent</div>'
+        + '<div class="bub">running · ' + c.secs + 's</div></div>'
+      : '<div class="turn in' + (c.err ? ' err' : '') + '">'
+        + '<div class="who">page → agent<span class="ts">' + c.ms + 'ms</span></div>'
+        + '<div class="bub">' + kv(c.out || []) + '</div></div>';
+    return '<div class="ex">' + req + res + '</div>';
+  }).join('');
+}
+
+/* 執行中那筆的秒數真的在跑 */
+setInterval(() => {
+  let live = false;
+  CALLS.forEach(c => { if (c.running){ c.secs = Math.round((Date.now() - c.t0)/1000); live = true; } });
+  if (live) render();
+}, 1000);
+
+/* 事件來源有二：① 同一個 browser context 的主頁（BroadcastChannel）
+   ② 錄影腳本直接呼叫 window.__push（跨 context 時 BroadcastChannel 不通）。
+   兩條路收到的都是同一種訊息，處理邏輯共用。 */
+function handle(m){
+  m = m || {};
+  if (m.type === 'ask'){
+    /* 使用者那句話：逐字顯示，速度是打字的速度不是動畫 */
+    const box = $('ask'), el = $('ask-text');
+    box.hidden = false; box.classList.remove('sent');
+    el.innerHTML = ''; let i = 0;
+    const text = String(m.text || '');
+    const tick = setInterval(() => {
+      i += 1;
+      el.innerHTML = esc(text.slice(0, i)) + '<span class="cur"></span>';
+      if (i >= text.length){ clearInterval(tick); setTimeout(() => box.classList.add('sent'), 500); }
+    }, 26);
+    return;
+  }
+  if (m.type === 'call'){
+    const c = { name: m.name, ts: m.ts, args: m.args, running: true, secs: 0, t0: Date.now() };
+    CALLS.unshift(c); if (CALLS.length > 3) CALLS.length = 3;
+    render();
+    return;
+  }
+  if (m.type === 'done'){
+    const c = CALLS.find(x => x.name === m.name && x.running);
+    if (c){ c.running = false; c.ms = m.ms; c.out = m.out; c.err = m.err; render(); }
+  }
+}
+
+window.__push = handle;
+try { new BroadcastChannel('ai-nomos-agent').onmessage = e => handle(e.data); } catch(e) {}
+</script>
+</body>
+</html>

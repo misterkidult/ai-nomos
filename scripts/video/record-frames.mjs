@@ -15,7 +15,7 @@ import { mkdirSync, renameSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const OUT = process.argv[2] || 'video-out';
-const SITE = 'https://ai-nomos.vercel.app/?lang=en';
+const SITE = 'https://ai-nomos.vercel.app/?lang=en&rec=1';
 const VIEW = { width: 1600, height: 900 };
 mkdirSync(OUT, { recursive: true });
 
@@ -62,6 +62,9 @@ async function frame(name, fn) {
   /* TOOLS 是 classic script 的頂層 const —— 不掛 window，但 evaluate 讀得到 */
   await page.waitForFunction(() => { try { return typeof TOOLS !== 'undefined' && typeof traceTool === 'function'; } catch(e) { return false; } }, { timeout: 20000 });
   await page.waitForTimeout(1200);            /* 讓資料與捲動進場落定 */
+  /* 面板隱藏 —— 分屏版把 agent 端放左邊了，首頁不該再浮一個框（2026-08-31 修：
+     結尾那格殘留「No calls yet」的空面板） */
+  await page.evaluate(() => { CALLS_HIDDEN = true; renderCalls(); });
   /* 接上工具：頁面自己的 execute()，面板記到的每個值都是真的 */
   await page.evaluate(() => {
     window.__reg = [];
@@ -126,9 +129,21 @@ await frame('f3-report', async page => {
     deviceScaleFactor: 2, locale: 'en-US',
   });
   const page = await ctx.newPage();
-  await page.goto('https://ai-nomos.vercel.app/term/mcp?lang=en');
-  await page.waitForTimeout(3000);
-  for (let i = 0; i < 8; i++) { await page.mouse.wheel(0, 240); await page.waitForTimeout(1100); }
+  await page.goto('https://ai-nomos.vercel.app/term/mcp?lang=en&rec=1');
+  await page.waitForTimeout(4500);
+  /* ⚠ 一區一停，等 .rv 進場完成才繼續。捲太快會拍到還沒浮出的空白區塊 ——
+     .rv 起手 opacity:0、900ms 才浮出，那是設計的一部分不為錄影拿掉。 */
+  const waitRv = () => page.waitForFunction(() => {
+    const vis = [...document.querySelectorAll('.rv')].filter(e => {
+      const r = e.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0; });
+    return vis.length === 0 || vis.every(e => e.classList.contains('is-in'));
+  }, { timeout: 3000 }).catch(() => {});
+  const stops = await page.evaluate(() =>
+    [...document.querySelectorAll('section.sec')].map(s => Math.round(s.getBoundingClientRect().top + scrollY)));
+  await page.evaluate(t => window.scrollTo({ top: t - 40, behavior: 'smooth' }), stops[1]);
+  await page.waitForTimeout(1200); await waitRv(); await page.waitForTimeout(5200);
+  await page.evaluate(() => window.scrollBy({ top: 640, behavior: 'smooth' }));
+  await page.waitForTimeout(1200); await waitRv(); await page.waitForTimeout(5800);
   const v = page.video(); await ctx.close();
   renameSync(await v.path(), join(OUT, 'f4-term-mcp.webm'));
   console.log('  ✓ f4-term-mcp.webm  (110–140s 並列定義)');
@@ -164,9 +179,14 @@ await frame('f5-confirm', async page => {
 
 /* ── 172–187s：首頁收場 ── */
 await frame('f6-home', async page => {
-  await page.waitForTimeout(3000);
-  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
-  await page.waitForTimeout(5000);
+  /* ⚠ 不捲動。頁面載入時就在視窗內的 .rv 會自己進場，捲回頂端反而拍到
+     從未進場的空骨架（那些元素的 IntersectionObserver 沒被觸發過）。 */
+  await page.waitForFunction(() => {
+    const vis = [...document.querySelectorAll('.rv')].filter(e => {
+      const r = e.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0; });
+    return vis.length > 0 && vis.every(e => e.classList.contains('is-in'));
+  }, { timeout: 6000 }).catch(() => {});
+  await page.waitForTimeout(9000);
 });
 
 await browser.close();
