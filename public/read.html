@@ -70,6 +70,37 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
 .f .tags{font-size:13px;color:#555}
 .f q{display:block;margin:4px 0 0;padding-left:10px;border-left:3px solid #000;font-size:14px}
 .f q::before,.f q::after{content:""}
+/* WebMCP 工具呼叫面板（2026-08-31）：agent 呼叫工具時，把「真的發生了什麼」攤在畫面上。
+   ⚠ 這裡每一行都由 execute() 真實觸發，帶的是它實際收到／回傳的參數 ——
+   不是預錄的時間軸，也沒有假進度。沒有呼叫就沒有行，這是它的重點。 */
+#calls{position:fixed;left:16px;bottom:16px;width:340px;z-index:50;
+  background:#0d0d0d;color:#e8e8e8;border:1px solid #000;box-shadow:0 2px 0 rgba(0,0,0,.25);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.5;
+  display:flex;flex-direction:column}
+#calls[hidden]{display:none}
+#calls .chd{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid #2a2a2a;flex:0 0 auto}
+#calls .chd b{font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#C5FF4A}
+#calls .chd .n{margin-left:auto;color:#888;font-variant-numeric:tabular-nums}
+#calls .chd button{margin:0;padding:0 6px;font-size:12px;font-weight:400;line-height:1.4;
+  background:transparent;border:1px solid #3a3a3a;color:#aaa;cursor:pointer}
+#calls .cbody{padding:6px 10px 10px;flex:1 1 auto}
+#calls .cempty{color:#777;padding:6px 0}
+.cl{padding:6px 0;border-top:1px solid #1e1e1e}
+.cl:first-child{border-top:0}
+.cl .h{display:flex;align-items:baseline;gap:8px}
+.cl .ts{color:#777;font-variant-numeric:tabular-nums;flex:0 0 auto}
+.cl .nm{color:#C5FF4A;font-weight:700;word-break:break-all}
+.cl.in .nm{color:#7fd1ff}
+.cl .kv{color:#bbb;padding-left:2px;word-break:break-all}
+.cl .kv i{color:#777;font-style:normal}
+.cl.err .nm{color:#ff8a80}
+/* 執行中：呼叫進來、還沒回應。秒數真的在跑，不是動畫 */
+.cl .run{color:#E5A400}
+.cl .run::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:#E5A400;margin-right:6px;vertical-align:middle;animation:cpulse 1.4s ease-in-out infinite}
+@keyframes cpulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.cl .run::before{animation:none}}
+@media (max-width:900px){#calls{position:static;width:auto;max-height:none;margin:16px 0}}
 #log div{padding:4px 0;border-top:1px solid #ddd;font-size:13px}
 .stat{display:flex;gap:24px;flex-wrap:wrap;font-size:14px}
 .life{border-top:1px solid #ddd;padding:12px 0}.life:first-child{border-top:0}
@@ -152,6 +183,13 @@ button.lang{margin:0;padding:4px 10px;font-size:13px;font-weight:400;background:
 
 <div class="box"><strong data-i="logLabel">紀錄</strong><div id="log"></div></div>
 
+<!-- WebMCP 工具呼叫面板。內容全部來自真實的 execute()，沒有呼叫就是空的。 -->
+<div id="calls" hidden>
+  <div class="chd"><b data-i="callsTitle">WebMCP 工具呼叫</b><span class="n" id="calls-n"></span>
+    <button id="calls-x" title="hide">×</button></div>
+  <div class="cbody" id="calls-body"></div>
+</div>
+
 <script src="/contract.js"></script>
 <script>
 /* ==================================================================
@@ -169,6 +207,7 @@ const I18N={
   editorialLine:'字典白話（editorial，不進信號）：',noDefs:'沒有任何來源給過定義句',sightings:n=>n+' 次目擊',windowT:d=>'近 '+d+' 天',contributors:n=>n+' 位貢獻者',oneFeeder:'（只有一個人在餵時，排名＝他的餵食順序）',qEmpty:'要查的詞是空的',
   reqBadge:'你指定',addBadge:'agent 加的',notAi:'agent 判定：不是 AI 詞',notFound:list=>'你指定但文章裡找不到：'+list.join('、'),
   demo:'載入範例目擊（廠商文，14 筆）',logLabel:'紀錄',
+  callsTitle:'WebMCP 工具呼叫',callsEmpty:'尚無呼叫。agent 叫工具時這裡會出現。',callsRunning:'執行中',callsN:n=>n+' 次呼叫',
   s4:'4 · 字典裡的目擊',s4Note:'（mock：只有本頁收到的；接上伺服器後會加進歷來所有目擊）',s4Hint:'收到目擊後，這裡列出每個詞的生命史與所有定義句；兩句講法不同就標「用法矛盾」。',
   lifeEmpty:'收到目擊後才會出現',firstSeen:d=>'首次出現 '+d,docs:n=>n+' 份來源',quiet:n=>'安靜 '+n+' 天',conflict:'用法矛盾',thisPage:'本頁',noQuote:'（無定義句）',
   loading:'載入中…',detecting:'偵測中…',entries:n=>n+' 則',lexFail:'載入失敗',lexLoaded:(n,k)=>'字典載入 '+n+' 則、'+k+' 個比對鍵',
@@ -212,6 +251,7 @@ const I18N={
   editorialLine:'hand-written line (editorial, not a signal): ',noDefs:'no source has ever defined it',sightings:n=>n+' sightings',windowT:d=>'last '+d+' days',contributors:n=>n+' contributors',oneFeeder:'(with a single feeder the ranking is that person\'s feeding order)',qEmpty:'nothing to look up',
   reqBadge:'you asked',addBadge:'agent added',notAi:'agent verdict: not an AI term',notFound:list=>'asked for but not found in the article: '+list.join(', '),
   demo:'load sample sightings (vendor article, 14)',logLabel:'Log',
+  callsTitle:'WebMCP tool calls',callsEmpty:'No calls yet. Tool calls from an agent appear here.',callsRunning:'running',callsN:n=>n+' call'+(n===1?'':'s'),
   s4:'4 · Sightings in the dictionary',s4Note:'(mock: only what this page collected; with the server, all past sightings join)',s4Hint:'After a submission, each term shows its life history and every definition quote; two quotes that differ are flagged “conflicting usage”.',
   lifeEmpty:'appears after a submission',firstSeen:d=>'first seen '+d,docs:n=>n+' sources',quiet:n=>'quiet '+n+' days',conflict:'conflicting usage',thisPage:'this page',noQuote:'(no definition quote)',
   loading:'loading…',detecting:'detecting…',entries:n=>n+' entries',lexFail:'failed to load',lexLoaded:(n,k)=>'lexicon loaded: '+n+' entries, '+k+' match keys',
@@ -252,6 +292,102 @@ const T=k=>I18N[LANG][k];
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const log=(m,cls)=>{const d=document.createElement('div');d.textContent=new Date().toLocaleTimeString()+'　'+m;if(cls)d.className=cls;$('log').prepend(d)};
+
+/* ── WebMCP 工具呼叫面板 ─────────────────────────────────────────
+   agent 呼叫工具時，把「真的發生了什麼」攤在畫面上。每一筆都由
+   execute() 包裝器真實觸發，帶的是它實際收到的參數與實際回傳的結果。
+   ⚠ 沒有預錄時間軸、沒有假進度條 —— 沒有呼叫就沒有行，那正是重點：
+   畫面上有東西，等於 agent 真的來過。
+   計時用 performance.now()（單調時鐘，不受系統校時影響）。 */
+const CALLS=[];                       /* 只留最新三筆給畫面看 */
+let CALL_TOTAL=0, CALLS_HIDDEN=false; /* 計數是真的總數，不受畫面上限影響 */
+
+const cshort=(v,n)=>{const t=String(v==null?'':v);return t.length>n?t.slice(0,n-1)+'…':t};
+
+/* 每個工具挑「看得出它做了什麼」的欄位，不倒整包 JSON —— 錄影時讀得到才有意義 */
+function callArgs(name,input){
+  const i=input||{};
+  if(name==='feedDocument')   return [];   /* 參數在頁面上，回傳才是重點 */
+  if(name==='reportDocument') return [['title',cshort(i.title,44)],
+                                      ['words',i.words?String(i.words):null],
+                                      ['byline',cshort(i.byline,24)||null]].filter(x=>x[1]);
+  if(name==='submitFindings') return [['findings',String((i.findings||[]).length)],
+                                      ['not_found',String((i.not_found||[]).length)]];
+  if(name==='lookupTerm')     return [['term',cshort(i.term,32)]];
+  return [];
+}
+function callOut(name,out){
+  const o=out||{};
+  if(name==='feedDocument')   return [['url',cshort(o.url,40)||'(pasted text)'],
+                                      ['requested_terms',String((o.requested_terms||[]).length)],
+                                      ['lexicon',String((o.lexicon||[]).length)]];
+  /* ⚠ rejected 是陣列不是數字（伺服器回每筆的 index／reasons），印長度才對。
+     順手把第一筆的拒絕碼帶出來 ——「被鎖擋下」是這個產品的賣點，值得看得見。 */
+  if(name==='submitFindings'){
+    const rej=Array.isArray(o.rejected)?o.rejected:[];
+    const codes=rej.length&&rej[0]&&Array.isArray(rej[0].reasons)?rej[0].reasons.join(','):'';
+    return [['status',cshort(o.status,24)],
+            ['accepted',o.accepted==null?null:String(o.accepted)],
+            ['rejected',rej.length?String(rej.length):(o.rejected==null?null:'0')],
+            ['reasons',codes?cshort(codes,40):null]].filter(x=>x[1]);
+  }
+  if(name==='lookupTerm')     return o&&o.term?[['sources',String(o.sources==null?'':o.sources)]]:[];
+  if(name==='trending')       return [['rows',String((o.rows||o.terms||[]).length||0)]];
+  return o&&o.ok?[['ok','true']]:[];
+}
+
+function renderCalls(){
+  const box=$('calls'); if(!box) return;
+  if(CALLS_HIDDEN){box.hidden=true;return}
+  box.hidden=false;
+  $('calls-n').textContent=CALL_TOTAL?T('callsN')(CALL_TOTAL):'';
+  const body=$('calls-body');
+  if(!CALLS.length){body.innerHTML='<div class="cempty">'+esc(T('callsEmpty'))+'</div>';return}
+  body.innerHTML=CALLS.map(c=>{
+    const rows=(c.running?callArgs(c.name,c.args)
+                        :callArgs(c.name,c.args).concat(c.err?[['error',cshort(c.err,60)]]:callOut(c.name,c.out)));
+    const tail=c.running
+      ? '<div class="kv run">'+esc(T('callsRunning'))+' · '+c.secs+'s</div>'
+      : '<div class="kv"><i>→</i> '+c.ms+'ms</div>';
+    return '<div class="cl'+(c.err?' err':'')+(c.running?' in':'')+'">'
+      +'<div class="h"><span class="ts">'+esc(c.ts)+'</span><span class="nm">'+esc(c.name)+'</span></div>'
+      +rows.map(r=>'<div class="kv"><i>'+esc(r[0])+':</i> '+esc(r[1])+'</div>').join('')
+      +tail+'</div>';
+  }).join('');
+}
+
+/* 執行中那筆的秒數要真的在跑（agent 讀一篇文章可能 10–60 秒） */
+document.addEventListener('DOMContentLoaded',()=>{
+  const x=$('calls-x'); if(x)x.onclick=()=>{CALLS_HIDDEN=true;renderCalls()};
+  renderCalls();
+});
+
+setInterval(()=>{let live=false;
+  CALLS.forEach(c=>{if(c.running){c.secs=Math.round((performance.now()-c.t0)/1000);live=true}});
+  if(live)renderCalls();},1000);
+
+/* 把工具的 execute 包起來：呼叫進來記一筆、回應回來補結果。
+   ⚠ 只做觀測，不改變回傳值，也不吞例外 —— 契約行為完全不動。 */
+function traceTool(t){
+  const orig=t.execute;
+  if(typeof orig!=='function')return t;
+  t.execute=async function(input,client){
+    const c={name:t.name,ts:new Date().toLocaleTimeString(),t0:performance.now(),
+             args:input,running:true,secs:0};
+    /* 只留最新三筆：一輪完整的呼叫正好是 feedDocument→reportDocument→submitFindings，
+       面板要能一眼看完，不必捲 */
+    CALL_TOTAL++;
+    CALLS.unshift(c); if(CALLS.length>3)CALLS.length=3;
+    renderCalls();
+    try{
+      const out=await orig.call(this,input,client);
+      c.out=out; return out;
+    }catch(e){ c.err=(e&&e.message)||String(e); throw e; }
+    finally{ c.running=false; c.ms=Math.round(performance.now()-c.t0); renderCalls(); }
+  };
+  return t;
+}
+
 function applyLang(){
   document.documentElement.lang=LANG==='zh'?'zh-Hant':'en';
   document.querySelectorAll('[data-i]').forEach(el=>{const v=T(el.dataset.i);if(v==null)return;
@@ -601,6 +737,7 @@ function setup(mc){
      inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
      async execute(){const r=trending();renderTrend(r);log('trending()','ok');return r;}}
   ];
+  tools.forEach(traceTool);   /* 觀測包裝：只記錄呼叫，不改回傳值 */
   try{tools.forEach(t=>{const r=mc.registerTool(t);if(r&&r.then)r.catch(e=>log('registerTool '+t.name+': '+e.message,'no'))});$('tools').textContent=tools.map(t=>t.name).join(' · ');log(T('registered')(tools.length),'ok');linkArm();}
   catch(e){$('tools').innerHTML='<span class="no">'+T('regFail')+'</span>';log(T('regFail')+': '+e.message,'no');}
 }
