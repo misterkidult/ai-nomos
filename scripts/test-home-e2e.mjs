@@ -86,10 +86,34 @@ ok('the page ran the locks itself', out.accepted === 2 && out.rejected.length ==
 
 /* now the person confirms */
 await page.click('#do-confirm');
-await page.waitForFunction(() => !document.getElementById('confirm') || document.getElementById('confirm').hidden, { timeout: 5000 });
+/* 2026-09-01: the box no longer disappears — it turns into the thank-you state in place.
+   That moment is the only visible proof of the fourth gate, so wait for it and assert it. */
+await page.waitForFunction(() => {
+  const b = document.getElementById('confirm');
+  return b && !b.hidden && b.classList.contains('is-done');
+}, { timeout: 5000 });
 const log2 = await page.textContent('#steps') + await page.textContent('body');
 
 ok('confirming POSTs to /api/findings', !!posted);
+/* The thank-you state is what the person actually sees at the fourth gate — if it silently
+   stops rendering, the gate still works but nobody can tell it did. */
+/* the count animates from 0 over ~900ms — wait for it to land on the real number,
+   which also proves the animation finishes instead of stalling mid-count */
+await page.waitForFunction(
+  () => { const n = document.querySelector('#confirm .num'); return n && /^\d+$/.test(n.textContent.trim()); },
+  { timeout: 3000 }).catch(()=>{});
+await page.waitForTimeout(1200);   // let the ~900ms count animation land
+const done = await page.evaluate(() => {
+  const b = document.getElementById('confirm');
+  return { n: b.querySelector('.num')?.textContent.trim(),
+           terms: b.querySelectorAll('.dterms li').length,
+           thanks: !!b.querySelector('.thx') };
+});
+/* This batch sends 2 findings; the server catches one with PII_DETECTED, so exactly 1 is
+   stored. The count and the listed terms must both reflect what was *stored*, not what was
+   submitted — showing 2 here would credit the person for a finding the server refused. */
+ok('the thank-you state shows the count and the terms',
+   done.thanks && done.n === '1' && done.terms === 1, JSON.stringify(done));
 ok('POST carried findings + not_found + submitter', posted && posted.findings.length === 2 && posted.not_found[0] === 'Multi-Agent' && /^anon-/.test(posted.submitter));
 /* 署名欄 2026-08-31 隨 /read 刪除，但 POST body 仍帶 submitter_name —— 它必須恆為空字串。
    若哪天有人把署名接回來卻沒接 UI，這條會先叫。 */

@@ -411,3 +411,47 @@ body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px
 @media (prefers-reduced-motion:reduce){.turn.pend .bub.run::before{animation:none}}
 
 @media (max-width:900px){#calls{position:static;width:auto;margin:16px 0;box-shadow:none}}
+
+/* ══ 寫入完成：謝謝你的貢獻 ══
+   按下確認那一刻是「agent 提議、人決定」唯一看得見的地方，框直接消失等於主張沒演出來。
+   用 display 級距講這件事 —— 這是整條動線的終點，不是一則狀態回報。 */
+.confirm.is-done{border-left-color:var(--ink);background:var(--ink);color:#fff;
+  padding:clamp(32px,5vw,64px) clamp(24px,4vw,56px);overflow:hidden}
+.confirm.is-done .thx{font-family:var(--font-mono);font-size:var(--fs-small);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brand-soft);margin:0 0 6px;
+  animation:thx-in .5s var(--ease-out) both}
+.confirm.is-done .big{margin:0;line-height:.86;
+  font-size:var(--fs-display);font-weight:700;letter-spacing:-.03em}
+.confirm.is-done .num{display:inline-block;color:#fff;
+  animation:num-pop .72s var(--ease-out) both .1s}
+.confirm.is-done .unit{margin:6px 0 clamp(20px,3vw,32px);color:#fff;
+  font-size:var(--fs-lead);font-weight:500;
+  animation:thx-in .5s var(--ease-out) both .28s}
+.confirm.is-done .dim{color:rgba(255,255,255,.68);font-size:var(--fs-small);margin:0 0 14px;
+  animation:thx-in .5s var(--ease-out) both .5s}
+.confirm.is-done .dwhy{color:rgba(255,255,255,.55);font-size:13px;margin:0 0 16px;
+  animation:thx-in .5s var(--ease-out) both .58s}
+.confirm.is-done .act{animation:thx-in .5s var(--ease-out) both .66s}
+.confirm.is-done button{border-color:rgba(255,255,255,.4);color:#fff}
+.confirm.is-done button:hover{background:rgba(255,255,255,.1)}
+
+@keyframes thx-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes num-pop{0%{opacity:0;transform:translateY(24px) scale(.86)}
+  60%{opacity:1;transform:translateY(0) scale(1.04)}100%{opacity:1;transform:none}}
+
+/* 收進去的詞：一顆顆浮出來 */
+.confirm .dterms{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0 0 clamp(18px,2.4vw,26px);padding:0}
+.confirm.is-done .dterms li{font-family:var(--font-mono);font-size:14px;padding:6px 13px;
+  border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.07);color:#fff;
+  animation:thx-in .46s var(--ease-out) both;animation-delay:calc(.34s + var(--i,0) * 55ms)}
+
+/* 剛進字典的詞：亮一下再褪回去 */
+.hotl .h.is-fresh{animation:fresh-glow 6s var(--ease-out) both}
+@keyframes fresh-glow{
+  0%,12%{background:color-mix(in srgb,var(--brand) 14%,transparent)}
+  100%{background:transparent}
+}
+@media (prefers-reduced-motion:reduce){
+  .confirm.is-done,.confirm.is-done *{animation:none!important}
+  .hotl .h.is-fresh{animation:none;background:transparent}
+}
