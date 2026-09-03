@@ -10,3 +10,10 @@ __pycache__/
 
 # 影片配音產出（重跑即可，不進版控）
 scripts/video/*.mp3
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# 假畫面預覽（選定後即刪，不進版控）
+_預覽/
