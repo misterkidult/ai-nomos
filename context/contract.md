@@ -26,14 +26,14 @@ One finding = one term as it was used in one document.
 
 | field | type | required | rule |
 |---|---|---|---|
-| `term_raw` | string | ✔ | exactly as written in the document (case, spacing, parentheses kept) |
-| `term_normalized` | string | ✔ (may be `""`) | the lexicon `term` this maps to; `""` when not a known term |
+| `term_raw` | string ≤ 120 chars | ✔ | exactly as written in the document (case, spacing, parentheses kept) |
+| `term_normalized` | string ≤ 120 chars | ✔ (may be `""`) | the lexicon `term` this maps to; `""` when not a known term |
 | `sentence` | string ≤ 120 chars | ✔ | the one sentence where `term_raw` appears, de-identified (§2 rule 5) |
-| `context` | string | ✔ | `sentence` plus one sentence before and after, de-identified |
+| `context` | string ≤ 2000 chars | ✔ | `sentence` plus one sentence before and after, de-identified |
 | `explained` | enum | ✔ | `has_definition` · `mentioned` · `assumed` |
 | `intent` | enum | ✔ | `selling_point` · `technical` · `risk_or_limit` |
 | `domain` | enum | ✔ | `core` · `edge` · `not` |
-| `definition_quote` | string | ✔ (may be `""`) | verbatim from the document, only when the document itself defines the term; must be a substring of `context` |
+| `definition_quote` | string ≤ 300 chars | ✔ (may be `""`) | verbatim from the document, only when the document itself defines the term; must be a substring of `context`. Over the cap is refused, never truncated — a trimmed quote no longer matches the article it links to |
 | `requested` | boolean | ✔ | `true` when the user listed this term in `requested_terms`; `false` when the agent added it on its own |
 
 `lang` is **not** a finding field: the agent never reports it. The server derives it from the document (§4) — a term name is not evidence of the language it was used in (`Sora 2` and `Midjourney` appear in Chinese articles as often as English ones).
@@ -50,18 +50,18 @@ JSON Schema (also returned by `feedDocument` as `finding_schema`):
 {"type":"object","additionalProperties":false,
  "required":["term_raw","term_normalized","sentence","context","explained","intent","domain","definition_quote","requested"],
  "properties":{
-  "term_raw":{"type":"string"},
-  "term_normalized":{"type":"string"},
+  "term_raw":{"type":"string","maxLength":120},
+  "term_normalized":{"type":"string","maxLength":120},
   "sentence":{"type":"string","maxLength":120},
-  "context":{"type":"string"},
+  "context":{"type":"string","maxLength":2000},
   "explained":{"type":"string","enum":["has_definition","mentioned","assumed"]},
   "intent":{"type":"string","enum":["selling_point","technical","risk_or_limit"]},
   "domain":{"type":"string","enum":["core","edge","not"]},
-  "definition_quote":{"type":"string"},
+  "definition_quote":{"type":"string","maxLength":300},
   "requested":{"type":"boolean"}}}
 ```
 
-`source` in a Finding (see §4). Required when the article came from a URL; absent only for a pasted document.
+`source` in a Finding (see §4). Required when the article came from a URL; absent only for a pasted document. `url` must parse as `http:` or `https:` (≤ 2048 chars) — any other scheme is refused, since the pages put it straight into a link; `title` ≤ 300, `published` ≤ 40. Every length in this contract counts Unicode code points, not UTF-16 units, so the locks agree across implementations.
 
 ```json
 {"source":{"url":"https://…","title":"","published":""}}
@@ -244,7 +244,7 @@ says a term is reported once per document, so re-feeding an article overwrites r
 
 ### `GET /api/sightings` (server → pages, Matt)
 
-Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?lang=zh|en|ja` for one language side; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"sightings":[…]}`. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint; until it exists the pages read the interim file `public/sightings.json` (same response shape; Matt imports it into Upstash on 8/29, then deletes it) and fall back to empty states (and `?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
+Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?lang=zh|en|ja` for one language side; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"totals":{"sightings":N,"documents":N},"capped":bool,"sightings":[…]}`. Every query answers with at most 200 records, newest first; `?days` and `?term_key` narrow the set, they do not raise the ceiling — `capped` says whether the ceiling was reached, and `totals` counts the whole corpus so a caller never has to infer it from the page it was given. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint. When it is unreachable the pages fall back to empty states — the interim file `public/sightings.json` was removed on 2026-09-03 (it exposed a complete offline copy of every url＋term_key pair) and there is no file fallback (`?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
 
 ## 6. One write path
 
