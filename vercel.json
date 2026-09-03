@@ -1,1 +1,43 @@
-{"rewrites":[{"source":"/probe","destination":"/probe.html"},{"source":"/terms","destination":"/terms.html"},{"source":"/term/:slug","destination":"/term.html"},{"source":"/agent-view","destination":"/agent-view.html"}]}
+{
+  "rewrites": [
+    {
+      "source": "/probe",
+      "destination": "/probe.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/term/:slug",
+      "destination": "/term.html"
+    },
+    {
+      "source": "/agent-view",
+      "destination": "/agent-view.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        }
+      ]
+    }
+  ]
+}

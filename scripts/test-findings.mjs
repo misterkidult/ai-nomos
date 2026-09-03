@@ -329,6 +329,26 @@ ok('S3：短窗口回傳的是窗口內的筆數，不是被墊到 200',
    sr.body.sightings.length > 0 && sr.body.sightings.length < 200,
    `got=${sr.body.sightings.length}`);
 
+/* M2：跨站寫入。CORS 是唯一分得出「別人的網站用訪客的瀏覽器打過來」的機制 —— 擋它是為了
+   不讓限速被拆散到成千上萬個乾淨 IP 上，那正好會廢掉 M1 剛修好的東西。
+   沒有 Origin 的呼叫端（curl、agent runtime、伺服器）不是瀏覽器跨站請求，照放。 */
+let mark2 = sent.length;
+let cors = await post({ submitter: 'cors-a', findings: [clean()] }, { origin: 'https://evil.example' });
+ok('M2：別的網站的 Origin 被擋', cors.code === 403, `code=${cors.code}`);
+ok('M2：被擋時一個 Redis 指令都沒發（連限速的 INCR 都不該花）',
+   sent.slice(mark2).length === 0, `發了 ${sent.slice(mark2).length} 個指令`);
+
+cors = await post({ submitter: 'cors-b', findings: [clean()] },
+  { origin: 'https://ai-nomos.vercel.app', host: 'ai-nomos.vercel.app' });
+ok('M2：同源放行', cors.code === 200, `code=${cors.code}`);
+
+cors = await post({ submitter: 'cors-c', findings: [clean()] }, {});
+ok('M2：沒有 Origin（curl／agent）照樣放行', cors.code === 200, `code=${cors.code}`);
+
+cors = await post({ submitter: 'cors-d', findings: [clean()] },
+  { origin: 'https://ai-nomos.vercel.app', 'x-forwarded-host': 'ai-nomos.vercel.app', host: 'internal' });
+ok('M2：同源判定看 x-forwarded-host（Vercel 邊緣後面的真主機名）', cors.code === 200, `code=${cors.code}`);
+
 /* totals：封頂之後，整體數字必須仍然來自全集，不能是被回傳那一頁數出來的 */
 sr = await getSightings('/api/sightings?days=99999');
 ok('totals：sightings 是全集數，不是被封頂的那一頁',

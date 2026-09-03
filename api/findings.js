@@ -160,7 +160,22 @@ function docLang(findings) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  /* The write path answers same-origin browsers and non-browser callers, not other sites.
+     `*` let any page anyone visits POST here with that visitor's own browser and their real IP,
+     which spreads the per-IP limit across thousands of clean addresses and makes blocking an
+     abusive IP hit real readers — it hands away exactly what M1 just fixed.
+     A request with no Origin (curl, an agent runtime, a server) is NOT a browser cross-site
+     request and stays allowed: the tools are meant to be callable from anywhere, and CORS was
+     never what stopped those callers anyway. Only a browser sending someone else's Origin is
+     refused, and CORS is the only mechanism that can tell that case apart. */
+  const origin = req.headers.origin;
+  const host = req.headers['x-forwarded-host'] || req.headers.host;
+  const sameOrigin = !!origin && !!host && (() => {
+    try { return new URL(origin).host === host; } catch { return false; }
+  })();
+  if (origin && !sameOrigin) return res.status(403).json({ error: 'cross-site writes are not accepted' });
+  if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();
