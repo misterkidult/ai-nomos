@@ -55,7 +55,7 @@ window.NOMOS = (() => {
          所以「伺服器才是最後一關」這件事，得靠這張表講出來。 */
       codes:{MISSING_FIELD:'缺欄位',ENUM_INVALID:'選項不在 enum 內',SENTENCE_LACKS_TERM:'sentence 不含 term_raw',SENTENCE_TOO_LONG:'sentence 超過 120 字',QUOTE_NOT_IN_CONTEXT:'definition_quote 不在 context 裡',EDGE_WITHOUT_QUOTE:'domain=edge 且無定義句',STOPLISTED:'停用清單',NOT_AI_TERM:'agent 自己加的非 AI 詞',PII_DETECTED:'貼上的文件含個資或金額'},
       rejectedBy:n=>'伺服器擋下 '+n+' 筆',
-      callsTitle:'AGENT ↔ 這一頁', callsEmpty:'還沒有 agent 來叫工具。它一呼叫，這裡就會出現。',
+      callsTitle:'AGENT ↔ 這一頁', callsEmpty:'還沒有 agent 來叫工具。用 ChatGPT 桌面版開這一頁（Work 模式要開「啟用網站工具」），叫它查一個詞——它一呼叫，這裡就會出現。',
       callsFromAgent:'agent → 這一頁', callsToAgent:'這一頁 → agent',
       callsRunning:'執行中', callsN:n=>n+' 次呼叫',
       seeDict:'看字典 →', theDict:'字典本體',
@@ -144,7 +144,7 @@ window.NOMOS = (() => {
       stWaiting:'Waiting for you to ask your AI', stWaitingNote:'The tools are ready; no agent has called them yet.',
       codes:{MISSING_FIELD:'missing field',ENUM_INVALID:'value not in enum',SENTENCE_LACKS_TERM:'sentence lacks term_raw',SENTENCE_TOO_LONG:'sentence over 120 chars',QUOTE_NOT_IN_CONTEXT:'definition_quote not in context',EDGE_WITHOUT_QUOTE:'domain=edge without quote',STOPLISTED:'stoplisted',NOT_AI_TERM:'non-AI term volunteered by the agent',PII_DETECTED:'pasted document carries PII or an amount'},
       rejectedBy:n=>'the server rejected '+n,
-      callsTitle:'AGENT ↔ THIS PAGE', callsEmpty:'No agent has called a tool yet. The moment one does, it shows up here.',
+      callsTitle:'AGENT ↔ THIS PAGE', callsEmpty:'No agent has called a tool yet. Open this page in the ChatGPT desktop app (Work mode, with website tools enabled) and ask it to look a term up — the moment it calls, it shows up here.',
       callsFromAgent:'agent → page', callsToAgent:'page → agent',
       callsRunning:'running', callsN:n=>n+' call'+(n===1?'':'s'),
       seeDict:'See the dictionary →', theDict:'The dictionary',
@@ -230,7 +230,7 @@ window.NOMOS = (() => {
       stWaiting:'あなたが AI に話しかけるのを待っています', stWaitingNote:'ツールは準備できています。まだどのエージェントも呼んでいません。',
       codes:{MISSING_FIELD:'必須項目が欠けています',ENUM_INVALID:'選択肢にない値です',SENTENCE_LACKS_TERM:'sentence に term_raw が含まれていません',SENTENCE_TOO_LONG:'sentence が 120 字を超えています',QUOTE_NOT_IN_CONTEXT:'definition_quote が context にありません',EDGE_WITHOUT_QUOTE:'domain=edge なのに定義文がありません',STOPLISTED:'除外リストの語です',NOT_AI_TERM:'AI 用語でないものをエージェントが挙げました',PII_DETECTED:'貼り付けた文書に個人情報または金額が含まれています'},
       rejectedBy:n=>'サーバーが '+n+' 件を拒否しました',
-      callsTitle:'AGENT ↔ このページ', callsEmpty:'まだどのエージェントもツールを呼んでいません。呼ばれた瞬間、ここに出ます。',
+      callsTitle:'AGENT ↔ このページ', callsEmpty:'まだどのエージェントもツールを呼んでいません。ChatGPT デスクトップ版でこのページを開き（Work モードでウェブサイトツールを有効に）、用語を調べさせてください——呼ばれた瞬間、ここに出ます。',
       callsFromAgent:'エージェント → ページ', callsToAgent:'ページ → エージェント',
       callsRunning:'実行中', callsN:n=>n+' 回の呼び出し',
       seeDict:'辞書を見る →', theDict:'辞書',
@@ -316,7 +316,11 @@ window.NOMOS = (() => {
     const demo = new URLSearchParams(location.search).get('demo');
     const url = demo ? '/fixtures/sightings-sample.json' : '/api/sightings' + query;
     const get = async u => { const r = await fetch(u); if (!r.ok) throw new Error(r.status); return r.json(); };
-    try { const d = await get(url); return { ok: true, demo: !!demo, contributors: d.contributors ?? 0, sightings: d.sightings || [] }; }
+    /* totals/capped ride along: `sightings` is capped at 200 (contract §5), so a caller that counted
+       it would report the window instead of the dictionary. Absent in the ?demo=1 fixture, and the
+       pages fall back to counting rows when it is missing. */
+    try { const d = await get(url); return { ok: true, demo: !!demo, contributors: d.contributors ?? 0,
+      totals: d.totals || null, capped: !!d.capped, sightings: d.sightings || [] }; }
     /* no interim fallback: public/sightings.json was removed 2026-09-03 (it shipped a full offline copy of every url+term_key pair). API down = empty state. */
     catch (e) { return { ok: false, demo: !!demo, contributors: 0, sightings: [] }; }
   };

@@ -206,6 +206,32 @@ ok('offline: the page says it could not reach the server', /連不到伺服器|s
 ok('offline: nothing claims it was stored', !/已寫入字典：|written to the dictionary：/.test(offLog.split('\n')[0]));
 ok('offline: the batch is still waiting, not silently dropped', !(await page.evaluate(() => document.getElementById('confirm').hidden)));
 
+/* totals：端點封頂 200 筆之後，首頁的整體數字必須來自 totals，不能是數回傳那一頁。
+   這條測試補在 2026-09-04 —— 當天線上就是這樣壞的：端點回了 totals，但 nomos.js
+   的 loadSightings 組回傳物件時沒有把它帶過去，首頁於是安靜地退回數 200 筆。
+   在小資料下「數列表」與「讀 totals」結果一樣，所以只有塞一份「總數遠大於單頁」的
+   假回應才照得出來。 */
+await page.unroute('**/api/findings').catch(()=>{});
+const fakeRows = Array.from({ length: 200 }, (_, i) => ({
+  id: 'x' + i, term_key: 'rag', term_raw: 'RAG', term_normalized: 'RAG',
+  explained: 'has_definition', intent: 'technical', domain: 'core',
+  definition_quote: 'q' + i, origin: 'agent', submitted_at: new Date().toISOString(),
+  submitter_name: '', lang: 'en', source: { url: 'https://example.com/' + i, title: 't', published: '' },
+}));
+await page.route('**/api/sightings*', route => route.fulfill({
+  status: 200, contentType: 'application/json',
+  body: JSON.stringify({ contract_version: 1, contributors: 20,
+    totals: { sightings: 1349, documents: 344 }, capped: true, sightings: fakeRows }),
+}));
+await page.goto('http://127.0.0.1:8799/', { waitUntil: 'domcontentloaded' });
+await page.waitForFunction(() => document.getElementById('n-sightings')?.textContent !== '—', { timeout: 8000 }).catch(()=>{});
+const nums = await page.evaluate(() => ({
+  sightings: document.getElementById('n-sightings')?.textContent.trim(),
+  sources: document.getElementById('n-sources')?.textContent.trim(),
+}));
+ok('totals：首頁目擊數顯示全集 1349，不是被封頂的 200', nums.sightings === '1349', `顯示=${nums.sightings}`);
+ok('totals：文章數顯示全集 344，不是那一頁的 200 篇', /344/.test(nums.sources), `顯示=${nums.sources}`);
+
 await browser.close(); srv.close();
 console.log(fail ? `\n${fail} FAILED` : '\nall passed');
 process.exit(fail ? 1 : 0);
