@@ -105,13 +105,22 @@ function renderHits(q) {
     : '<p class="dim">' + T('noMatch') + '</p>';
 }
 
+/* 剛寫進去的詞在字典區亮一下 —— FRESH 由 confirmPending() 設定，6 秒後清掉重畫 */
+const isFresh = (k, rows) => !!FRESH && (FRESH.has(String(k).toLowerCase())
+  || (rows||[]).some(r => FRESH.has(String(r.term_raw||'').toLowerCase())));
+
 function draw() {
   N.applyLang();
   const S = SIGHT.sightings, groups = N.groupByTerm(S), now = Date.now(), d7 = now-7*864e5, d14 = now-14*864e5, d30 = now-30*864e5;
 
   $('n-terms').textContent = N.lex().length;
-  $('n-sightings').textContent = S.length;
-  $('n-sources').textContent = S.length ? T('nSources')(new Set(S.map(s => s.source && s.source.url).filter(Boolean)).size) : '';
+  /* Whole-corpus counts come from the endpoint (`totals`), not from S: S is capped at 200 (S3),
+     so counting it would report the window and the dictionary would look like it shrank.
+     Fall back to counting S when totals is absent (?demo=1 fixtures, or an older endpoint). */
+  const TOT = SIGHT.totals || null;
+  $('n-sightings').textContent = TOT ? TOT.sightings : S.length;
+  const nSrc = TOT ? TOT.documents : new Set(S.map(s => s.source && s.source.url).filter(Boolean)).size;
+  $('n-sources').textContent = nSrc ? T('nSources')(nSrc) : '';
   $('n-contrib').textContent = SIGHT.contributors;
   const latest = S.length ? Math.max(...S.map(s => +when(s))) : null;
   $('n-last').textContent = latest ? N.ago(latest) : '—';
@@ -119,7 +128,7 @@ function draw() {
   $('n-fresh').textContent = freshAll.length;
 
   const note = $('note');
-  const msg = SIGHT.demo ? T('demoOn') : SIGHT.interim ? T('interim') : !SIGHT.ok ? T('apiDown') : null;
+  const msg = SIGHT.demo ? T('demoOn') : !SIGHT.ok ? T('apiDown') : null;
   note.hidden = !msg; if (msg) note.textContent = msg;
 
   /* 本週在夯：詞是主角，配它最多人用的那句 */
@@ -129,7 +138,7 @@ function draw() {
       return { k, rows, n7, p7, tq: topQuote(rows) };
     }).filter(h => h.n7).sort((a,b) => b.n7 - a.n7).slice(0, 12);
   const HOT = hot.length ? '<div class="hotl">' + hot.map(h =>
-      '<div class="h"><a class="w" href="' + href(h.k) + '" style="font-size:' + (20 + Math.min(h.n7,12)*1.6) + 'px">'
+      '<div class="h' + (isFresh(h.k, h.rows) ? ' is-fresh' : '') + '"><a class="w" href="' + href(h.k) + '" style="font-size:' + (20 + Math.min(h.n7,12)*1.6) + 'px">'
       + esc(nameOf(h.k, h.rows)) + '</a>'
       + '<span class="n">' + h.n7 + (h.p7 === 0 ? ' <span class="up">' + T('up') + '</span>' : '') + '</span>'
       + (h.tq ? '<p>' + N.tq(h.tq.q) + '</p>' : '<p class="none">' + T('hotNoQuote') + '</p>')
@@ -285,8 +294,40 @@ function renderFound(){
     + (FOUND_NF.length?'<p class="fnf">'+esc(T('nfHere')(FOUND_NF))+'</p>':'');
 }
 
+let DONE = null, FRESH = null;
 function renderConfirm(){
   const box = $('confirm'); if(!box) return;
+  /* 寫入成功後確認框不消失，原地換成完成狀態 —— 按下去那一刻是「agent 提議、人決定」
+     唯一看得見的地方，框直接不見等於這個主張沒演出來（2026-09-01 實錄發現）。
+     ⚠ 新的一批進來時致謝要讓位：agent 連送兩篇時，第二批的確認框必須畫得出來。 */
+  if(PENDING && DONE) DONE = null;
+  if(DONE){
+    box.hidden = false; box.className = 'confirm is-done';
+    box.innerHTML = DONE.n
+      ? '<p class="thx">' + esc(T('doneThanks')) + '</p>'
+        + '<p class="big"><span class="num">' + DONE.n + '</span></p>'
+        + '<p class="unit">' + esc(T('doneUnit')(DONE.n)) + '</p>'
+        + '<ul class="dterms">' + DONE.terms.map((t,i)=>'<li style="--i:'+i+'">'+esc(t)+'</li>').join('') + '</ul>'
+        + '<p class="dim">' + esc(T('doneNote')) + '</p>'
+        + (DONE.why ? '<p class="dwhy">' + esc(DONE.why) + '</p>' : '')
+        + '<div class="act"><button id="do-again">' + esc(T('doneAgain')) + '</button></div>'
+      : '<h3>' + esc(T('doneNothing')) + '</h3>'
+        + (DONE.why ? '<p class="dwhy">' + esc(DONE.why) + '</p>' : '')
+        + '<div class="act"><button id="do-again">' + esc(T('doneAgain')) + '</button></div>';
+    /* 數字從 0 跳上去 —— 這是慶祝，不是報數 */
+    const numEl = box.querySelector('.num');
+    if(numEl && !matchMedia('(prefers-reduced-motion:reduce)').matches){
+      const target = DONE.n, t0 = performance.now(), dur = 900;
+      const step = t => { const k = Math.min((t-t0)/dur, 1);
+        numEl.textContent = Math.round(target * (1-Math.pow(1-k,3)));
+        if(k<1) requestAnimationFrame(step); };
+      numEl.textContent = '0'; requestAnimationFrame(step);
+    }
+    $('do-again').onclick = () => { DONE=null; renderConfirm();
+      document.querySelector('.hotl')?.scrollIntoView({behavior:'smooth',block:'center'}); };
+    return;
+  }
+  box.className = 'confirm';
   if(!PENDING){ box.hidden = true; box.innerHTML=''; return; }
   box.hidden = false;
   box.innerHTML = '<h3>' + esc(T('confirmTitle')) + '</h3><p class="dim">' + esc(T('confirmNote')) + '</p>'
@@ -313,8 +354,17 @@ async function confirmPending(){
           + rej.map(x => (x.term_raw || '?') + '（' + (x.reasons || []).map(c => C[c] || c).join('／') + '）').join('；')
         : '';
       pushStep('done', T('stored') + '：' + d.accepted, why);
+      /* 只列真的寫進去的詞：伺服器擋下的（PII_DETECTED）與去重掉的都不算，
+         否則畫面上的數字與詞會對不起來（E2E 抓到：accepted=1 卻列了 2 個）。 */
+      const out = new Set(rej.map(x=>String(x.term_raw||'').toLowerCase()));
+      const names = (PENDING.list||[]).map(f=>f.term_raw||f.term_key).filter(Boolean)
+        .filter(t=>!out.has(String(t).toLowerCase())).slice(0, d.accepted);
+      DONE = { n:d.accepted, terms:names.slice(0,12), why };
+      FRESH = names.length ? new Set(names.map(t=>String(t).toLowerCase())) : null;
       PENDING=null; renderConfirm();
-      N.loadSightings('?days=365').then(x => { SIGHT=x; draw(); });   /* 字典當場長大 */
+      /* 字典當場長大：重畫後讓剛進去的詞亮一下，這是「長大」唯一看得見的證據 */
+      N.loadSightings('?days=365').then(x => { SIGHT=x; draw();
+        setTimeout(()=>{ FRESH=null; draw(); }, 6000); });
     } else {
       pushStep('done', T('storeFail')((d&&d.error)||('HTTP '+r.status)), '');
       if(b){b.disabled=false;b.textContent=T('confirmBtn')(PENDING.list.length)}
@@ -504,7 +554,16 @@ const TOOLS = [
      const e=N.lex().find(x=>[x.term,x.zh,...(x.aka||[])].some(k=>k&&k.toLowerCase()===t.toLowerCase()));
      LOOKUPS++; if(e) LOOKUP_KNOWN++;
      pushStep('checking', T('stChecking'), T('stCheckingN')(LOOKUPS, LOOKUP_KNOWN));
-     const rows=SIGHT.sightings.filter(s=>N.termKey(s)===(e?e.slug:t.toLowerCase()));
+     /* Ask the endpoint for this one term instead of filtering the page's own list: that list is
+        capped at 200 (S3), so filtering it would answer "no sightings" for a term whose evidence
+        happens to sit outside the window — a wrong answer that looks exactly like a right one.
+        One term is a few dozen records at most, well inside the cap. Falls back to the page's
+        list if the call fails, so a network blip degrades instead of erroring. */
+     const key=e?e.slug:t.toLowerCase();
+     let rows;
+     try { const r=await N.loadSightings('?term_key='+encodeURIComponent(key));
+           rows=r.ok?r.sightings:SIGHT.sightings.filter(s=>N.termKey(s)===key); }
+     catch(_){ rows=SIGHT.sightings.filter(s=>N.termKey(s)===key); }
      return {contract_version:CONTRACT_VERSION, term:t, known:!!e,
        editorial_line:e?e.line:'', sightings:rows.length,
        definitions:rows.filter(r=>r.definition_quote).map(r=>({quote:r.definition_quote,source:r.source})),
@@ -513,10 +572,15 @@ const TOOLS = [
   {name:'trending',description:'Top terms by sightings in the last 30 days. Read-only.',
    inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
    async execute(){
+     /* Ask for the 30-day window itself rather than counting inside the page's 365-day list: with
+        the 200 cap (S3) that list is the newest 200 of a year, so counting it would rank whatever
+        survived the window instead of the last 30 days. */
+     let src=SIGHT;
+     try { const r=await N.loadSightings('?days=30'); if(r.ok) src=r; } catch(_){}
      const now=Date.now(), d30=now-30*864e5, m=new Map();
-     SIGHT.sightings.forEach(s=>{const t=+new Date(s.submitted_at||0);
+     src.sightings.forEach(s=>{const t=+new Date(s.submitted_at||0);
        if(t>=d30){const k=N.termKey(s); m.set(k,(m.get(k)||0)+1)}});
-     return {contract_version:CONTRACT_VERSION, window_days:30, contributors:SIGHT.contributors||0,
+     return {contract_version:CONTRACT_VERSION, window_days:30, contributors:src.contributors||0,
        terms:[...m].sort((a,b)=>b[1]-a[1]).slice(0,10)
          .map(([k,n])=>({term:k, sightings_30d:n, new_term:!N.bySlug(k)}))};
    }},
