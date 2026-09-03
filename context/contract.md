@@ -1,6 +1,6 @@
 # ai-nomos data contract · v1 (2026-08-27)
 
-Single source of truth for everything that crosses a boundary: page ↔ agent (WebMCP tools), page ↔ server (`api/*`). **Change it here, not in chat.** The contract is English only; the agent never translates. UI copy is a separate concern (`public/read.html` carries zh-Hant and en string tables).
+Single source of truth for everything that crosses a boundary: page ↔ agent (WebMCP tools), page ↔ server (`api/*`). **Change it here, not in chat.** The contract is English only; the agent never translates. UI copy is a separate concern (`public/nomos.js` carries zh-Hant and en string tables).
 
 **Translations are a display layer.** A sighting is evidence, and evidence is the words the author
 actually wrote — so `definition_quote`, `sentence`, `context` and `term_raw` are stored in the
@@ -26,14 +26,14 @@ One finding = one term as it was used in one document.
 
 | field | type | required | rule |
 |---|---|---|---|
-| `term_raw` | string | ✔ | exactly as written in the document (case, spacing, parentheses kept) |
-| `term_normalized` | string | ✔ (may be `""`) | the lexicon `term` this maps to; `""` when not a known term |
+| `term_raw` | string ≤ 120 chars | ✔ | exactly as written in the document (case, spacing, parentheses kept) |
+| `term_normalized` | string ≤ 120 chars | ✔ (may be `""`) | the lexicon `term` this maps to; `""` when not a known term |
 | `sentence` | string ≤ 120 chars | ✔ | the one sentence where `term_raw` appears, de-identified (§2 rule 5) |
-| `context` | string | ✔ | `sentence` plus one sentence before and after, de-identified |
+| `context` | string ≤ 2000 chars | ✔ | `sentence` plus one sentence before and after, de-identified |
 | `explained` | enum | ✔ | `has_definition` · `mentioned` · `assumed` |
 | `intent` | enum | ✔ | `selling_point` · `technical` · `risk_or_limit` |
 | `domain` | enum | ✔ | `core` · `edge` · `not` |
-| `definition_quote` | string | ✔ (may be `""`) | verbatim from the document, only when the document itself defines the term; must be a substring of `context` |
+| `definition_quote` | string ≤ 300 chars | ✔ (may be `""`) | verbatim from the document, only when the document itself defines the term; must be a substring of `context`. Over the cap is refused, never truncated — a trimmed quote no longer matches the article it links to |
 | `requested` | boolean | ✔ | `true` when the user listed this term in `requested_terms`; `false` when the agent added it on its own |
 
 `lang` is **not** a finding field: the agent never reports it. The server derives it from the document (§4) — a term name is not evidence of the language it was used in (`Sora 2` and `Midjourney` appear in Chinese articles as often as English ones).
@@ -50,18 +50,18 @@ JSON Schema (also returned by `feedDocument` as `finding_schema`):
 {"type":"object","additionalProperties":false,
  "required":["term_raw","term_normalized","sentence","context","explained","intent","domain","definition_quote","requested"],
  "properties":{
-  "term_raw":{"type":"string"},
-  "term_normalized":{"type":"string"},
+  "term_raw":{"type":"string","maxLength":120},
+  "term_normalized":{"type":"string","maxLength":120},
   "sentence":{"type":"string","maxLength":120},
-  "context":{"type":"string"},
+  "context":{"type":"string","maxLength":2000},
   "explained":{"type":"string","enum":["has_definition","mentioned","assumed"]},
   "intent":{"type":"string","enum":["selling_point","technical","risk_or_limit"]},
   "domain":{"type":"string","enum":["core","edge","not"]},
-  "definition_quote":{"type":"string"},
+  "definition_quote":{"type":"string","maxLength":300},
   "requested":{"type":"boolean"}}}
 ```
 
-`source` in a Finding (see §4). Required when the article came from a URL; absent only for a pasted document.
+`source` in a Finding (see §4). Required when the article came from a URL; absent only for a pasted document. `url` must parse as `http:` or `https:` (≤ 2048 chars) — any other scheme is refused, since the pages put it straight into a link; `title` ≤ 300, `published` ≤ 40. Every length in this contract counts Unicode code points, not UTF-16 units, so the locks agree across implementations.
 
 ```json
 {"source":{"url":"https://…","title":"","published":""}}
@@ -116,7 +116,7 @@ What the server keeps after a finding passes the locks. Public read surfaces onl
 | ★ `lang` | `zh` · `en` · `ja` — **the language of the source document, not of the term**. Server-derived per document, in this order: **any kana letter (hiragana ぁ-ゖ or katakana ァ-ヺ) ⇒ `ja`** — letters only, never the punctuation ・ ー ゠ that Chinese articles use as separators, otherwise CJK×3 > Latin ⇒ `zh`, otherwise `en`. Kana is checked first because Japanese prose is full of Han characters and the ratio alone reads it as Chinese — 11 sightings from one Japanese site sat in the Chinese side until 2026-08-30. Every sighting from one URL gets the same value, so an English term quoted in a Japanese article is `ja`. A term's language sides are the same `term_key` split by this field; nothing else relates them |
 | ★ `term_raw`, ★ `term_normalized`, ★ `explained`, ★ `intent`, ★ `domain`, ★ `definition_quote` | from the finding |
 | `sentence`, `context` | **never public** (plan v2 §2) |
-| ★ `origin` | `agent` (via `submitFindings` — the only write path, including the existing 133 entries, which Kidult feeds through `/read` himself) · `editorial` (the 133 hand-written definitions; not in the signal system) |
+| ★ `origin` | `agent` (via `submitFindings` — the only write path, including the existing 133 entries, which Kidult feeds through the home page himself) · `editorial` (the 133 hand-written definitions; not in the signal system) |
 | `source.hash` | salted hash of the document text, computed client-side; dedup key and the "N documents" counter |
 | ★ `source.url`, ★ `source.title`, ★ `source.published` | **always public when present.** A sighting without a source is just a quote; the link is what lets a reader check it. The agent reads the article at `url` and copies it into `source.url`; only a pasted document (fallback mode) has no URL. |
 | ★ `submitted_at` | server time, ISO 8601 |
@@ -137,7 +137,7 @@ Public via `lookupTerm`／`trending` (§5), never stored: `first_seen` = min `su
 | `url` | the article the user gave their agent. Required |
 | `requested_terms` | words the user said they wanted looked up, if any. Omit or `[]` when they did not name any — then the agent decides what is worth reporting, which in the 2026-08-30 live run produced five findings from a user who named nothing |
 
-The agent fetches the article itself; the page never sees its text. `document` in the response is empty and exists only for the no-agent fallback, where a person pastes text into `/read`.
+The agent fetches the article itself; the page never sees its text. `document` in the response is always empty: the site has no text input at all — the only way in is an agent calling these tools.
 
 `next_step` restates the order of work in the response body. It duplicates §2 rule 0 on purpose: an agent that skimmed the long rules blob still sees it here, and it was skipped in a live run on 2026-08-30 when it existed only in the rules.
 
@@ -244,7 +244,7 @@ says a term is reported once per document, so re-feeding an article overwrites r
 
 ### `GET /api/sightings` (server → pages, Matt)
 
-Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?lang=zh|en|ja` for one language side; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"sightings":[…]}`. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint; until it exists the pages read the interim file `public/sightings.json` (same response shape; Matt imports it into Upstash on 8/29, then deletes it) and fall back to empty states (and `?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
+Public sighting records (★ fields of §4 only), newest first. Query: `?term_key=<slug>` for one term; `?lang=zh|en|ja` for one language side; `?days=30` for the trending window; no query = latest 200. Response `{"contract_version":1,"contributors":N,"totals":{"sightings":N,"documents":N},"capped":bool,"sightings":[…]}`. Every query answers with at most 200 records, newest first; `?days` and `?term_key` narrow the set, they do not raise the ceiling — `capped` says whether the ceiling was reached, and `totals` counts the whole corpus so a caller never has to infer it from the page it was given. The home page (`/`), the term page (`/term/{slug}`) and `lookupTerm`／`trending` all read from this one endpoint. When it is unreachable the pages fall back to empty states — the interim file `public/sightings.json` was removed on 2026-09-03 (it exposed a complete offline copy of every url＋term_key pair) and there is no file fallback (`?demo=1` loads `fixtures/sightings-sample.json` for rehearsal).
 
 ## 6. One write path
 

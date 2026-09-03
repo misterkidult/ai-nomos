@@ -5,13 +5,13 @@
 丟一篇文章的連結進來、寫下想撈的詞，字典自己長大。人與 agent 在同一頁共讀：人給連結與詞，agent 自己去讀那篇 —— 找人指定的詞、判斷它是不是 AI 詞、補上人沒列的 —— 字典累積「目擊紀錄」（每則附來源），定義從用法歸納，爭議不裁判、並列呈現。
 
 - 詞條本體：[ai-dictionary](https://github.com/kidult/ai-dictionary)（133 則白話詞條，靜態）
-- 本 repo：字典本體（`/`＋`/term/{slug}`）＋`/read` 頁＋WebMCP 工具＋目擊資料層。**首頁是字典，WebMCP 是它長大的方式。**OpenAI WebMCP Challenge 參賽作品（2026-08-27 起）
+- 本 repo：字典本體（`/`＋`/term/{slug}`）＋WebMCP 工具＋目擊資料層。**首頁是字典，WebMCP 是它長大的方式。**OpenAI WebMCP Challenge 參賽作品（2026-08-27 起）
 - 計畫與審查：`context/`
 
 ## 結構
 
 ```
-public/      靜態頁：index.html（字典首頁）、term.html（/term/{slug} 詞條頁）、read.html（/read 拿文章來）、probe.html（探針）、nomos.js／nomos.css（共用）、vendor 的 lexicon.json
+public/      靜態頁：index.html（字典首頁）、term.html（/term/{slug} 詞條頁）、probe.html（探針）、nomos.js／nomos.css（共用）、vendor 的 lexicon.json
 scripts/     sync-lexicon.sh：從字典 repo 產薄索引複製進 public/；check-findings.py：三條鎖參考實作
 api/         Vercel Functions（目擊寫入、lexicon 代理）
 fixtures/    抓詞實驗的 48 筆與規則草稿，兼回歸測試
@@ -25,3 +25,29 @@ context/     contract.md（資料契約 v1，英文）、計畫 v2、產品簡�
 3. agent 不照單全收 —— 人指定的詞它會判斷，它看到的詞它會補
 4. 沒有 agent 時頁面退化成貼文字本地比對，人單獨用也成立
 5. 每則目擊都有來源連結，沒來源的只是引文
+
+## 詞條長大以後
+
+**重複怎麼處理** —— key 是 `(文件, 詞)` 這一對，不是「送出這件事」。目擊的 id 是
+`sha16(url) + sha16(term_key)`，同一篇文章重餵會覆蓋而不是堆疊：字典把第二次讀
+同一篇當成「讀得更好了」，不當成新證據。契約 §2 規則 6 規定同一篇文章同一個詞
+只報一次，所以文章提十次 MCP 仍然只有一筆。
+
+寫法收斂靠三層：`term_raw`（agent 看到的原字）→ `term_normalized`（它判斷這是哪個詞）
+→ `term_key`（對得上就用字典 slug）。詞條頁那句「10 種寫法 · MCP ×4 · MCP 伺服器 ×2」
+就是這層的產物 —— 收斂成一個詞，但保留每種寫法出現幾次。
+
+**讀取已經是可長大的形狀**：查一個詞是 `ZRANGE by_term:{key}`、動態是 `ZRANGE recent`，
+都只碰一個 index 不碰全量。
+
+**會先撞牆的地方**（讀程式碼推的，未壓測）：
+
+| 問題 | 現況 | 下一步 |
+|---|---|---|
+| 首頁把全部目擊載進瀏覽器算統計 | 1,325 筆 = 661 KB；1 萬筆約 5 MB、10 萬筆約 49 MB | 改成寫入時遞增計數器，不要每次全撈重算 |
+| `/api/sightings` 上限 200 筆 | 要全量得帶 `?days=3650`，那是 O(n) | 同上；全量查詢改走預先算好的聚合 |
+| 沒有分頁 | `/terms` 一次列出全部詞條 | 游標分頁 |
+
+現在沒做是因為**這個規模下全撈比維護計數器簡單、而且不會算錯**。寫入路徑（必須正確的
+那半）已經是冪等且有索引的；讀取路徑（必須快的那半）在這個量級刻意保持笨，
+但下一步很明確。

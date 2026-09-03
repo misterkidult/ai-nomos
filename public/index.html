@@ -10,7 +10,7 @@
 </head>
 <body class="doc">
 <div class="wrap hero">
-  <div class="top"><p class="dim" style="margin:0"></p><button class="lang" id="lang">EN</button></div>
+  <div class="top"><p class="dim" style="margin:0"></p><div class="langs" id="langs"></div></div>
   <p class="note" id="note" hidden></p>
   <h1>ai-nomos</h1>
   <p class="tag" data-i="heroTag"></p>
@@ -52,6 +52,14 @@
   <div class="found" id="found" hidden></div>
   <div class="confirm" id="confirm" hidden></div>
 
+  <!-- WebMCP 工具呼叫面板。內容全部來自真實的 execute()，沒有呼叫就是空的。
+       .steps 把呼叫翻成人話，這裡給的是原始事實（工具名、參數、回傳、耗時）。 -->
+  <div id="calls" hidden>
+    <div class="chd"><b data-i="callsTitle"></b><span class="n" id="calls-n"></span>
+      <button id="calls-x" title="hide">×</button></div>
+    <div class="cbody" id="calls-body"></div>
+  </div>
+
   <div class="nums">
     <div><b id="n-terms">—</b><span data-i="nTerms"></span></div>
     <div><b id="n-sightings">—</b><span><span data-i="nSightings"></span> <small id="n-sources"></small></span></div>
@@ -66,7 +74,7 @@
 <script src="/contract.js"></script>
 <script>
 const N = NOMOS, $ = id => document.getElementById(id), esc = N.esc, T = N.T;
-$('lang').onclick = () => { N.toggleLang(); N.loadTranslations().then(() => { draw(); if (HAS_MCP !== null) renderMcp(HAS_MCP); }); };
+N.onLangChange(() => N.loadTranslations().then(() => { draw(); if (HAS_MCP !== null) renderMcp(HAS_MCP); }));
 
 let SIGHT = { ok:false, sightings:[], contributors:0 };
 const when = s => new Date(s.submitted_at || (s.source && s.source.published) || 0);
@@ -97,13 +105,22 @@ function renderHits(q) {
     : '<p class="dim">' + T('noMatch') + '</p>';
 }
 
+/* 剛寫進去的詞在字典區亮一下 —— FRESH 由 confirmPending() 設定，6 秒後清掉重畫 */
+const isFresh = (k, rows) => !!FRESH && (FRESH.has(String(k).toLowerCase())
+  || (rows||[]).some(r => FRESH.has(String(r.term_raw||'').toLowerCase())));
+
 function draw() {
-  N.applyLang(); $('lang').textContent = T('lang');
+  N.applyLang();
   const S = SIGHT.sightings, groups = N.groupByTerm(S), now = Date.now(), d7 = now-7*864e5, d14 = now-14*864e5, d30 = now-30*864e5;
 
   $('n-terms').textContent = N.lex().length;
-  $('n-sightings').textContent = S.length;
-  $('n-sources').textContent = S.length ? T('nSources')(new Set(S.map(s => s.source && s.source.url).filter(Boolean)).size) : '';
+  /* Whole-corpus counts come from the endpoint (`totals`), not from S: S is capped at 200 (S3),
+     so counting it would report the window and the dictionary would look like it shrank.
+     Fall back to counting S when totals is absent (?demo=1 fixtures, or an older endpoint). */
+  const TOT = SIGHT.totals || null;
+  $('n-sightings').textContent = TOT ? TOT.sightings : S.length;
+  const nSrc = TOT ? TOT.documents : new Set(S.map(s => s.source && s.source.url).filter(Boolean)).size;
+  $('n-sources').textContent = nSrc ? T('nSources')(nSrc) : '';
   $('n-contrib').textContent = SIGHT.contributors;
   const latest = S.length ? Math.max(...S.map(s => +when(s))) : null;
   $('n-last').textContent = latest ? N.ago(latest) : '—';
@@ -111,7 +128,7 @@ function draw() {
   $('n-fresh').textContent = freshAll.length;
 
   const note = $('note');
-  const msg = SIGHT.demo ? T('demoOn') : SIGHT.interim ? T('interim') : !SIGHT.ok ? T('apiDown') : null;
+  const msg = SIGHT.demo ? T('demoOn') : !SIGHT.ok ? T('apiDown') : null;
   note.hidden = !msg; if (msg) note.textContent = msg;
 
   /* 本週在夯：詞是主角，配它最多人用的那句 */
@@ -121,7 +138,7 @@ function draw() {
       return { k, rows, n7, p7, tq: topQuote(rows) };
     }).filter(h => h.n7).sort((a,b) => b.n7 - a.n7).slice(0, 12);
   const HOT = hot.length ? '<div class="hotl">' + hot.map(h =>
-      '<div class="h"><a class="w" href="' + href(h.k) + '" style="font-size:' + (20 + Math.min(h.n7,12)*1.6) + 'px">'
+      '<div class="h' + (isFresh(h.k, h.rows) ? ' is-fresh' : '') + '"><a class="w" href="' + href(h.k) + '" style="font-size:' + (20 + Math.min(h.n7,12)*1.6) + 'px">'
       + esc(nameOf(h.k, h.rows)) + '</a>'
       + '<span class="n">' + h.n7 + (h.p7 === 0 ? ' <span class="up">' + T('up') + '</span>' : '') + '</span>'
       + (h.tq ? '<p>' + N.tq(h.tq.q) + '</p>' : '<p class="none">' + T('hotNoQuote') + '</p>')
@@ -277,8 +294,40 @@ function renderFound(){
     + (FOUND_NF.length?'<p class="fnf">'+esc(T('nfHere')(FOUND_NF))+'</p>':'');
 }
 
+let DONE = null, FRESH = null;
 function renderConfirm(){
   const box = $('confirm'); if(!box) return;
+  /* 寫入成功後確認框不消失，原地換成完成狀態 —— 按下去那一刻是「agent 提議、人決定」
+     唯一看得見的地方，框直接不見等於這個主張沒演出來（2026-09-01 實錄發現）。
+     ⚠ 新的一批進來時致謝要讓位：agent 連送兩篇時，第二批的確認框必須畫得出來。 */
+  if(PENDING && DONE) DONE = null;
+  if(DONE){
+    box.hidden = false; box.className = 'confirm is-done';
+    box.innerHTML = DONE.n
+      ? '<p class="thx">' + esc(T('doneThanks')) + '</p>'
+        + '<p class="big"><span class="num">' + DONE.n + '</span></p>'
+        + '<p class="unit">' + esc(T('doneUnit')(DONE.n)) + '</p>'
+        + '<ul class="dterms">' + DONE.terms.map((t,i)=>'<li style="--i:'+i+'">'+esc(t)+'</li>').join('') + '</ul>'
+        + '<p class="dim">' + esc(T('doneNote')) + '</p>'
+        + (DONE.why ? '<p class="dwhy">' + esc(DONE.why) + '</p>' : '')
+        + '<div class="act"><button id="do-again">' + esc(T('doneAgain')) + '</button></div>'
+      : '<h3>' + esc(T('doneNothing')) + '</h3>'
+        + (DONE.why ? '<p class="dwhy">' + esc(DONE.why) + '</p>' : '')
+        + '<div class="act"><button id="do-again">' + esc(T('doneAgain')) + '</button></div>';
+    /* 數字從 0 跳上去 —— 這是慶祝，不是報數 */
+    const numEl = box.querySelector('.num');
+    if(numEl && !matchMedia('(prefers-reduced-motion:reduce)').matches){
+      const target = DONE.n, t0 = performance.now(), dur = 900;
+      const step = t => { const k = Math.min((t-t0)/dur, 1);
+        numEl.textContent = Math.round(target * (1-Math.pow(1-k,3)));
+        if(k<1) requestAnimationFrame(step); };
+      numEl.textContent = '0'; requestAnimationFrame(step);
+    }
+    $('do-again').onclick = () => { DONE=null; renderConfirm();
+      document.querySelector('.hotl')?.scrollIntoView({behavior:'smooth',block:'center'}); };
+    return;
+  }
+  box.className = 'confirm';
   if(!PENDING){ box.hidden = true; box.innerHTML=''; return; }
   box.hidden = false;
   box.innerHTML = '<h3>' + esc(T('confirmTitle')) + '</h3><p class="dim">' + esc(T('confirmNote')) + '</p>'
@@ -296,9 +345,26 @@ async function confirmPending(){
       body:JSON.stringify({findings:PENDING.list,not_found:PENDING.notFound,submitter:SUBMITTER,submitter_name:nick()})});
     const d = await r.json().catch(()=>null);
     if(r.ok && d && d.status === 'stored'){
-      pushStep('done', T('stored') + '：' + d.accepted, '');
+      /* 伺服器擋下的要講出來，不能只報收了幾筆 —— 頁面跑過同一組鎖了，還被擋
+         代表那是只有伺服器看得到的（PII_DETECTED）。契約 §3：伺服器有最後一句話。 */
+      const C = T('codes') || {};
+      const rej = (d.rejected || []);
+      const why = rej.length
+        ? T('rejectedBy')(rej.length) + '：'
+          + rej.map(x => (x.term_raw || '?') + '（' + (x.reasons || []).map(c => C[c] || c).join('／') + '）').join('；')
+        : '';
+      pushStep('done', T('stored') + '：' + d.accepted, why);
+      /* 只列真的寫進去的詞：伺服器擋下的（PII_DETECTED）與去重掉的都不算，
+         否則畫面上的數字與詞會對不起來（E2E 抓到：accepted=1 卻列了 2 個）。 */
+      const out = new Set(rej.map(x=>String(x.term_raw||'').toLowerCase()));
+      const names = (PENDING.list||[]).map(f=>f.term_raw||f.term_key).filter(Boolean)
+        .filter(t=>!out.has(String(t).toLowerCase())).slice(0, d.accepted);
+      DONE = { n:d.accepted, terms:names.slice(0,12), why };
+      FRESH = names.length ? new Set(names.map(t=>String(t).toLowerCase())) : null;
       PENDING=null; renderConfirm();
-      N.loadSightings('?days=365').then(x => { SIGHT=x; draw(); });   /* 字典當場長大 */
+      /* 字典當場長大：重畫後讓剛進去的詞亮一下，這是「長大」唯一看得見的證據 */
+      N.loadSightings('?days=365').then(x => { SIGHT=x; draw();
+        setTimeout(()=>{ FRESH=null; draw(); }, 6000); });
     } else {
       pushStep('done', T('storeFail')((d&&d.error)||('HTTP '+r.status)), '');
       if(b){b.disabled=false;b.textContent=T('confirmBtn')(PENDING.list.length)}
@@ -309,6 +375,136 @@ async function confirmPending(){
   }
 }
 
+
+/* ── WebMCP 工具呼叫面板 ─────────────────────────────────────────
+   .steps 把呼叫翻成人話（「它讀完了，找到 16 個詞」）；這裡給的是原始事實：
+   工具名、它實際收到的參數、它實際回傳的結果、耗時。兩層都要有 ——
+   人話讓人看得懂，原始事實讓人相信那不是演的。
+   ⚠ 每一行都由 execute() 包裝器真實觸發。沒有預錄時間軸、沒有假進度條。
+   計時用 performance.now()（單調時鐘，不受系統校時影響）。 */
+const CALLS = [];                     /* 只留最新三筆給畫面看 */
+/* ?rec=1 隱藏面板 —— 錄影時 agent 端在左邊分屏，首頁不該再浮一個框。
+   這是網址參數不是腳本注入：分屏錄影有多個 page／context，逐一注入會漏掉。 */
+let CALL_TOTAL = 0,
+    CALLS_HIDDEN = new URLSearchParams(location.search).get('rec') === '1';
+
+const cshort = (v, n) => { const t = String(v == null ? '' : v); return t.length > n ? t.slice(0, n-1) + '…' : t; };
+
+/* 每個工具挑「看得出它做了什麼」的欄位，不倒整包 JSON —— 錄影時讀得到才有意義 */
+function callArgs(name, input){
+  const i = input || {};
+  if (name === 'feedDocument')   return [['url', cshort(i.url, 40)],
+                                        ['requested_terms', String((i.requested_terms||[]).length)]].filter(x => x[1]);
+  if (name === 'reportDocument') return [['title', cshort(i.title, 44)],
+                                        ['words', i.words ? String(i.words) : null],
+                                        ['byline', cshort(i.byline, 24) || null]].filter(x => x[1]);
+  if (name === 'submitFindings') return [['findings', String((i.findings||[]).length)],
+                                        ['not_found', String((i.not_found||[]).length)]];
+  if (name === 'lookupTerm')     return [['term', cshort(i.term, 32)]];
+  return [];
+}
+function callOut(name, out){
+  const o = out || {};
+  if (name === 'feedDocument')   return [['lexicon', String((o.lexicon||[]).length)],
+                                        ['next_step', 'reportDocument']];
+  /* ⚠ rejected 是陣列不是數字（每筆帶 index／reasons），印長度才對。
+     順手把第一筆的拒絕碼帶出來 ——「被鎖擋下」是這個產品的賣點，值得看得見。 */
+  if (name === 'submitFindings'){
+    const rej = Array.isArray(o.rejected) ? o.rejected : [];
+    const codes = rej.length && rej[0] && Array.isArray(rej[0].reasons) ? rej[0].reasons.join(',') : '';
+    return [['status', cshort(o.status, 24)],
+            ['accepted', o.accepted == null ? null : String(o.accepted)],
+            ['rejected', rej.length ? String(rej.length) : (o.rejected == null ? null : '0')],
+            ['reasons', codes ? cshort(codes, 40) : null]].filter(x => x[1]);
+  }
+  if (name === 'lookupTerm')     return [['known', o.known ? 'true' : 'false'],
+                                        ['sightings', o.sightings == null ? null : String(o.sightings)],
+                                        ['definitions', String((o.definitions||[]).length)]].filter(x => x[1]);
+  if (name === 'trending')       return [['terms', String((o.terms||[]).length)],
+                                        ['window_days', String(o.window_days || 30)]];
+  return o && o.ok ? [['ok', 'true']] : [];
+}
+
+/* 一次呼叫畫成兩段：agent 送出的請求、頁面回的答案。
+   ⚠ 只是排版 —— 兩段的每個值都還是 execute() 實際收到／實際回傳的東西。
+      這裡沒有任何一句是 agent 的「台詞」，agent 不會對頁面說話，它只呼叫工具。 */
+function renderCalls(){
+  const box = $('calls'); if (!box) return;
+  if (CALLS_HIDDEN){ box.hidden = true; return; }
+  box.hidden = false;
+  $('calls-n').textContent = CALL_TOTAL ? T('callsN')(CALL_TOTAL) : '';
+  const body = $('calls-body');
+  if (!CALLS.length){ body.innerHTML = '<div class="cempty">' + esc(T('callsEmpty')) + '</div>'; return; }
+
+  const kv = rows => rows.map(r =>
+    '<div class="kv"><i>' + esc(r[0]) + ':</i>' + esc(r[1]) + '</div>').join('');
+
+  body.innerHTML = CALLS.map(c => {
+    /* ① agent → 頁面：它呼叫了哪個工具、帶了什麼 */
+    const req = '<div class="turn out">'
+      + '<div class="who">' + esc(T('callsFromAgent')) + '<span class="ts">' + esc(c.ts) + '</span></div>'
+      + '<div class="bub"><b>' + esc(c.name) + '</b>' + kv(callArgs(c.name, c.args)) + '</div>'
+      + '</div>';
+
+    /* ② 頁面 → agent：還在跑就顯示真實秒數，回來了就顯示它實際回傳的欄位 */
+    const res = c.running
+      ? '<div class="turn in pend"><div class="who">' + esc(T('callsToAgent')) + '</div>'
+        + '<div class="bub run">' + esc(T('callsRunning')) + ' · ' + c.secs + 's</div></div>'
+      : '<div class="turn in' + (c.err ? ' err' : '') + '">'
+        + '<div class="who">' + esc(T('callsToAgent')) + '<span class="ts">' + c.ms + 'ms</span></div>'
+        + '<div class="bub">'
+        + kv(c.err ? [['error', cshort(c.err, 60)]] : callOut(c.name, c.out))
+        + '</div></div>';
+
+    return '<div class="ex">' + req + res + '</div>';
+  }).join('');
+}
+
+/* 「換一篇」不清面板：它記的是「這個分頁裡 agent 呼叫過什麼」，
+   換一篇文章不代表那些呼叫沒發生過。 */
+document.addEventListener('DOMContentLoaded', () => {
+  const x = $('calls-x'); if (x) x.onclick = () => { CALLS_HIDDEN = true; renderCalls(); };
+  renderCalls();
+});
+
+/* 執行中那筆的秒數要真的在跑（agent 讀一篇文章可能 10–60 秒） */
+setInterval(() => { let live = false;
+  CALLS.forEach(c => { if (c.running){ c.secs = Math.round((performance.now() - c.t0)/1000); live = true; } });
+  if (live) renderCalls(); }, 1000);
+
+/* 把工具的 execute 包起來：呼叫進來記一筆、回應回來補結果。
+   ⚠ 只做觀測，不改變回傳值，也不吞例外 —— 契約行為完全不動。 */
+/* 錄影用：另開一個 agent 端視圖（/agent-view）時，把每次呼叫的實際參數與
+   實際回傳廣播過去。⚠ 只轉發已經發生的事實，不產生任何內容。
+   沒有人開那一頁時 BroadcastChannel 沒有接收者，等於不存在。 */
+const AGENT_CH = (() => { try { return new BroadcastChannel('ai-nomos-agent'); } catch(e){ return null; } })();
+
+function traceTool(t){
+  const orig = t.execute;
+  if (typeof orig !== 'function') return t;
+  t.execute = async function(input, client){
+    /* 時間戳固定 24 小時制，不跟介面語言走 —— 這是機器日誌的格式，
+       中文 locale 會印出「上午10:54:07」，混在英文面板裡是噪音。
+       ⚠ 定義句引文則相反：永遠留來源語言，那是證據不是介面（契約 §1）。 */
+    const c = { name: t.name, ts: new Date().toLocaleTimeString('en-GB', { hour12: false }), t0: performance.now(),
+                args: input, running: true, secs: 0 };
+    CALL_TOTAL++;
+    /* 只留最新三筆：一輪完整的呼叫正好是 feedDocument→reportDocument→submitFindings，
+       面板要能一眼看完，不必捲 */
+    CALLS.unshift(c); if (CALLS.length > 3) CALLS.length = 3;
+    renderCalls();
+    AGENT_CH?.postMessage({ type:'call', name:t.name, ts:c.ts, args: callArgs(t.name, input) });
+    try {
+      const out = await orig.call(this, input, client); c.out = out; return out;
+    } catch(e){ c.err = (e && e.message) || String(e); throw e; }
+    finally {
+      c.running = false; c.ms = Math.round(performance.now() - c.t0); renderCalls();
+      AGENT_CH?.postMessage({ type:'done', name:t.name, ms:c.ms,
+        out: c.err ? null : callOut(t.name, c.out), err: c.err || null });
+    }
+  };
+  return t;
+}
 
 const TOOLS = [
   {name:'feedDocument',description:'Start here. Pass the article the user gave you: url, plus requested_terms if they named any words to look up (omit it if they did not — then judge for yourself what is worth reporting). Returns the extraction rules, the finding schema and a thin lexicon index. Read-only; the page never fetches the article, you do. THEN DO THIS, IN ORDER: (1) open the article; (2) call reportDocument once with its title, byline, date, rough length and a one-sentence gist — the person is staring at a blank screen while you read, and this is the only thing that tells them you got there; (3) extract the terms and send them with submitFindings.',
@@ -358,7 +554,16 @@ const TOOLS = [
      const e=N.lex().find(x=>[x.term,x.zh,...(x.aka||[])].some(k=>k&&k.toLowerCase()===t.toLowerCase()));
      LOOKUPS++; if(e) LOOKUP_KNOWN++;
      pushStep('checking', T('stChecking'), T('stCheckingN')(LOOKUPS, LOOKUP_KNOWN));
-     const rows=SIGHT.sightings.filter(s=>N.termKey(s)===(e?e.slug:t.toLowerCase()));
+     /* Ask the endpoint for this one term instead of filtering the page's own list: that list is
+        capped at 200 (S3), so filtering it would answer "no sightings" for a term whose evidence
+        happens to sit outside the window — a wrong answer that looks exactly like a right one.
+        One term is a few dozen records at most, well inside the cap. Falls back to the page's
+        list if the call fails, so a network blip degrades instead of erroring. */
+     const key=e?e.slug:t.toLowerCase();
+     let rows;
+     try { const r=await N.loadSightings('?term_key='+encodeURIComponent(key));
+           rows=r.ok?r.sightings:SIGHT.sightings.filter(s=>N.termKey(s)===key); }
+     catch(_){ rows=SIGHT.sightings.filter(s=>N.termKey(s)===key); }
      return {contract_version:CONTRACT_VERSION, term:t, known:!!e,
        editorial_line:e?e.line:'', sightings:rows.length,
        definitions:rows.filter(r=>r.definition_quote).map(r=>({quote:r.definition_quote,source:r.source})),
@@ -367,10 +572,15 @@ const TOOLS = [
   {name:'trending',description:'Top terms by sightings in the last 30 days. Read-only.',
    inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},
    async execute(){
+     /* Ask for the 30-day window itself rather than counting inside the page's 365-day list: with
+        the 200 cap (S3) that list is the newest 200 of a year, so counting it would rank whatever
+        survived the window instead of the last 30 days. */
+     let src=SIGHT;
+     try { const r=await N.loadSightings('?days=30'); if(r.ok) src=r; } catch(_){}
      const now=Date.now(), d30=now-30*864e5, m=new Map();
-     SIGHT.sightings.forEach(s=>{const t=+new Date(s.submitted_at||0);
+     src.sightings.forEach(s=>{const t=+new Date(s.submitted_at||0);
        if(t>=d30){const k=N.termKey(s); m.set(k,(m.get(k)||0)+1)}});
-     return {contract_version:CONTRACT_VERSION, window_days:30, contributors:SIGHT.contributors||0,
+     return {contract_version:CONTRACT_VERSION, window_days:30, contributors:src.contributors||0,
        terms:[...m].sort((a,b)=>b[1]-a[1]).slice(0,10)
          .map(([k,n])=>({term:k, sightings_30d:n, new_term:!N.bySlug(k)}))};
    }},
@@ -390,6 +600,7 @@ let HAS_MCP = null;
 N.onMcp(m => {
   HAS_MCP = !!m; renderMcp(HAS_MCP);
   if (m) {
+    TOOLS.forEach(traceTool);   /* 觀測包裝：只記錄呼叫，不改回傳值 */
     try { TOOLS.forEach(t => m.registerTool(t)); } catch(e) {}
     pushStep('ready', T('stWaiting'), T('stWaitingNote'));
   }

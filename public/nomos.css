@@ -39,6 +39,16 @@ body.doc .head{padding-top:32px;padding-bottom:clamp(56px,7vw,88px)}
 body.doc a{color:inherit}
 body.doc .top .dim a{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:var(--muted);text-decoration:none}
 body.doc button.lang{border:1px solid var(--line);background:#fff;font-family:var(--font-mono);font-size:12px;letter-spacing:.08em}
+/* 三顆並列（2026-08-31）：一眼看得到有三種語言，不用按到第三次才發現。
+   當前語言反白，其餘可點。 */
+.langs{display:inline-flex;border:1px solid var(--line);background:#fff}
+.langs button.lang{margin:0;border:0;border-left:1px solid var(--line);
+  padding:4px 11px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.langs button.lang:first-child{border-left:0}
+.langs button.lang.on{background:var(--ink);color:#fff;font-weight:500}
+body.doc .langs button.lang{border:0;border-left:1px solid var(--line)}
+body.doc .langs button.lang:first-child{border-left:0}
+body.doc .langs button.lang.on{background:var(--ink);color:#fff}
 body.doc .note{background:#FFF7C2;border:0;border-left:4px solid var(--ink);padding:8px 14px;font-size:13px;margin:0 0 24px}
 
 /* 捲動進場 —— 逐字對齊 coreplay 2027 官網 style.sass 的 .rv
@@ -345,3 +355,103 @@ body.doc .foot .dim{margin-left:auto;font-family:var(--font-mono);font-size:11px
 .busy.done .spin{animation:none;opacity:.3;-webkit-mask:none;mask:none}
 .busy.done b{color:var(--muted);font-weight:400}
 @media (prefers-reduced-motion:reduce){.spin{animation:none}}
+
+
+/* ═══ AGENT ⇄ 這一頁（2026-08-31 改成對話樣式）═══
+   一次工具呼叫畫成兩段：agent 送出的請求、頁面回的答案。
+   ⚠ 只是排版。兩段的每個值都還是 execute() 實際收到／實際回傳的東西 ——
+   沒有 agent 的「台詞」（agent 不對頁面說話，它只呼叫工具），
+   沒有預錄時間軸，沒有假進度。沒有呼叫就沒有氣泡。 */
+#calls{position:fixed;right:16px;bottom:16px;width:352px;z-index:50;
+  background:var(--ink);color:#e8e8e8;border:1px solid var(--ink);
+  font-family:var(--font-mono);font-size:11.5px;line-height:1.5;
+  display:flex;flex-direction:column;
+  box-shadow:0 10px 34px rgba(0,0,0,.30)}
+#calls[hidden]{display:none}
+
+#calls .chd{display:flex;align-items:center;gap:8px;padding:8px 11px;
+  border-bottom:1px solid rgba(255,255,255,.13);flex:0 0 auto}
+#calls .chd b{font-size:10.5px;letter-spacing:.09em;font-weight:600;color:var(--accent-lime)}
+#calls .chd .n{margin-left:auto;color:#8b8b93;font-variant-numeric:tabular-nums;font-size:10.5px}
+#calls .chd button{margin:0;padding:0 6px;font-size:12px;font-weight:400;line-height:1.4;
+  background:transparent;border:1px solid rgba(255,255,255,.2);color:#a5a5ad;cursor:pointer}
+#calls .cbody{padding:9px 11px 11px;flex:1 1 auto}
+#calls .cempty{color:#8b8b93;padding:5px 0;line-height:1.7}
+
+/* 一次完整往返 */
+.ex{padding:9px 0;border-top:1px solid rgba(255,255,255,.08)}
+.ex:first-child{border-top:0;padding-top:2px}
+
+.turn{margin-top:7px}
+.turn:first-child{margin-top:0}
+/* 誰對誰 —— 方向靠縮排與色差，不靠箭頭圖示 */
+.turn .who{font-size:9.5px;letter-spacing:.07em;color:#7c7c85;
+  display:flex;align-items:baseline;gap:7px;margin-bottom:3px}
+.turn .who .ts{margin-left:auto;color:#63636b;font-variant-numeric:tabular-nums}
+.turn .bub{padding:6px 9px;border-left:2px solid transparent;background:rgba(255,255,255,.035)}
+/* agent → 頁面：果核綠，工具名是主角 */
+.turn.out .bub{border-left-color:var(--accent-lime)}
+.turn.out .bub b{color:var(--accent-lime);font-weight:600;
+  display:block;margin-bottom:3px;letter-spacing:.01em}
+/* 頁面 → agent：藍，往右縮排，一眼看出是回話 */
+.turn.in{margin-left:15px}
+.turn.in .bub{border-left-color:#5aa9e6;background:rgba(90,169,230,.07)}
+.turn.in.err .bub{border-left-color:#ff9b91;background:rgba(255,155,145,.08)}
+
+.turn .kv{color:#c7c7cd;word-break:break-all}
+.turn .kv i{color:#83838c;font-style:normal;margin-right:5px}
+
+/* 還在等回應：秒數真的在跑，不是動畫 */
+.turn.pend .bub.run{color:var(--warning);border-left-color:var(--warning);
+  background:rgba(229,164,0,.07)}
+.turn.pend .bub.run::before{content:"";display:inline-block;width:5px;height:5px;
+  border-radius:50%;background:var(--warning);margin-right:7px;vertical-align:middle;
+  animation:cpulse 1.4s ease-in-out infinite}
+@keyframes cpulse{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.turn.pend .bub.run::before{animation:none}}
+
+@media (max-width:900px){#calls{position:static;width:auto;margin:16px 0;box-shadow:none}}
+
+/* ══ 寫入完成：謝謝你的貢獻 ══
+   按下確認那一刻是「agent 提議、人決定」唯一看得見的地方，框直接消失等於主張沒演出來。
+   用 display 級距講這件事 —— 這是整條動線的終點，不是一則狀態回報。 */
+.confirm.is-done{border-left-color:var(--ink);background:var(--ink);color:#fff;
+  padding:clamp(32px,5vw,64px) clamp(24px,4vw,56px);overflow:hidden}
+.confirm.is-done .thx{font-family:var(--font-mono);font-size:var(--fs-small);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brand-soft);margin:0 0 6px;
+  animation:thx-in .5s var(--ease-out) both}
+.confirm.is-done .big{margin:0;line-height:.86;
+  font-size:var(--fs-display);font-weight:700;letter-spacing:-.03em}
+.confirm.is-done .num{display:inline-block;color:#fff;
+  animation:num-pop .72s var(--ease-out) both .1s}
+.confirm.is-done .unit{margin:6px 0 clamp(20px,3vw,32px);color:#fff;
+  font-size:var(--fs-lead);font-weight:500;
+  animation:thx-in .5s var(--ease-out) both .28s}
+.confirm.is-done .dim{color:rgba(255,255,255,.68);font-size:var(--fs-small);margin:0 0 14px;
+  animation:thx-in .5s var(--ease-out) both .5s}
+.confirm.is-done .dwhy{color:rgba(255,255,255,.55);font-size:13px;margin:0 0 16px;
+  animation:thx-in .5s var(--ease-out) both .58s}
+.confirm.is-done .act{animation:thx-in .5s var(--ease-out) both .66s}
+.confirm.is-done button{border-color:rgba(255,255,255,.4);color:#fff}
+.confirm.is-done button:hover{background:rgba(255,255,255,.1)}
+
+@keyframes thx-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes num-pop{0%{opacity:0;transform:translateY(24px) scale(.86)}
+  60%{opacity:1;transform:translateY(0) scale(1.04)}100%{opacity:1;transform:none}}
+
+/* 收進去的詞：一顆顆浮出來 */
+.confirm .dterms{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0 0 clamp(18px,2.4vw,26px);padding:0}
+.confirm.is-done .dterms li{font-family:var(--font-mono);font-size:14px;padding:6px 13px;
+  border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.07);color:#fff;
+  animation:thx-in .46s var(--ease-out) both;animation-delay:calc(.34s + var(--i,0) * 55ms)}
+
+/* 剛進字典的詞：亮一下再褪回去 */
+.hotl .h.is-fresh{animation:fresh-glow 6s var(--ease-out) both}
+@keyframes fresh-glow{
+  0%,12%{background:color-mix(in srgb,var(--brand) 14%,transparent)}
+  100%{background:transparent}
+}
+@media (prefers-reduced-motion:reduce){
+  .confirm.is-done,.confirm.is-done *{animation:none!important}
+  .hotl .h.is-fresh{animation:none;background:transparent}
+}

@@ -10,7 +10,7 @@
 </head>
 <body class="doc">
 <div class="wrap head">
-  <div class="top"><p class="dim" style="margin:0"><a href="/" data-i="back"></a></p><button class="lang" id="lang">EN</button></div>
+  <div class="top"><p class="dim" style="margin:0"><a href="/" data-i="back"></a></p><div class="langs" id="langs"></div></div>
   <p class="note" id="note" hidden></p>
   <div class="hd" id="hd"></div>
 </div>
@@ -21,7 +21,7 @@ const N = NOMOS, $ = id => document.getElementById(id), esc = N.esc, T = N.T;
 const slug = decodeURIComponent((location.pathname.match(/\/term\/([^/]+)/) || [])[1] || new URLSearchParams(location.search).get('slug') || '');
 const FCAP = 5;   /* 寫法最多列 5 種（08-29 拍板），其餘收成一句 */
 
-$('lang').onclick = () => { N.toggleLang(); N.loadTranslations().then(draw); };
+N.onLangChange(() => N.loadTranslations().then(draw));
 
 let SIGHT = { ok: false, sightings: [] };
 let SIDE = null;   /* 使用者點過的語料側；null＝依資料自動選 */
@@ -33,7 +33,7 @@ const band = (cls, inner) => inner ? '<section class="sec ' + cls + '"><div clas
 const h2 = (num, label) => '<h2>' + (num !== '' ? '<b>' + num + '</b>' : '') + label + '</h2>';
 
 function draw() {
-  N.applyLang(); $('lang').textContent = T('lang');
+  N.applyLang();
   const e = N.bySlug(slug);
   const rows = SIGHT.sightings.filter(s => N.termKey(s) === slug);
   /* 雙語（契約 §4 lang）：同一個 term_key 的兩側。lang 是「來源文章」的語言，
@@ -52,7 +52,7 @@ function draw() {
   document.title = name + ' · ai-nomos';
 
   const note = $('note');
-  const msg = SIGHT.demo ? T('demoOn') : SIGHT.interim ? T('interim') : !SIGHT.ok ? T('apiDown') : null;
+  const msg = SIGHT.demo ? T('demoOn') : !SIGHT.ok ? T('apiDown') : null;
   note.hidden = !msg; if (msg) note.textContent = msg;
 
   if (!e && !rows.length) {
@@ -128,7 +128,7 @@ function draw() {
   const R = u.size ? '<div class="refs">' + [...u.values()].map(s => '<div>' + src(s) + '</div>').join('') + '</div>' : '';
 
   const foot = '<div class="foot"><span>' + T('contribute') + '</span>'
-    + '<a class="btn" href="/read">' + T('bring') + '</a>'
+    + '<a class="btn" href="/#bring">' + T('bring') + '</a>'
     + '<span class="dim">' + T('evidence') + '</span></div>';
 
   /* 語料側切換：兩側都有資料才出現 */

@@ -1,0 +1,1 @@
+Your agent analyses the article using the rules this site gives it, finds the words you named, and picks up others that might be describing AI.

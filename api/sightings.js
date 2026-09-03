@@ -1,5 +1,6 @@
 /* GET /api/sightings — contract §5. Public (★) fields only; sentence/context never leave the server.
-   ?term_key=<slug>  one term        ?days=30  the trending window        no query  latest 200 */
+   ?term_key=<slug>  one term        ?days=30  the trending window        no query  latest 200
+   200 (MAX) is the ceiling on every path, not just the default one — see the comment on it below. */
 
 const URL_ = process.env.KV_REST_API_URL;
 const TOKEN = process.env.KV_REST_API_READ_ONLY_TOKEN || process.env.KV_REST_API_TOKEN;
@@ -40,19 +41,33 @@ export default async function handler(req, res) {
     const days = parseInt(q.get('days') || '', 10);
     const lang = q.get('lang');   // contract §4: the source document's language, zh|en
 
+    /* MAX applies to every path, not just the default one. Each id becomes its own GET below, so
+       an uncapped query is an amplifier: `?days=99999` puts `since` in the past, matches the whole
+       `recent` set and turns one HTTP request into one Redis command per stored sighting (~1,300
+       today). `s-maxage` does not stop it either — the CDN keys on the full URL and this handler
+       ignores every parameter but three, so `&z=<random>` misses the cache every time.
+       The cap is asked for in the command AND applied to the answer: the LIMIT keeps the range
+       scan from returning the whole set, and the slice holds the ceiling whatever a command
+       happens to return. 200 is not a new number — contract §5 already states it. */
     let ids;
     if (termKey) {
-      // every sighting of one term, newest first — no cap, a term has at most a few dozen
-      [ids] = await redis([['ZREVRANGE', `by_term:${termKey}`, 0, -1]]);
+      [ids] = await redis([['ZREVRANGE', `by_term:${termKey}`, 0, MAX - 1]]);
     } else if (Number.isFinite(days) && days > 0) {
       const since = Math.floor(Date.now() / 1000) - days * 86400;
-      [ids] = await redis([['ZREVRANGEBYSCORE', 'recent', '+inf', since]]);
+      [ids] = await redis([['ZREVRANGEBYSCORE', 'recent', '+inf', since, 'LIMIT', 0, MAX]]);
     } else {
       [ids] = await redis([['ZREVRANGE', 'recent', 0, MAX - 1]]);
     }
-    ids = ids || [];
+    ids = (ids || []).slice(0, MAX);
 
-    const [contributors] = await redis([['SCARD', 'contributors']]);
+    /* Totals are counted server-side over the WHOLE set, never derived from the capped page above.
+       The 200 cap (S3) means `sightings` is a window, so a page that counted its own rows would
+       report the window instead of the dictionary — "N terms / N documents" would silently shrink
+       to whatever fits. These are set cardinalities (ZCARD/SCARD), one command each, so they cost
+       nothing next to the per-id GETs and stay correct however small the window gets. */
+    const [contributors, totalSightings, totalDocs] = await redis([
+      ['SCARD', 'contributors'], ['ZCARD', 'recent'], ['SCARD', 'docs'],
+    ]);
     const blobs = ids.length ? await redis(ids.map(id => ['GET', `sighting:${id}`])) : [];
     // Allowlist (PR #2): stripping private fields instead would publish every new field a later
     // writer adds. submitter_name (★ in §4) is the one identity meant to be seen; submitter and
@@ -71,6 +86,9 @@ export default async function handler(req, res) {
     return res.status(200).json({
       contract_version: 1,
       contributors: contributors || 0,
+      /* Whole-corpus counts; `sightings` below is at most MAX records of it. */
+      totals: { sightings: totalSightings || 0, documents: totalDocs || 0 },
+      capped: sightings.length >= MAX,
       sightings,
     });
   } catch (e) {

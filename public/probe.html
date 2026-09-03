@@ -28,7 +28,50 @@ button{border:1px solid #000;background:#C5FF4A;padding:8px 16px;font:inherit;fo
     <li>「呼叫 <code>ping</code> 工具」→ 應回 <code>pong</code>＋時間</li>
     <li>「呼叫 <code>writeNote</code>，note 寫『測試』」→ 應先跳確認框，確認後畫面「最後一次寫入」會更新</li>
   </ol>
-  <p>沒有 agent 也可以按 <button id="selftest">本機自測（Chrome 152 原生 document.modelContext）</button></p>
+  <p>沒有 agent 也可以按 <button id="selftest">本機自測（Chrome 152 原生 document.modelContext）</button>
+  ⚠ 自測是頁面自己呼叫自己，<strong>不代表 agent 叫得到</strong> —— 那是下面第 ③ 格的事。</p>
+
+  <details style="margin:1em 0;padding:.8em 1em;border:1px solid #ccc;border-radius:4px">
+  <summary>2026-09-01 複測結論（Chrome 152 原生，旗標已開）</summary>
+  <ul>
+    <li>① <code>document.modelContext</code> 存在、<code>registerTool</code> 成功、<code>getTools()</code> 正常回工具 —— <strong>通</strong></li>
+    <li>③ 那些工具<strong>沒有</strong>進 Claude in Chrome 的工具清單 —— <strong>仍斷</strong>（同 8/27）。
+        agent 只能用 <code>javascript_tool</code> 手動 <code>executeTool</code> 繞過橋接，那不算 agent 呼叫</li>
+    <li><code>requestUserInteraction</code>：Chrome 152 原生 client <strong>不提供</strong>。
+        ai-nomos 不受影響 —— 契約 §6 的第四關本來就是頁面自己畫確認框，不靠 client</li>
+  </ul>
+  <p><strong>Chrome 152 原生 <code>executeTool</code> 的兩個坑</strong>（自測按鈕已避開，手動呼叫要注意）：</p>
+  <ul>
+    <li>第一個參數要傳 <code>getTools()</code> 回來的 <em>tool 物件</em>，傳字串 <code>'ping'</code> 會丟 <code>not of type 'RegisteredTool'</code></li>
+    <li>第二個參數要<em>字串化的 JSON</em>，傳 <code>{}</code> 物件會丟 <code>Failed to parse input arguments</code></li>
+  </ul>
+  </details>
+
+  <details style="margin:1em 0;padding:.8em 1em;border:1px solid #ccc;border-radius:4px">
+  <summary>2026-09-01 追查：③ 為什麼斷 —— 拆擴充包看到的答案</summary>
+  <p>不再靠試誤猜。直接讀 Claude in Chrome 擴充的 bundle（<code>fcoeoabgfenejglbffodgkkbkcdhcgfn</code> v1.0.90），
+  用字串搜尋確認它到底有沒有讀頁面註冊的工具。</p>
+  <ul>
+    <li><strong>整包 0 次命中</strong>：<code>modelContext</code>、<code>webmcp</code>、<code>registerTool</code>、
+        <code>getTools</code>、<code>provideContext</code> 全都是 0。
+        <strong>這個版本根本沒寫讀 WebMCP 的程式碼</strong> —— 不是權限沒開、不是旗標沒設，是功能不存在</li>
+    <li><code>mcp</code> 有 190 次命中，但方向<strong>相反</strong>：那是
+        <code>tabs_context_mcp</code>／<code>tabs_create_mcp</code>／<code>tabs_close_mcp</code>，
+        擴充<strong>自己當 MCP server</strong>、把分頁開給外部 client 用。
+        WebMCP 要的是「擴充當 client、讀頁面提供的工具」，兩者是反過來的</li>
+    <li>唯一真的能把外部工具餵進工具清單的路徑是 <strong>remote MCP server</strong>
+        （工具名長成 <code>mcp__&lt;uuid&gt;__&lt;tool&gt;</code>，走 OAuth，UI 叫 Connectors）。
+        但這個 build 的 Connectors 選單傳的是 <code>showConnectors:!1</code> —— <strong>寫死關閉</strong></li>
+  </ul>
+  <p><strong>結論</strong>：Chrome 152 ＋ 擴充 1.0.90 這個組合，
+  「讓 Chrome 的 agent 叫得到頁面 WebMCP 工具」<strong>沒有可行路徑</strong>。
+  旗標 <code>enable-webmcp-testing</code> 只讓<em>網頁</em>拿得到 <code>document.modelContext</code>（① 通），
+  它管不到擴充讀不讀（③ 斷）。這兩件事是分開的兩套程式碼。</p>
+  <p><strong>所以不要再花時間在</strong>：換 profile、重開旗標、調權限、重裝擴充、升 Canary —— 這些都不改變「bundle 裡沒有那段程式碼」。
+  要等的是擴充改版。複測方法：解壓新版擴充，
+  <code>grep -ro "modelContext" .</code> 不是 0 才值得重測 ③。</p>
+  <p>今天實際可用的 agent 路徑仍是 <strong>ChatGPT 桌面版</strong>（<code>document.modelContext</code>，Settings › Browser › Permissions 開 site tools）。</p>
+  </details>
 </div>
 
 <div class="box"><strong>紀錄</strong><div id="log"></div></div>
