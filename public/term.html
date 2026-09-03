@@ -52,7 +52,7 @@ function draw() {
   document.title = name + ' · ai-nomos';
 
   const note = $('note');
-  const msg = SIGHT.demo ? T('demoOn') : SIGHT.interim ? T('interim') : !SIGHT.ok ? T('apiDown') : null;
+  const msg = SIGHT.demo ? T('demoOn') : !SIGHT.ok ? T('apiDown') : null;
   note.hidden = !msg; if (msg) note.textContent = msg;
 
   if (!e && !rows.length) {

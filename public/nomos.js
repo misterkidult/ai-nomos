@@ -17,7 +17,7 @@ window.NOMOS = (() => {
       assumedNoDef: '假設你懂，還沒有人給定義句', editorial: '字典白話（editorial，不進信號）：',
       noSightings: '還沒有任何目擊 —— 拿一篇提到它的文章來。', noDefs: '有人看見它，但還沒有人給定義句。',
       evidence: '只給證據不裁判；要引用就引用帶來源的那句。', back: '← 回字典', notFound: '字典裡沒有這個詞，也還沒有人看見它。',
-      apiDown: '目擊資料層讀不到；現在顯示的是空狀態。', interim: '目擊資料層讀不到，改讀 repo 的過渡檔 sightings.json（只收公開文章）。', demoOn: '示範資料（fixtures/sightings-sample.json），不是真目擊。',
+      apiDown: '目擊資料層讀不到；現在顯示的是空狀態。', demoOn: '示範資料（fixtures/sightings-sample.json），不是真目擊。',
       editorialTag: '字典白話（editorial，不進信號）', explainedBy: n => '解釋這個詞的文章（' + n + '）', mentionedBy: n => '提到這個詞的文章（' + n + '）',
       nLast: '最近一次目擊', hot: '本週在夯', hotNote: '（近 7 天目擊數；字越大越常被看見，↑＝本週才進榜）', hotEmpty: '近 7 天沒有目擊。', up: '↑ 新進榜',
       sell: '🟢 大家在賣什麼', risk: '🔴 大家在擔心什麼', feed: '動態牆', feedNote: '（最新目擊，每一條都有來源）', feedEmpty: '還沒有目擊。', seenIn: (src, term) => '有人在《' + src + '》看到' + term, allLink: n => '全部 ' + n + ' 則 →', noMatch: '沒有符合的詞。',
@@ -33,6 +33,10 @@ window.NOMOS = (() => {
       confirmNote:'你的 AI 讀完了。按下去才會寫進字典 —— 在那之前只有你看得到。',
       confirmBtn:n=>'收進字典（'+n+' 筆）', discardBtn:'這篇不收',
       discarded:'已捨棄，沒有寫進字典', confirming:'寫入中…',
+      doneThanks:'謝謝你的貢獻', doneCount:n=>n, doneUnit:n=>'個詞進了字典',
+      doneTitle:n=>'進字典了 —— '+n+' 筆',
+      doneNote:'這些詞現在誰都看得到了。字典剛剛長大了一點。',
+      doneNothing:'這篇沒有可收的', doneAgain:'再看一次字典',
       stored:'已寫入字典', notStored:'沒有可收的（都被鎖擋下了）',
       storeFail:e=>'伺服器沒收：'+e, storeOff:e=>'連不到伺服器（'+e+'）',
       foundTitle:'它在這篇裡看到的詞', startOver:'← 換一篇',
@@ -104,7 +108,7 @@ window.NOMOS = (() => {
       assumedNoDef: 'assumed known; nobody has defined it yet', editorial: 'hand-written line (editorial, not a signal): ',
       noSightings: 'No sightings yet — bring an article that mentions it.', noDefs: 'Seen, but no source has defined it yet.',
       evidence: 'Evidence only, no ruling; cite the quote with its source.', back: '← back to the dictionary', notFound: 'Not in the dictionary, and nobody has seen it yet.',
-      apiDown: 'Sighting storage is unreachable; this is the empty state.', interim: 'Sighting storage is unreachable; falling back to sightings.json in the repo (public articles only).', demoOn: 'Demo data (fixtures/sightings-sample.json), not real sightings.',
+      apiDown: 'Sighting storage is unreachable; this is the empty state.', demoOn: 'Demo data (fixtures/sightings-sample.json), not real sightings.',
       editorialTag: 'hand-written line (editorial, not a signal)', explainedBy: n => 'Articles that explain it (' + n + ')', mentionedBy: n => 'Articles that mention it (' + n + ')',
       nLast: 'last sighting', hot: 'Hot this week', hotNote: '(sightings in the last 7 days; bigger = seen more; ↑ = entered the list this week)', hotEmpty: 'No sightings in the last 7 days.', up: '↑ new',
       sell: '🟢 What people are selling', risk: '🔴 What people are worried about', feed: 'Activity', feedNote: '(latest sightings, each with its source)', feedEmpty: 'No sightings yet.', seenIn: (src, term) => 'someone saw ' + term + ' in “' + src + '”', allLink: n => 'all ' + n + ' entries →', noMatch: 'No matching term.',
@@ -120,6 +124,10 @@ window.NOMOS = (() => {
       confirmNote:'Your AI has read it. Nothing is written until you say so — until then only you can see this.',
       confirmBtn:n=>'Add to the dictionary ('+n+')', discardBtn:'Skip this article',
       discarded:'discarded — nothing was written', confirming:'writing…',
+      doneThanks:'Thanks for contributing', doneCount:n=>n, doneUnit:n=>n===1?'term entered the dictionary':'terms entered the dictionary',
+      doneTitle:n=>'In the dictionary — '+n+' added',
+      doneNote:'Anyone can see these now. The dictionary just grew.',
+      doneNothing:'nothing from this article', doneAgain:'back to the dictionary',
       stored:'written to the dictionary', notStored:'nothing to add (the locks caught them all)',
       storeFail:e=>'server refused: '+e, storeOff:e=>'server unreachable ('+e+')',
       foundTitle:'What it saw in this article', startOver:'← Start over',
@@ -189,7 +197,7 @@ window.NOMOS = (() => {
       assumedNoDef: '知っている前提で使われ、まだ誰も定義していない', editorial: '手書きの語釈（編集部によるもので、信号ではありません）：',
       noSightings: 'まだ目撃がありません —— この語に触れた記事を持ってきてください。', noDefs: '見かけてはいるものの、まだどの出典も定義していません。',
       evidence: '証拠を並べるだけで、正解は決めません。引用は必ず出典とともに。', back: '← 辞書に戻る', notFound: '辞書になく、まだ誰も見かけていません。',
-      apiDown: '目撃データに接続できません。これは空の状態です。', interim: '目撃データに接続できないため、リポジトリの sightings.json を読んでいます（公開記事のみ）。', demoOn: 'デモ用データ（fixtures/sightings-sample.json）であり、実際の目撃ではありません。',
+      apiDown: '目撃データに接続できません。これは空の状態です。', demoOn: 'デモ用データ（fixtures/sightings-sample.json）であり、実際の目撃ではありません。',
       editorialTag: '手書きの語釈（編集部によるもので、信号ではありません）', explainedBy: n => '説明している記事（' + n + '）', mentionedBy: n => '言及している記事（' + n + '）',
       nLast: '最後の目撃', hot: '今週よく見かけた語', hotNote: '（直近 7 日の目撃数。大きいほど多く見かけた。↑ は今週から入った語）', hotEmpty: '直近 7 日の目撃はありません。', up: '↑ 新',
       sell: '🟢 売り文句として', risk: '🔴 リスクとして', feed: '動き', feedNote: '（最新の目撃と、その出典）', feedEmpty: 'まだ目撃がありません。', seenIn: (src, term) => '誰かが「' + src + '」で ' + term + ' を見かけました', allLink: n => '全 ' + n + ' 件の語釈へ →', noMatch: '該当する語がありません。',
@@ -203,6 +211,10 @@ window.NOMOS = (() => {
       confirmNote:'AI は読み終えました。あなたが押すまで何も書き込まれません —— それまでは、あなたにしか見えません。',
       confirmBtn:n=>'辞書に入れる（'+n+'）', discardBtn:'この記事は入れない',
       discarded:'破棄しました —— 何も書き込まれていません', confirming:'書き込み中…',
+      doneThanks:'ご協力ありがとうございます', doneCount:n=>n, doneUnit:n=>'語が辞書に入りました',
+      doneTitle:n=>'辞書に入りました —— '+n+' 件',
+      doneNote:'これらの語は誰でも見られるようになりました。辞書が少し大きくなりました。',
+      doneNothing:'この記事から入れられるものはありません', doneAgain:'辞書に戻る',
       stored:'辞書に書き込みました', notStored:'入れられるものがありません（すべてロックに掛かりました）',
       storeFail:e=>'サーバーが拒否しました：'+e, storeOff:e=>'サーバーに接続できません（'+e+'）',
       foundTitle:'この記事から見つけたもの', startOver:'← 別の記事にする',
@@ -305,11 +317,8 @@ window.NOMOS = (() => {
     const url = demo ? '/fixtures/sightings-sample.json' : '/api/sightings' + query;
     const get = async u => { const r = await fetch(u); if (!r.ok) throw new Error(r.status); return r.json(); };
     try { const d = await get(url); return { ok: true, demo: !!demo, contributors: d.contributors ?? 0, sightings: d.sightings || [] }; }
-    catch (e) {
-      /* fallback while GET /api/sightings is down: the static file in the repo (public articles only, no sentence/context). Ruling 2026-08-29: it stays until the video is recorded on 9/2, then goes. */
-      try { const d = await get('/sightings.json'); let list = d.sightings || []; const m = query.match(/term_key=([^&]+)/); if (m) list = list.filter(s => s.term_key === decodeURIComponent(m[1])); return { ok: true, interim: true, demo: false, contributors: d.contributors ?? 0, sightings: list }; }
-      catch (e2) { return { ok: false, demo: !!demo, contributors: 0, sightings: [] }; }
-    }
+    /* no interim fallback: public/sightings.json was removed 2026-09-03 (it shipped a full offline copy of every url+term_key pair). API down = empty state. */
+    catch (e) { return { ok: false, demo: !!demo, contributors: 0, sightings: [] }; }
   };
   const termKey = s => s.term_key || (bySlug(s.term_normalized) ? s.term_normalized : String(s.term_raw || '').trim().toLowerCase());
   const groupByTerm = list => { const m = new Map(); for (const s of list) { const k = termKey(s); if (!m.has(k)) m.set(k, []); m.get(k).push(s); } return m; };
@@ -351,8 +360,15 @@ window.NOMOS = (() => {
   /* WebMCP 偵測。
      ⚠ 這只回答「這個瀏覽器看得到 API 嗎」，不回答「agent 真的會叫我的工具嗎」——
      兩者會斷在不同地方：Claude in Chrome 有 modelContext 卻不把頁面工具接進它的
-     清單（2026-08-27 探針實測），所以①綠②永遠不亮。第二個訊號只有首頁上
-     feedDocument 真的被呼叫過才算數。
+     清單，所以①綠②永遠不亮。第二個訊號只有首頁上 feedDocument 真的被呼叫過才算數。
+
+     2026-09-01 複測（Chrome 152 原生 document.modelContext，旗標已開）：
+       ① API 存在、registerTool 成功、getTools() 正常回工具　→ 通
+       ③ 那些工具沒有進 agent 的工具清單　　　　　　　　　　 → 仍斷
+     agent 端只能用 javascript_tool 手動 executeTool 繞過橋接，那不算 agent 呼叫。
+     8/27 的結論未過期。另：Chrome 152 原生 client 不提供 requestUserInteraction
+     ——ai-nomos 不受影響，契約 §6 的第四關本來就是頁面自己畫確認框（contract.md:192）。
+
      API 可能在載入後才注入，所以輪詢一小段時間才判定沒有。 */
   const mcp = () =>
     (typeof document.modelContext?.registerTool === 'function') ? document.modelContext
